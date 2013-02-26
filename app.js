@@ -12,7 +12,7 @@ var settings = require('./settings');
 
 var MongoStore = require('connect-mongo')(express);
 
-//var partials = require('express-partials');
+var partials = require('express-partials');
 var flash = require('connect-flash');
 
 var sessionStore = new MongoStore({
@@ -29,7 +29,7 @@ app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
 
-  //app.use(partials());
+  app.use(partials());
   app.use(flash());
 
   app.use(express.favicon());
@@ -58,6 +58,8 @@ app.configure('development', function(){
 //route
 app.get('/', routes.index);
 app.get('/login', account.login);
+app.post('/login', account.doLogin);
+app.get('/logout', account.logout);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
