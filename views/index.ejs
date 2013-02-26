@@ -1,0 +1,14 @@
+<div class="hero-unit">
+<h1>欢迎来到 readIn</h1>
+<p>
+  <a class="btn btn-primary btn-large" href="/login">登录</a>
+  <a class="btn btn-large" href="/reg">立即注册</a>
+</p>
+</div>
+
+<% for(var i=0; i<books.length; i++) {%>
+   <li><%= books[i].bookName %></li>
+   <li><%= books[i].author %></li>
+   <li><%= books[i].cata %></li>
+<% } %>
+
