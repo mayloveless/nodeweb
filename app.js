@@ -34,7 +34,7 @@ app.configure(function(){
 
   app.use(express.favicon());
   app.use(express.logger('dev'));
-  app.use(express.bodyParser());
+  app.use(express.bodyParser({uploadDir:'./tmp/'}));
   app.use(express.methodOverride());
 
   app.use(express.cookieParser());
@@ -60,6 +60,14 @@ app.get('/', routes.index);
 app.get('/login', account.login);
 app.post('/login', account.doLogin);
 app.get('/logout', account.logout);
+app.get('/reg', account.reg);
+app.post('/reg', account.doReg);
+
+app.get('/setting', account.setting);
+app.post('/changePwd', account.changePwd);
+app.post('/changeAvatar', account.changeAvatar);
+app.get('/forgetPwd', account.forgetPwd);
+app.post('/forgetPwd', account.pwdMail);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
