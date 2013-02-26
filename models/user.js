@@ -1,0 +1,94 @@
+var mongodb = require('./db');
+
+//Book is a function container
+var User = function(){
+	
+};
+module.exports = User;
+
+User.get = function (username, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('user', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			collection.findOne({name: username}, function(err, doc) {
+				mongodb.close();
+				if (doc) {
+					var user = {
+						name : doc.name,
+						password : doc.password
+					};
+					callback(err, user);
+				} else {
+					callback(err, null);
+				}
+			});
+		});
+	});
+};
+
+User.save = function (user,callback) {
+
+	mongodb.open(function(err, db) {
+		if (err) {
+		  return callback(err);
+		}
+
+		//获取users集合
+		db.collection('user', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			//为name属性添加索引
+			//collection.ensureIndex('name', {unique: true});
+
+			//save
+			collection.insert(user, {safe: true}, function(err, user) {
+				mongodb.close();
+				callback(err, user);
+			});
+		});
+	});
+};
+
+User.update = function (user,callback) {
+
+	mongodb.open(function(err, db) {
+		if (err) {
+		  return callback(err);
+		}
+
+		//获取users集合
+		db.collection('user', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			//为name属性添加索引
+			//collection.ensureIndex('name', {unique: true});
+
+			//update
+			var newUser = {	};
+			if(user.avatar){
+				newUser['avatar'] = user.avatar;
+			}
+			if(user.password){
+				newUser['password']= user.password;
+			}
+			collection.update({"name":user.name}, { $set :newUser}, function(err, user) {
+				mongodb.close();
+				callback(err, user);
+			});
+		});
+	});
+};

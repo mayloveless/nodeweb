@@ -1,0 +1,40 @@
+<div class="hero-unit">
+  <form class="form-horizontal" method="post" enctype="multipart/form-data" action="/changePwd">
+    <fieldset>
+      <legend>修改密码</legend>
+      <div class="control-group">
+        <label class="control-label" for="old">原密码</label>
+        <div class="controls">
+          <input type="password" class="input-xlarge" id="old" name="old">
+           <a href="/forgetPwd">忘记密码</a>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="newPwd">新密码</label>
+        <div class="controls">
+          <input type="password" class="input-xlarge" id="newPwd" name="newPwd">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </fieldset>
+  </form>
+</div>
+
+<div class="hero-unit">
+  <form class="form-horizontal" method="post" enctype="multipart/form-data" action="/changeAvatar">
+    <fieldset>
+      <legend>上传新头像</legend>
+      <div class="control-group">
+        <label class="control-label" for="password-repeat">上传新头像</label>
+        <div class="controls">
+          <input type="file" class="input-xlarge" id="avatar" name="avatar">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </fieldset>
+  </form>
+</div>

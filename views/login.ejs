@@ -1,7 +1,22 @@
-<div class="hero-unit">
-<h1>欢迎登录</h1>
-<p>
-  <a class="btn btn-primary btn-large" href="/login">登录</a>
-</p>
-</div>
+<form class="form-horizontal" method="post">
+  <fieldset>
+    <legend>用户登录</legend>
+    <div class="control-group">
+      <label class="control-label" for="username">用户名</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" id="username" name="username">
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="password">密码</label>
+      <div class="controls">
+        <input type="password" class="input-xlarge" id="password" name="password">
+        <a href="/forgetPwd">忘记密码</a>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">登录</button>
+    </div>
+  </fieldset>
+</form>
 

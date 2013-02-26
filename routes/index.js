@@ -14,7 +14,8 @@ exports.index = function(req, res){
 		res.render('index', {
 			title: '首页',
 			books : books,
-			//user : req.session.user,
+			user : req.session.user,
+			curPage :"index",
 			success : req.flash('success').toString(),
 			error : req.flash('error').toString()
 		});
