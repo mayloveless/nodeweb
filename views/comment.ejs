@@ -1,0 +1,63 @@
+<style>
+	img{
+		width: 50px;
+	}
+	footer{
+		clear: both;
+	}
+</style>
+<h1>管理中心</h1>
+
+<ul class="nav nav-pills nav-stacked span2">
+  <li ><a href="/admin">用户</a></li>
+  <li ><a href="/admin/book">书籍</a></li>
+  <li  ><a href="/admin/salon">书评</a></li>
+  <li ><a href="/admin/note">笔记</a></li>
+  <li class="active"><a href="/admin/comment">评论</a></li>
+  <li ><a href="/admin/tip">提醒</a></li>
+</ul>
+
+<table class="table table-striped span8">
+	 <tr>
+	  <td >内容</td>
+	  <td>用户</td>
+	  <td>详情</td>
+	  
+	</tr>
+<% for(var i=0; i<comments.length; i++) {%>
+	<tr>
+	   <td style="width:300px;overflow:hidden"><%= comments[i].content %></td>
+	   <td><%= comments[i].user %></td>
+	   <% if(comments[i].type === "salon") {%>
+	   		<td><a href="/sid/<%= comments[i].from %>"><%= comments[i].type %></a></td>
+	   <% }else {%>
+	   		<td><a href="/nid/<%= comments[i].from %>"><%= comments[i].type %></a></td>
+	   <% }%>
+	  
+	</tr>
+<% } %>
+</table>
+
+
+
+<script>
+
+	/*$('.delete').bind('click',function(){
+		var cidArr = $(this).parent().prev().children('a').attr('href').split('/');
+		var cid = cidArr[cidArr.length-1];
+		if(cidArr[1] === 'sid'){
+			var type = 'salon';
+		}else{
+			var type = 'note'
+		}
+		var obj = {'cid':cid,'type':type}
+		$.post('/admin/delComment',obj,function(req, res){
+			if(res !=='success'){
+				$('#error').show();
+			}else{
+				location.reload();
+			}
+			
+		});
+	});*/
+</script>

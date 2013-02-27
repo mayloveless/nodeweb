@@ -1,12 +1,15 @@
 var mongodb = require('./db');
+var BSON = require('mongodb').BSON;
+var ObjectID = require('mongodb').ObjectID;
 
-//Book is a function container
-var User = function(){
+var Note = function(){
 	
 };
-module.exports = User;
+module.exports = Note;
 
-User.get = function (username, callback) {
+
+/*
+Salon.get = function (username, callback) {
 	//check db
 	mongodb.open(function(err, db) {
 		if (err) {
@@ -37,31 +40,7 @@ User.get = function (username, callback) {
 	});
 };
 
-User.getAll = function (username, callback) {
-	//check db
-	mongodb.open(function(err, db) {
-		if (err) {
-			return callback(err);
-		}
-		db.collection('user', function(err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
-
-			collection.find({}).toArray(function(err, docs) {
-				mongodb.close();
-				if (docs) {
-					callback(err, docs);
-				} else {
-					callback(err, null);
-				}
-			});
-		});
-	});
-};
-
-User.save = function (user,callback) {
+Salon.save = function (user,callback) {
 
 	mongodb.open(function(err, db) {
 		if (err) {
@@ -87,7 +66,7 @@ User.save = function (user,callback) {
 	});
 };
 
-User.update = function (user,callback) {
+Salon.update = function (user,callback) {
 
 	mongodb.open(function(err, db) {
 		if (err) {
@@ -125,27 +104,53 @@ User.update = function (user,callback) {
 		});
 	});
 };
+*/
 
-User.delete = function (name,callback) {
+
+Note.getAll = function (callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('note', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+
+			collection.find({}).toArray(function(err, docs) {
+				mongodb.close();
+				if (docs) {
+					callback(err, docs);
+				} else {
+					callback(err, null);
+				}
+			});
+		});
+	});
+};
+
+
+Note.delete = function (nid,callback) {
 	mongodb.open(function(err, db) {
 		if (err) {
 		  return callback(err);
 		}
 
 		//获取users集合
-		db.collection('user', function(err, collection) {
+		db.collection('note', function(err, collection) {
 			if (err) {
 				mongodb.close();
 				return callback(err);
 			}
-
-			//为name属性添加索引
-			//collection.ensureIndex('name', {unique: true});
-			collection.remove({"name":name},function(err, doc) {
+			var note = new ObjectID(nid)
+			
+			collection.remove({'_id':note},function(err, doc) {
 				mongodb.close();
 				callback(err, doc);
 			});
 		});
 	});
-
 };

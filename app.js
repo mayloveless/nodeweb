@@ -5,25 +5,21 @@
 
 var express = require('express');
 var http = require('http');
-var routes = require('./routes');
-var account = require('./routes/account');
-
-var settings = require('./settings');
-
 var MongoStore = require('connect-mongo')(express);
-
 var partials = require('express-partials');
 var flash = require('connect-flash');
-
+var settings = require('./settings');
 var sessionStore = new MongoStore({
   db : settings.db
 }, function() {
     console.log('connect mongodb success...');
 });
 
+var routes = require('./routes');
+var account = require('./routes/account');
+var admin = require('./routes/admin');
 
 var app = express();
-
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
@@ -68,6 +64,19 @@ app.post('/changePwd', account.changePwd);
 app.post('/changeAvatar', account.changeAvatar);
 app.get('/forgetPwd', account.forgetPwd);
 app.post('/forgetPwd', account.pwdMail);
+
+app.get('/admin', admin.index);
+app.post('/admin/editUser', admin.editUser);
+app.post('/admin/delUser', admin.delUser);
+app.get('/admin/book', admin.book);
+app.get('/admin/salon', admin.salon);
+app.post('/admin/delSalon', admin.delSalon);
+app.get('/admin/note', admin.note);
+app.post('/admin/delNote', admin.delNote);
+app.get('/admin/comment', admin.comment);
+app.get('/admin/tip', admin.tip);
+app.post('/admin/editBook', admin.editBook);
+app.post('/admin/delBook', admin.delBook);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

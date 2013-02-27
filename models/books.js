@@ -1,5 +1,6 @@
 var mongodb = require('./db');
-
+var BSON = require('mongodb').BSON;
+var ObjectID = require('mongodb').ObjectID;
 //Book is a function container
 var Book = function(){
 	
@@ -22,7 +23,7 @@ Book.get = function (bookId, callback) {
 			if (bookId) {
 				query.bookId = bookId;
 			}
-			collection.find(query, {limit:9}).sort({time: -1}).toArray(function(err, docs) {
+			collection.find({}).toArray(function(err, docs) {
 				mongodb.close();
 				if (err) {
 					callback(err, null);
@@ -38,9 +39,53 @@ Book.get = function (bookId, callback) {
 					}
 					books.push(book);
 				});
-				callback(null, books);
+				callback(null, docs);
 			});
 		});
 	});
 };
 
+Book.update = function (book,callback) {
+
+	mongodb.open(function(err, db) {
+		if (err) {
+		  return callback(err);
+		}
+
+		//获取users集合
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			var id = new ObjectID(book.bookId)
+			collection.update({"_id":id}, { $set :book}, function(err, doc) {
+				mongodb.close();
+				callback(err, doc);
+			});
+		});
+	});
+};
+
+Book.delete = function (bid,callback) {
+	mongodb.open(function(err, db) {
+		if (err) {
+		  return callback(err);
+		}
+
+		//获取users集合
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(bid)
+			collection.remove({"_id":id},function(err, doc) {
+				mongodb.close();
+				callback(err, doc);
+			});
+		});
+	});
+
+};

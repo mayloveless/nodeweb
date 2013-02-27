@@ -1,0 +1,58 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'moongoose' ]
+2 info using npm@1.2.11
+3 info using node@v0.8.20
+4 verbose read json /home/wanglingfei/nodeme/package.json
+5 warn package.json application-name@0.0.1 No README.md file found!
+6 verbose read json /home/wanglingfei/nodeme/node_modules/express-partials/package.json
+7 verbose read json /home/wanglingfei/nodeme/node_modules/mongodb/package.json
+8 verbose read json /home/wanglingfei/nodeme/node_modules/nodemailer/package.json
+9 verbose read json /home/wanglingfei/nodeme/node_modules/connect-flash/package.json
+10 verbose read json /home/wanglingfei/nodeme/node_modules/async/package.json
+11 verbose read json /home/wanglingfei/nodeme/node_modules/wind/package.json
+12 verbose read json /home/wanglingfei/nodeme/node_modules/connect-mongo/package.json
+13 verbose read json /home/wanglingfei/nodeme/node_modules/ejs/package.json
+14 verbose read json /home/wanglingfei/nodeme/node_modules/express/package.json
+15 verbose from cache /home/wanglingfei/nodeme/package.json
+16 verbose readDependencies using package.json deps
+17 verbose cache add [ 'moongoose', null ]
+18 verbose cache add name=undefined spec="moongoose" args=["moongoose",null]
+19 verbose parsed url { pathname: 'moongoose', path: 'moongoose', href: 'moongoose' }
+20 silly lockFile 01f8586d-moongoose moongoose
+21 verbose lock moongoose /home/wanglingfei/.npm/01f8586d-moongoose.lock
+22 silly lockFile 01f8586d-moongoose moongoose
+23 silly lockFile 01f8586d-moongoose moongoose
+24 verbose addNamed [ 'moongoose', '' ]
+25 verbose addNamed [ null, '' ]
+26 silly lockFile 5953e2d4-moongoose moongoose@
+27 verbose lock moongoose@ /home/wanglingfei/.npm/5953e2d4-moongoose.lock
+28 silly addNameRange { name: 'moongoose', range: '', hasData: false }
+29 verbose url raw moongoose
+30 verbose url resolving [ 'https://registry.npmjs.org/', './moongoose' ]
+31 verbose url resolved https://registry.npmjs.org/moongoose
+32 info trying registry request attempt 1 at 23:32:49
+33 http GET https://registry.npmjs.org/moongoose
+34 http 404 https://registry.npmjs.org/moongoose
+35 silly registry.get cb [ 404,
+35 silly registry.get   { server: 'CouchDB/1.2.1 (Erlang OTP/R15B03)',
+35 silly registry.get     date: 'Wed, 27 Feb 2013 15:32:53 GMT',
+35 silly registry.get     'content-type': 'application/json',
+35 silly registry.get     'content-length': '52',
+35 silly registry.get     'cache-control': 'must-revalidate' } ]
+36 silly lockFile 5953e2d4-moongoose moongoose@
+37 silly lockFile 5953e2d4-moongoose moongoose@
+38 error 404 'moongoose' is not in the npm registry.
+38 error 404 You should bug the author to publish it
+38 error 404
+38 error 404 Note that you can also install from a
+38 error 404 tarball, folder, or http url, or git url.
+39 error System Linux 3.5.0-25-generic
+40 error command "/usr/local/bin/node" "/usr/local/bin/npm" "install" "moongoose"
+41 error cwd /home/wanglingfei/nodeme
+42 error node -v v0.8.20
+43 error npm -v 1.2.11
+44 error code E404
+45 verbose exit [ 1, true ]

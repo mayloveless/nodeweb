@@ -33,9 +33,9 @@ exports.doLogin = function(req, res){
 		if (user.password != password) {
 			req.flash('error', '密码错误');
 			return res.redirect('/login');
-		}
+		} 
 		req.session.user = user;
-		res.redirect('/');
+   		res.redirect('/');
 	});
 };
 
@@ -107,6 +107,8 @@ exports.doReg = function(req, res) {
 		        });
 		    });
 		    newUser['avatar'] = newUser.name + '.' +avatarType;
+		}else{
+			newUser['avatar'] = 'default.png';
 		}
 		//如果不存在則新增用戶
 		User.save(newUser,function(err) {
@@ -228,7 +230,7 @@ exports.pwdMail = function(req, res){
 		return res.redirect('/forgetPwd');
 	}
 	//正则判断邮箱地址
-	
+
 	var newUser = {
 		name: req.session.user.name
 	};

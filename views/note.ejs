@@ -1,0 +1,65 @@
+<style>
+	img{
+		width: 50px;
+	}
+	footer{
+		clear: both;
+	}
+</style>
+<h1>管理中心</h1>
+
+<ul class="nav nav-pills nav-stacked span2">
+  <li ><a href="/admin">用户</a></li>
+  <li ><a href="/admin/book">书籍</a></li>
+  <li  ><a href="/admin/salon">书评</a></li>
+  <li class="active"><a href="/admin/note">笔记</a></li>
+  <li ><a href="/admin/comment">评论</a></li>
+  <li ><a href="/admin/tip">提醒</a></li>
+</ul>
+
+<table class="table table-striped span8">
+	 <tr>
+	  <td >笔记</td>
+	  <td>用户</td>
+	  <td>详情</td>
+	  <td>操作</td>
+	</tr>
+<% for(var i=0; i<notes.length; i++) {%>
+	<tr>
+	   <td style="width:300px;overflow:hidden"><%= notes[i].content %></td>
+	   <td><%= notes[i].user.name %></td>
+	   <td><a href="/nid/<%= notes[i]._id %>"><%= notes[i].bookId.bookName %></a></td>
+	   <td><a href="javascript:;" class="delete">删除</a></td>
+	</tr>
+<% } %>
+</table>
+
+
+<div class="modal hide fade" id="error">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>提示</h3>
+  </div>
+  <div class="modal-body">
+    <p>删除出错，请重新操作</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">确定</a>
+  </div>
+</div>
+
+<script>
+
+	$('.delete').bind('click',function(){
+		var nidArr = $(this).parent().prev().children('a').attr('href').split('/');
+		var nid = nidArr[nidArr.length-1];
+		$.post('/admin/delNote',{'nid':nid},function(req, res){
+			if(res !=='success'){
+				$('#error').show();
+			}else{
+				location.reload();
+			}
+			
+		});
+	});
+</script>
