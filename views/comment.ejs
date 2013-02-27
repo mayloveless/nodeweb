@@ -16,12 +16,23 @@
   <li class="active"><a href="/admin/comment">评论</a></li>
   <li ><a href="/admin/tip">提醒</a></li>
 </ul>
+<div class="alert alert-info span8">共<%= comments.length %>条记录</div>
 
 <table class="table table-striped span8">
 	 <tr>
 	  <td >内容</td>
 	  <td>用户</td>
-	  <td>详情</td>
+	  <td class="btn-group">
+	      <a class="dropdown" data-toggle="dropdown" href="#">
+	        详情
+	        <span class="caret"></span>
+	      </a>
+	      <ul class="dropdown-menu">
+	        <li><a href="/admin/comment">全部</a></li>
+	        <li><a href="/admin/comment/salon">长评</a></li>
+	        <li><a href="/admin/comment/note">笔记</a></li>
+	      </ul>
+	    </td>
 	  
 	</tr>
 <% for(var i=0; i<comments.length; i++) {%>

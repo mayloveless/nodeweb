@@ -16,7 +16,13 @@
   <li ><a href="/admin/comment">评论</a></li>
   <li ><a href="/admin/tip">提醒</a></li>
 </ul>
-
+<div class="alert alert-info span8">共<%= users.length %>条记录</div>
+<div class="span8">
+	<form action="/admin/search" method="get" class="form-inline ">
+		<input type="text" name="name" placeholder="用户名" class="input-large"/>
+		<button type="submit" class="btn">搜索</button>
+	</form>
+</div>
 
 <table class="table table-striped span8">
 	 <tr>

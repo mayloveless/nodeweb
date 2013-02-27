@@ -156,3 +156,68 @@ Comments.getAll = function (callback) {
 	});
 };
 
+Comments.getNote = function (callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('note', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			collection.find({}).toArray(function(err, cts) {
+				mongodb.close();
+				var res = [];
+				for(var i=0;i<cts.length;i++){
+					var one = cts[i]['comment'];
+					for(var j=0;j<one.length;j++){
+						res.push(one[j]);
+					}
+				}
+
+				if (res) {
+					callback(err, res);
+				} else {
+					callback(err, null);
+				}
+
+			});
+		});
+	});
+};
+
+Comments.getSalon = function (callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('salon', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			collection.find({}).toArray(function(err, cts) {
+				mongodb.close();
+				var res = [];
+				for(var i=0;i<cts.length;i++){
+					var one = cts[i]['comment'];
+					for(var j=0;j<one.length;j++){
+						res.push(one[j]);
+					}
+				}
+
+				if (res) {
+					callback(err, res);
+				} else {
+					callback(err, null);
+				}
+
+			});
+		});
+	});
+};

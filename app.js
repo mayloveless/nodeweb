@@ -78,6 +78,15 @@ app.get('/admin/tip', admin.tip);
 app.post('/admin/editBook', admin.editBook);
 app.post('/admin/delBook', admin.delBook);
 
+app.get('/admin/search', admin.searchUser);
+app.get('/admin/comment/salon', admin.cataSalon);
+app.get('/admin/comment/note', admin.cataNote);
+app.get('/admin/note/search', admin.searchNote);
+app.get('/admin/salon/search', admin.searchSalon);
+app.get('/admin/book/cata/:cata', admin.cataBook);
+app.get('/admin/book/status/:status', admin.statusBook);
+app.get('/admin/book/search', admin.searchBook);
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

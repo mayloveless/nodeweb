@@ -212,7 +212,7 @@ exports.book = function(req, res){
 		return res.redirect('/');
 	}
 	//check db from model then execute callback below
-	Books.get({},function(err, books) {
+	Books.get({},function(err, books,cata) {
 		if (err) {
 			req.flash('error', err);
 			return res.redirect('/admin');
@@ -221,6 +221,7 @@ exports.book = function(req, res){
 		res.render('books', {
 			title: '管理中心',
 			books : books,
+			cata :cata,
 			user : req.session.user,
 			curPage :"",
 			success : req.flash('success').toString(),
@@ -252,5 +253,180 @@ exports.delBook = function(req, res){
 			return  res.json({'success':0});
 		}
 		return  res.json({'success':1});
+	});
+};
+
+exports.searchUser = function(req, res){
+	if(!req.session.user || !req.session.user.admin){
+		return res.redirect('/');
+	}
+	User.search(req.query.name, function(err, users) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/admin');
+		}
+		res.render('admin', {
+			title: '管理中心',
+			users : users,
+			user : req.session.user,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});
+	});
+};
+
+exports.cataNote = function(req, res){
+	if(!req.session.user || !req.session.user.admin){
+		return res.redirect('/');
+	}
+	//check db from model then execute callback below
+	Comment.getNote(function(err, comments) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/admin');
+		}
+		
+		res.render('comment', {
+			title: '管理中心',
+			comments : comments,
+			user : req.session.user,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});
+	});
+};
+
+exports.cataSalon = function(req, res){
+	if(!req.session.user || !req.session.user.admin){
+		return res.redirect('/');
+	}
+	//check db from model then execute callback below
+	Comment.getSalon(function(err, comments) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/admin');
+		}
+		
+		res.render('comment', {
+			title: '管理中心',
+			comments : comments,
+			user : req.session.user,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});
+	});
+};
+
+exports.searchNote = function(req, res){
+	if(!req.session.user || !req.session.user.admin){
+		return res.redirect('/');
+	}
+	Note.search(req.query.content,function(err, notes) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/admin');
+		}
+	
+		res.render('note', {
+			title: '管理中心',
+			notes : notes,
+			user : req.session.user,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});
+	});
+};
+
+exports.searchSalon = function(req, res){
+	if(!req.session.user || !req.session.user.admin){
+		return res.redirect('/');
+	}
+	Salon.search(req.query.content,function(err, salons) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/admin');
+		}
+	
+		res.render('salon', {
+			title: '管理中心',
+			salon : salons,
+			user : req.session.user,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});
+	});
+};
+
+exports.cataBook = function(req, res){
+	if(!req.session.user || !req.session.user.admin){
+		return res.redirect('/');
+	}
+	//check db from model then execute callback below
+	Books.getCata(req.params.cata,function(err, books,cata) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/admin');
+		}
+		
+		res.render('books', {
+			title: '管理中心',
+			books : books,
+			cata :cata,
+			user : req.session.user,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});
+	});
+};
+
+exports.statusBook = function(req, res){
+	if(!req.session.user || !req.session.user.admin){
+		return res.redirect('/');
+	}
+	//check db from model then execute callback below
+	Books.getStatus(req.params.status,function(err, books,cata) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/admin');
+		}
+		
+		res.render('books', {
+			title: '管理中心',
+			books : books,
+			cata :cata,
+			user : req.session.user,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});
+	});
+};
+
+exports.searchBook = function(req, res){
+	if(!req.session.user || !req.session.user.admin){
+		return res.redirect('/');
+	}
+	//check db from model then execute callback below
+	Books.getContent(req.query.key,function(err, books,cata) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/admin');
+		}
+		
+		res.render('books', {
+			title: '管理中心',
+			books : books,
+			cata :cata,
+			user : req.session.user,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});
 	});
 };

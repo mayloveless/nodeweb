@@ -28,18 +28,21 @@ Book.get = function (bookId, callback) {
 				if (err) {
 					callback(err, null);
 				}
-
-				var books = [];
-
-				docs.forEach(function(doc, index) {
-					var book = {
-						'bookName' : doc.bookName,
-						'author' : doc.uploader,
-						'cata': doc.cata
+				db.collection('cata', function(err, collection) {
+					if (err) {
+						mongodb.close();
+						return callback(err);
 					}
-					books.push(book);
+					collection.find({}).toArray(function(err, cata) {
+						mongodb.close();
+						if (err) {
+							callback(err, null);
+						}
+
+						callback(null, docs,cata);
+					});
 				});
-				callback(null, docs);
+
 			});
 		});
 	});
@@ -74,7 +77,7 @@ Book.delete = function (bid,callback) {
 		  return callback(err);
 		}
 
-		//获取users集合
+		//获取Book集合
 		db.collection('book', function(err, collection) {
 			if (err) {
 				mongodb.close();
@@ -88,4 +91,123 @@ Book.delete = function (bid,callback) {
 		});
 	});
 
+};
+
+Book.getCata = function (cata, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			console.log(cata);
+			collection.find({'cata':cata}).toArray(function(err, docs) {
+				mongodb.close();
+				if (err) {
+					callback(err, null);
+				}
+				db.collection('cata', function(err, collection) {
+					if (err) {
+						mongodb.close();
+						return callback(err);
+					}
+					collection.find({}).toArray(function(err, cata) {
+						mongodb.close();
+						if (err) {
+							callback(err, null);
+						}
+
+						callback(null, docs,cata);
+					});
+				});
+
+			});
+		});
+	});
+};
+
+Book.getStatus= function (status, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			if(status === 'online'){
+				var statusId = 1;
+			}else if(status === 'check'){
+				var statusId = 0;
+			}else{
+				var statusId = 2;
+			}
+			collection.find({'status':statusId}).toArray(function(err, docs) {
+				mongodb.close();
+				if (err) {
+					callback(err, null);
+				}
+
+				db.collection('cata', function(err, collection) {
+					if (err) {
+						mongodb.close();
+						return callback(err);
+					}
+					collection.find({}).toArray(function(err, cata) {
+						mongodb.close();
+						if (err) {
+							callback(err, null);
+						}
+
+						callback(null, docs,cata);
+					});
+				});
+
+			});
+		});
+	});
+};
+
+Book.getContent= function (key, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var searchContent = eval("/"+key+"/i");
+			collection.find({'$or':[{'content':searchContent},{'bookName':searchContent}]}).toArray(function(err, docs) {
+				mongodb.close();
+				if (err) {
+					callback(err, null);
+				}
+				
+				db.collection('cata', function(err, collection) {
+					if (err) {
+						mongodb.close();
+						return callback(err);
+					}
+					collection.find({}).toArray(function(err, cata) {
+						mongodb.close();
+						if (err) {
+							callback(err, null);
+						}
+
+						callback(null, docs,cata);
+					});
+				});
+
+			});
+		});
+	});
 };

@@ -154,3 +154,28 @@ Note.delete = function (nid,callback) {
 		});
 	});
 };
+
+Note.search = function (content,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('note', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			var searchContent = eval("/"+content+"/i");
+			collection.find({'content':searchContent}).toArray(function(err, docs) {
+				mongodb.close();
+				if (docs) {
+					callback(err, docs);
+				} else {
+					callback(err, null);
+				}
+			});
+		});
+	});
+};

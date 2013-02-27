@@ -155,6 +155,32 @@ Salon.delete = function (sid,callback) {
 	});
 };
 
+Salon.search = function (content,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('salon', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			var searchContent = eval("/"+content+"/i");
+			collection.find({'$or':[{'content':searchContent},{'title':searchContent}]}).toArray(function(err, docs) {
+				mongodb.close();
+				if (docs) {
+					callback(err, docs);
+				} else {
+					callback(err, null);
+				}
+			});
+		});
+	});
+};
+
+
 /*Salon.delComment = function (sid,callback) {
 	mongodb.open(function(err, db) {
 		if (err) {

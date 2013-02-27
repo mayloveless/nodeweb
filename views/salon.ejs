@@ -17,6 +17,14 @@
   <li ><a href="/admin/tip">提醒</a></li>
 </ul>
 
+<div class="alert alert-info span8">共<%= salon.length %>条记录</div>
+<div class="span8">
+	<form action="/admin/salon/search" method="get" class="form-inline ">
+		<input type="text" name="content" placeholder="内容" class="input-large"/>
+		<button type="submit" class="btn">搜索</button>
+	</form>
+</div>
+
 <table class="table table-striped span8">
 	 <tr>
 	  <td>标题</td>

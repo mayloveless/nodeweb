@@ -149,3 +149,27 @@ User.delete = function (name,callback) {
 	});
 
 };
+
+User.search = function (username, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('user', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var searchName = eval("/"+username+"/i");
+			collection.find({name:searchName}).toArray(function(err, docs) {
+				mongodb.close();
+				if (docs) {
+					callback(err, docs);
+				} else {
+					callback(err, null);
+				}
+			});
+		});
+	});
+};
