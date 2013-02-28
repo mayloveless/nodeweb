@@ -60,6 +60,12 @@
                 </li>
                 <% if (user.admin) {%>
                   <li ><a href="/admin">管理</a></li>
+                  <% if (curPage == 'create') {%>
+                    <li class="active" ><a href="/create">制作</a></li>
+                  <% } else { %>
+                    <li><a href="/create">制作</a></li>
+                  <% } %>
+                  
                 <% }  %>
               <% } %>
             </ul>

@@ -211,3 +211,7 @@ Book.getContent= function (key, callback) {
 		});
 	});
 };
+
+Book.create = function (bid,callback) {
+	
+};

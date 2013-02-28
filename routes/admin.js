@@ -236,7 +236,8 @@ exports.editBook = function(req, res){
 		bookName : req.body.bookName,
 		cata :req.body.cata,
 		status : req.body.status,
-		bookId : req.body.bookId
+		bookId : req.body.bookId,
+		index:req.body.index
 	}
 	Books.update(book, function(err, doc) {
 		if (err) {
@@ -430,3 +431,30 @@ exports.searchBook = function(req, res){
 		});
 	});
 };
+
+exports.createBookPage = function(req, res){
+	if(!req.session.user || !req.session.user.admin){
+		return res.redirect('/');
+	}
+	//check db from model then execute callback below
+	res.render('create', {
+		title: '制作书籍',
+		user : req.session.user,
+		curPage :"create",
+		success : req.flash('success').toString(),
+		error : req.flash('error').toString()
+	});
+};
+
+/*exports.createBook = function(req, res){
+	if(!req.session.user || !req.session.user.admin){
+		return res.redirect('/');
+	}
+	//check db from model then execute callback below
+	Books.create(function(err, books,cata) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/create');
+		}
+	});
+};*/

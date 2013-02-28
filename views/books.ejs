@@ -19,7 +19,7 @@
 <div class="alert alert-info span8">共<%= books.length %>条记录</div>
 <div class="span8">
 	<form action="/admin/book/search" method="get" class="form-inline ">
-		<input type="text" name="key" placeholder="内容" class="input-large"/>
+		<input type="text" name="key" placeholder="内容及标题" class="input-large"/>
 		<button type="submit" class="btn">搜索</button>
 	</form>
 </div>
@@ -27,10 +27,11 @@
 <table class="table table-striped span8">
 	 <tr>
 	  <td >内容</td>
+	  <td >目录</td>
 	  <td>书名</td>
 	   <td class="btn-group">
 	      <a class="dropdown" data-toggle="dropdown" href="#">
-	        详情
+	        分类
 	        <span class="caret"></span>
 	      </a>
 	      <ul class="dropdown-menu">
@@ -49,7 +50,7 @@
 	      </a>
 	      <ul class="dropdown-menu">
 	      	<li><a href="/admin/book">全部</a></li>
-	        <li><a href="/admin/book/status/online">上线</a></li>
+	        <li><a href="/admin/book/status/online">线上</a></li>
 	        <li><a href="/admin/book/status/check">审核</a></li>
 	        <li><a href="/admin/book/status/reject">拒绝</a></li>
 	      </ul>
@@ -61,6 +62,7 @@
 
 	<tr>
 	   <td style="width:300px;overflow:hidden"><%= books[i].content %></td>
+	   <td style="width:100px;overflow:hidden"><%= books[i].index %></td>
 	   <td><%= books[i].bookName %></td>
 	   <td><%= books[i].cata %></td>
 	   <td><%= books[i].uploader %></td>
@@ -84,6 +86,12 @@
 	      <label class="control-label" for="content">内容</label>
 	      <div class="controls">
 	        <textarea type="text" class="input-xlarge" id="content" name="content"></textarea>
+	      </div>
+	    </div>
+	    <div class="control-group">
+	      <label class="control-label" for="index">目录</label>
+	      <div class="controls">
+	        <textarea type="text" class="input-xlarge" id="index" name="index"></textarea>
 	      </div>
 	    </div>
 	    <div class="control-group">
@@ -133,12 +141,14 @@
 <script>
 	$('.edit').bind('click',function(){
 		var contents = $(this).parent().parent().children()[0].innerHTML;
-		var bookName = $(this).parent().parent().children()[1].innerHTML;
-		var cata = $(this).parent().parent().children()[2].innerHTML;
-		var status = $(this).parent().parent().children()[4].innerHTML;
+		var index = $(this).parent().parent().children()[1].innerHTML;
+		var bookName = $(this).parent().parent().children()[2].innerHTML;
+		var cata = $(this).parent().parent().children()[3].innerHTML;
+		var status = $(this).parent().parent().children()[5].innerHTML;
 		var id = $(this).parent().prev().val();
 		$('#bookid').val(id);
 		$('#content').val(contents);
+		$('#index').val(index);
 		$('#bookName').val(bookName);
 		$('#cata').val(cata);
 		$('#status').val(status);
