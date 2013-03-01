@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post" enctype="multipart/form-data" action="/creat">
+<form class="form-horizontal" method="post" enctype="multipart/form-data" action="/create">
   <fieldset>
     <legend>制作书籍</legend>
     <div class="control-group">
@@ -13,22 +13,22 @@
         <input type="text" class="input-xlarge" id="cata" name="cata" placeholder="分类">
       </div>
     </div>
-    <div class="control-group">
+    <!-- <div class="control-group">
       <label class="control-label" for="index">添加目录项</label>
       <div class="controls">
         <input type="text" class="input-xlarge" id="index" name="index" placeholder="目录项">
         <a href="javascript:;" id="more" class="btn">继续添加</a>
       </div>
-    </div>
+    </div> -->
 
     <div class="control-group" id="firlGroup">
-      <label class="control-label" for="password-repeat">上传文件:支持txt格式</label>
+      <label class="control-label" for="bookFile">上传文件</label>
       <div class="controls">
-        <input type="file" class="input-xlarge" id="file" name="file">
+        <input type="file" class="input-xlarge" id="bookFile" name="bookFile">
       </div>
     </div>
      <div class="form-actions">
-    	<button type="submit" class="btn">提交</button>
+    	<button type="submit" class="btn">提交给编辑</button>
     </div>
   </fieldset>
 </form>

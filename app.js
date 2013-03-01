@@ -87,8 +87,8 @@ app.get('/admin/book/cata/:cata', admin.cataBook);
 app.get('/admin/book/status/:status', admin.statusBook);
 app.get('/admin/book/search', admin.searchBook);
 
-app.get('/create', admin.createBookPage);
-//app.post('/create', admin.createBook);
+app.get('/create', admin.createBook);
+app.post('/create',admin.uploadBook);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

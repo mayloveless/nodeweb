@@ -7,7 +7,7 @@ var Book = function(){
 };
 module.exports = Book;
 
-Book.get = function (bookId, callback) {
+Book.get = function (bookName, callback) {
 	//check db
 	mongodb.open(function(err, db) {
 		if (err) {
@@ -20,10 +20,10 @@ Book.get = function (bookId, callback) {
 			}
 
 			var query = {};
-			if (bookId) {
-				query.bookId = bookId;
+			if (bookName) {
+				query.bookName = bookName;
 			}
-			collection.find({}).toArray(function(err, docs) {
+			collection.find(query).toArray(function(err, docs) {
 				mongodb.close();
 				if (err) {
 					callback(err, null);
@@ -212,6 +212,50 @@ Book.getContent= function (key, callback) {
 	});
 };
 
-Book.create = function (bid,callback) {
-	
+Book.create = function (bookName,cata,uploader,callback) {
+	mongodb.open(function(err, db) {
+		if (err) {
+		  return callback(err);
+		}
+
+		//获取books集合
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			//save
+			var book ={};
+			book['bookName'] = bookName;
+			book['cata'] = cata;
+			book['time'] = new Date();
+			book['uploader'] = uploader;
+			book['status'] = 1;
+			collection.insert(book, {safe: true}, function(err, book) {
+				db.collection('cata', function(err, collection) {
+					if (err) {
+						mongodb.close();
+						return callback(err);
+					}
+					
+					collection.find({'cname':cata}).toArray(function(err, docs) {
+						console.log(docs);
+						if(!docs[0]){
+							collection.insert({'cname':cata}, {safe: true}, function(err, docs) {
+								if (err) {
+									mongodb.close();
+									return callback(err);
+								}
+								mongodb.close();
+								callback(err, book);
+							});
+						}
+						mongodb.close();
+						callback(err, book);
+					});
+				});
+			});
+		});
+	});
+
 };

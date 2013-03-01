@@ -66,7 +66,13 @@
 	   <td><%= books[i].bookName %></td>
 	   <td><%= books[i].cata %></td>
 	   <td><%= books[i].uploader %></td>
-	   <td><%= books[i].status %></td>
+	   <% if(Number(books[i].status) === 0) { %>
+	   		<td>审核</td>
+	  	<%}else if(Number(books[i].status) === 1) {%>
+	  		<td>线上</td>
+	  	<% }else {%>
+	  		<td>拒绝</td>
+	  	<%}%>
 	   <input type="hidden" value="<%= books[i]['_id'] %>"/>
 	   <td><a href="#edit" role="button" data-toggle="modal" class="edit">修改</a></td>
 	   <td><a href="javascript:;" class="delete">删除</a></td>

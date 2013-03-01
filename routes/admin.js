@@ -212,7 +212,7 @@ exports.book = function(req, res){
 		return res.redirect('/');
 	}
 	//check db from model then execute callback below
-	Books.get({},function(err, books,cata) {
+	Books.get(null,function(err, books,cata) {
 		if (err) {
 			req.flash('error', err);
 			return res.redirect('/admin');
@@ -432,7 +432,7 @@ exports.searchBook = function(req, res){
 	});
 };
 
-exports.createBookPage = function(req, res){
+exports.createBook = function(req, res){
 	if(!req.session.user || !req.session.user.admin){
 		return res.redirect('/');
 	}
@@ -446,15 +446,55 @@ exports.createBookPage = function(req, res){
 	});
 };
 
-/*exports.createBook = function(req, res){
+exports.uploadBook = function(req, res){
 	if(!req.session.user || !req.session.user.admin){
 		return res.redirect('/');
 	}
-	//check db from model then execute callback below
-	Books.create(function(err, books,cata) {
+	if (req.body['bookName'] === '' || req.body['cata'] === ''){
+		req.flash('error', '请检查输入');
+		return res.redirect('/create');
+	}
+	if(!req.files.bookFile.name){
+		req.flash('error', '请上传文件');
+		return res.redirect('/create');
+	}
+	var bookName = req.body['bookName'];
+	var cataName = req.body['cata'];
+	Books.get(bookName, function(err, docs,cata) {
+		console.log(docs);
+		if (docs[0])
+			err = '书籍名已存在，请更换';
 		if (err) {
 			req.flash('error', err);
 			return res.redirect('/create');
 		}
+
+		var book = req.files.bookFile.name.split('.');
+		var bookType = book[book.length-1].toLowerCase();
+	/*	if(avatarType !=='txt' && avatarType !=='doc' && avatarType !=='pdf' ){
+			req.flash('error', '请上传txt或pdf格式文件');
+			return res.redirect('/create');
+		}
+	*/
+	  	var tmp_path = req.files.bookFile.path;
+	    // 指定文件上传后的目录 
+	    var target_path = './bookFiles/' + bookName + '.' +bookType;
+	    // 移动文件
+	    fs.rename(tmp_path, target_path, function(err) {
+	        if (err) throw err;
+	      // 删除临时文件夹文件, 
+	        fs.unlink(tmp_path, function() {
+	           if (err) throw err;
+	        });
+	    });
+
+		Books.create(bookName,cataName,req.session.user.name,function(err,docs) {
+			if (err) {
+				req.flash('error', err);
+				return res.redirect('/create');
+			}
+			req.flash('success', '上传成功');
+			return res.redirect('/create');
+		});
 	});
-};*/
+};
