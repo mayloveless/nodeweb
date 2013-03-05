@@ -338,7 +338,7 @@ Book.delRead = function (bid,user, callback) {
 				return callback(err);
 			}
 			var id = new ObjectID(bid);
-			collection.update({'_id':id},{ $set :{'reader':[]}}, function(err, doc) {
+			collection.update({'_id':id},{ $pull :{'reader':user}}, function(err, doc) {
 				mongodb.close();
 				if (err) {
 					callback(err, null);
