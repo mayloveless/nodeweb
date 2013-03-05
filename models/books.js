@@ -104,8 +104,12 @@ Book.getCata = function (cata, callback) {
 				mongodb.close();
 				return callback(err);
 			}
-			console.log(cata);
-			collection.find({'cata':cata}).toArray(function(err, docs) {
+			if(cata){
+				var searchObj = {'cata':cata}
+			}else{
+				var searchObj = {}
+			}
+			collection.find(searchObj).toArray(function(err, docs) {
 				mongodb.close();
 				if (err) {
 					callback(err, null);
@@ -212,7 +216,7 @@ Book.getContent= function (key, callback) {
 	});
 };
 
-Book.create = function (bookName,cata,uploader,callback) {
+Book.create = function (bookName,cata,uploader,desc,callback) {
 	mongodb.open(function(err, db) {
 		if (err) {
 		  return callback(err);
@@ -230,7 +234,8 @@ Book.create = function (bookName,cata,uploader,callback) {
 			book['cata'] = cata;
 			book['time'] = new Date();
 			book['uploader'] = uploader;
-			book['status'] = 1;
+			book['status'] = 0;
+			book['descption'] = desc;
 			collection.insert(book, {safe: true}, function(err, book) {
 				db.collection('cata', function(err, collection) {
 					if (err) {
@@ -258,4 +263,88 @@ Book.create = function (bookName,cata,uploader,callback) {
 		});
 	});
 
+};
+
+Book.getSingle = function (bookId, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			var query = {};
+			if (bookId) {
+				var id = new ObjectID(bookId)
+				query._id = id;
+			}
+
+			collection.find(query).toArray(function(err, docs) {
+				mongodb.close();
+				if (err) {
+					callback(err, null);
+				}
+				callback(null, docs);
+
+			});
+		});
+	});
+};
+
+Book.getUser = function (name, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			collection.find({'uploader':name}).toArray(function(err, docs) {
+				mongodb.close();
+				if (err) {
+					callback(err, null);
+				}
+				var list ={};
+				list.makeList = docs;
+				collection.find({'reader':{'$all':[name]}}).toArray(function(err, docs) {
+					list.readList = docs;
+					callback(null, list);
+				});
+				
+
+			});
+		});
+	});
+};
+
+
+Book.delRead = function (bid,user, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(bid);
+			collection.update({'_id':id},{ $set :{'reader':[]}}, function(err, doc) {
+				mongodb.close();
+				if (err) {
+					callback(err, null);
+				}
+				callback(err, doc);
+			});
+		});
+	});
 };

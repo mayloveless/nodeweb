@@ -1,12 +1,16 @@
-<div class="hero-unit">
-	<h1>欢迎来到 readIn</h1>
-</div>
-
 <ul class="nav nav-pills nav-stacked span2">
   <li class="nav-header">书籍分类</li>
-  <li class="active"><a href="/cata/all">全部书籍</a></li>
+  <% if(curCata === 'all'){%>
+  	<li class="active"><a href="/cata/all">全部书籍</a></li>
+  <% }else {%>
+  	<li><a href="/cata/all">全部书籍</a></li>
+  <% }%>
 <% for(var i=0; i<cata.length; i++) {%>
-	<li><a href="/cata/<%= cata[i].cname %>"><%= cata[i].cname %></a></li>
+	<% if(curCata === cata[i].cname){%>
+		<li class="active"><a href="/cata/<%= cata[i].cname %>"><%= cata[i].cname %></a></li>
+	<% }else {%>
+	  	<li><a href="/cata/<%= cata[i].cname %>"><%= cata[i].cname %></a></li>
+	  <% }%>
 <% } %>
 </ul>
 
@@ -17,6 +21,13 @@
 	</form>
 </div>
 
+<% if(books.length){ %>
+	<div class="alert alert-info span8">共<%= books.length %>条记录</div>
+<% }else { %>
+	<div class="alert alert-info span8">非常抱歉，没有结果</div>
+<% } %>
+
+
 <ul class="span8">
 <% for(var i=0; i<books.length; i++) {%>
    <li><a href="/book/<%= books[i]._id %>"><%= books[i].bookName %></a></li>
@@ -24,4 +35,3 @@
    <li><%= books[i].cata %></li>
 <% } %>
 </ul>
-

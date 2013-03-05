@@ -1,0 +1,174 @@
+<style>
+	img{
+		width: 50px;
+	}
+	footer{
+		clear: both;
+	}
+</style>
+<h1>管理中心</h1>
+
+<ul class="nav nav-pills nav-stacked span2">
+  <li ><a href="/admin">用户</a></li>
+  <li class="active"><a href="/admin/book">书籍</a></li>
+  <li  ><a href="/admin/salon">书评</a></li>
+  <li ><a href="/admin/note">笔记</a></li>
+  <li ><a href="/admin/comment">评论</a></li>
+  <li ><a href="/admin/tip">提醒</a></li>
+</ul>
+<div class="alert alert-info span8">共<%= books.length %>条记录</div>
+<div class="span8">
+	<form action="/admin/book/search" method="get" class="form-inline ">
+		<input type="text" name="key" placeholder="内容及标题" class="input-large"/>
+		<button type="submit" class="btn">搜索</button>
+	</form>
+</div>
+
+<table class="table table-striped span8">
+	 <tr>
+	  <td >内容</td>
+	  <td >目录</td>
+	  <td>书名</td>
+	   <td class="btn-group">
+	      <a class="dropdown" data-toggle="dropdown" href="#">
+	        分类
+	        <span class="caret"></span>
+	      </a>
+	      <ul class="dropdown-menu">
+	        <li><a href="/admin/book">全部</a></li>
+	        <% for(var i=0; i<cata.length; i++) {%>
+	       		<li><a href="/admin/book/cata/<%= cata[i]['cname']%>"><%= cata[i].cname%></a></li>
+	        <% } %>
+	      </ul>
+	    </td>
+
+	  <td>上传者</td>
+	  <td class="btn-group">
+	      <a class="dropdown" data-toggle="dropdown" href="#">
+	        状态
+	        <span class="caret"></span>
+	      </a>
+	      <ul class="dropdown-menu">
+	      	<li><a href="/admin/book">全部</a></li>
+	        <li><a href="/admin/book/status/online">线上</a></li>
+	        <li><a href="/admin/book/status/check">审核</a></li>
+	        <li><a href="/admin/book/status/reject">拒绝</a></li>
+	      </ul>
+	    </td>
+	  <td>修改</td>
+	  <td>删除</td>
+	</tr>
+<% for(var i=0; i<books.length; i++) {%>
+
+	<tr>
+	   <td style="width:300px;overflow:hidden"><%= books[i].content %></td>
+	   <td style="width:100px;overflow:hidden"><%= books[i].index %></td>
+	   <td><%= books[i].bookName %></td>
+	   <td><%= books[i].cata %></td>
+	   <td><%= books[i].uploader %></td>
+	   <% if(Number(books[i].status) === 0) { %>
+	   		<td>审核</td>
+	  	<%}else if(Number(books[i].status) === 1) {%>
+	  		<td>线上</td>
+	  	<% }else {%>
+	  		<td>拒绝</td>
+	  	<%}%>
+	   <input type="hidden" value="<%= books[i]['_id'] %>"/>
+	   <td><a href="#edit" role="button" data-toggle="modal" class="edit">修改</a></td>
+	   <td><a href="javascript:;" class="delete">删除</a></td>
+	</tr>
+<% } %>
+</table>
+
+<div id="edit" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">修改Book信息</h3>
+  </div>
+  <form method="post"  action="/admin/editBook" >
+	  <div class="modal-body">
+	  	<input type="hidden" value="" id="bookid" name="bookId"/>
+	    <div class="control-group">
+	      <label class="control-label" for="content">内容</label>
+	      <div class="controls">
+	        <textarea type="text" class="input-xlarge" id="content" name="content"></textarea>
+	      </div>
+	    </div>
+	    <div class="control-group">
+	      <label class="control-label" for="index">目录</label>
+	      <div class="controls">
+	        <textarea type="text" class="input-xlarge" id="index" name="index"></textarea>
+	      </div>
+	    </div>
+	    <div class="control-group">
+	      <label class="control-label" for="bookName">书名</label>
+	      <div class="controls">
+	        <input type="text" class="input-xlarge" id="bookName" name="bookName">
+	      </div>
+	    </div>
+	    <div class="control-group">
+	      <label class="control-label" for="cata">分类</label>
+	      <div class="controls">
+	        <input type="text" class="input-xlarge" id="cata" name="cata">
+	      </div>
+	    </div>
+	    <div class="control-group">
+	      <label class="control-label" for="password">状态</label>
+	      <div class="controls">
+	        <select id="status" name="status">
+	        	<option value="1">线上</option>
+	        	<option value="0">审核</option>
+	        	<option value="2">拒绝</option>
+	        </select>
+	      </div>
+	    </div>
+	   
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+	    <button class="btn btn-primary" type="submit">确定</button>
+	  </div>
+   </form>
+</div>
+
+<div class="modal hide fade" id="error">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>提示</h3>
+  </div>
+  <div class="modal-body">
+    <p>删除出错，请重新操作</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">确定</a>
+  </div>
+</div>
+
+<script>
+	$('.edit').bind('click',function(){
+		var contents = $(this).parent().parent().children()[0].innerHTML;
+		var index = $(this).parent().parent().children()[1].innerHTML;
+		var bookName = $(this).parent().parent().children()[2].innerHTML;
+		var cata = $(this).parent().parent().children()[3].innerHTML;
+		var status = $(this).parent().parent().children()[5].innerHTML;
+		var id = $(this).parent().prev().val();
+		$('#bookid').val(id);
+		$('#content').val(contents);
+		$('#index').val(index);
+		$('#bookName').val(bookName);
+		$('#cata').val(cata);
+		$('#status').val(status);
+	});
+
+	$('.delete').bind('click',function(){
+		var id = $(this).parent().prev().prev().val();
+		$.post('/admin/delBook',{'id':id},function(req, res){
+			if(res !=='success'){
+				$('#error').show();
+			}else{
+				location.reload();
+			}
+			
+		});
+	});
+</script>

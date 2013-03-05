@@ -92,7 +92,7 @@ exports.salon = function(req, res){
 			return res.redirect('/admin');
 		}
 	
-		res.render('salon', {
+		res.render('mgSalon', {
 			title: '管理中心',
 			salon : salons,
 			user : req.session.user,
@@ -124,7 +124,7 @@ exports.note = function(req, res){
 			return res.redirect('/admin');
 		}
 	
-		res.render('note', {
+		res.render('mgNote', {
 			title: '管理中心',
 			notes : notes,
 			user : req.session.user,
@@ -155,7 +155,7 @@ exports.comment = function(req, res){
 			return res.redirect('/admin');
 		}
 		
-		res.render('comment', {
+		res.render('mgComment', {
 			title: '管理中心',
 			comments : comments,
 			user : req.session.user,
@@ -195,7 +195,7 @@ exports.tip = function(req, res){
 			return res.redirect('/admin');
 		}
 		
-		res.render('tips', {
+		res.render('mgTips', {
 			title: '管理中心',
 			tips : tips,
 			user : req.session.user,
@@ -218,7 +218,7 @@ exports.book = function(req, res){
 			return res.redirect('/admin');
 		}
 		
-		res.render('books', {
+		res.render('mgBooks', {
 			title: '管理中心',
 			books : books,
 			cata :cata,
@@ -288,7 +288,7 @@ exports.cataNote = function(req, res){
 			return res.redirect('/admin');
 		}
 		
-		res.render('comment', {
+		res.render('mgComment', {
 			title: '管理中心',
 			comments : comments,
 			user : req.session.user,
@@ -310,7 +310,7 @@ exports.cataSalon = function(req, res){
 			return res.redirect('/admin');
 		}
 		
-		res.render('comment', {
+		res.render('mgComment', {
 			title: '管理中心',
 			comments : comments,
 			user : req.session.user,
@@ -331,7 +331,7 @@ exports.searchNote = function(req, res){
 			return res.redirect('/admin');
 		}
 	
-		res.render('note', {
+		res.render('mgCote', {
 			title: '管理中心',
 			notes : notes,
 			user : req.session.user,
@@ -352,7 +352,7 @@ exports.searchSalon = function(req, res){
 			return res.redirect('/admin');
 		}
 	
-		res.render('salon', {
+		res.render('mgSalon', {
 			title: '管理中心',
 			salon : salons,
 			user : req.session.user,
@@ -374,7 +374,7 @@ exports.cataBook = function(req, res){
 			return res.redirect('/admin');
 		}
 		
-		res.render('books', {
+		res.render('mgBooks', {
 			title: '管理中心',
 			books : books,
 			cata :cata,
@@ -397,7 +397,7 @@ exports.statusBook = function(req, res){
 			return res.redirect('/admin');
 		}
 		
-		res.render('books', {
+		res.render('mgBooks', {
 			title: '管理中心',
 			books : books,
 			cata :cata,
@@ -420,7 +420,7 @@ exports.searchBook = function(req, res){
 			return res.redirect('/admin');
 		}
 		
-		res.render('books', {
+		res.render('mgBooks', {
 			title: '管理中心',
 			books : books,
 			cata :cata,
@@ -450,7 +450,7 @@ exports.uploadBook = function(req, res){
 	if(!req.session.user || !req.session.user.admin){
 		return res.redirect('/');
 	}
-	if (req.body['bookName'] === '' || req.body['cata'] === ''){
+	if (req.body['bookName'] === '' || req.body['cata'] === ''|| req.body['desc'] === ''){
 		req.flash('error', '请检查输入');
 		return res.redirect('/create');
 	}
@@ -460,6 +460,7 @@ exports.uploadBook = function(req, res){
 	}
 	var bookName = req.body['bookName'];
 	var cataName = req.body['cata'];
+	var desc = req.body['desc'];
 	Books.get(bookName, function(err, docs,cata) {
 		console.log(docs);
 		if (docs[0])
@@ -488,7 +489,7 @@ exports.uploadBook = function(req, res){
 	        });
 	    });
 
-		Books.create(bookName,cataName,req.session.user.name,function(err,docs) {
+		Books.create(bookName,cataName,req.session.user.name,desc,function(err,docs) {
 			if (err) {
 				req.flash('error', err);
 				return res.redirect('/create');

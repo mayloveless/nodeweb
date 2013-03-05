@@ -86,9 +86,14 @@ app.get('/admin/salon/search', admin.searchSalon);
 app.get('/admin/book/cata/:cata', admin.cataBook);
 app.get('/admin/book/status/:status', admin.statusBook);
 app.get('/admin/book/search', admin.searchBook);
-
 app.get('/create', admin.createBook);
 app.post('/create',admin.uploadBook);
+
+app.get('/cata/:cata',routes.cata);
+app.get('/book/search',routes.searchBook);
+app.get('/book/:bookid',routes.single);
+app.get('/user/:userid',routes.user);
+app.post('/user/delRead',routes.userDelRead);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

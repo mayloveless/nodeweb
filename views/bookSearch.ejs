@@ -1,0 +1,22 @@
+
+<div class="span10">
+  <form action="/book/search" method="get" class="form-inline ">
+    <input type="text" name="key" placeholder="内容及标题" class="input-large"/>
+    <button type="submit" class="btn">搜索</button>
+  </form>
+</div>
+
+<% if(books.length){ %>
+	<div class="alert alert-info span10">共搜索到<%= books.length %>条记录</div>
+<% }else { %>
+	<div class="alert alert-info span10">非常抱歉，没有结果</div>
+<% } %>
+
+
+<ul class="span10">
+<% for(var i=0; i<books.length; i++) {%>
+  <li><a href="/book/<%= books[i]._id %>"><%= books[i].bookName %></a></li>
+   <li><%= books[i].author %></li>
+   <li><%= books[i].cata %></li>
+<% } %>
+</ul>

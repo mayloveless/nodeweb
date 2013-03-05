@@ -1,0 +1,73 @@
+
+
+<% if(isMine === true){%>
+	<h1>我的主页</h1>
+<%}else {%>
+	<h1><%= curUser.name%>的主页</h1>
+<% }%>
+
+<ul class="nav nav-tabs span10">
+  <li class="active" ><a href="#readList" data-toggle="tab">阅读清单</a></li>
+  <li><a href="#makeList" data-toggle="tab">制作清单</a></li>
+</ul>
+
+
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade active in" id="readList">
+  	<ul class="nav nav-list " >
+   		<% if(readList[0]){%>
+	   		<% for(var i=0;i<readList.length;i++){%>
+				<li>
+					<a href="/book/<%= readList[i]._id %>"><%= readList[i].bookName %></a>
+					<% if(isMine === true){%>
+						<a href="javascript:;" bid=<%= readList[i]._id %> class="delete">删除</a>
+					<% }%>
+				</li>
+			<%}%>
+		<% }else {%>
+			<div class="alert alert-info span10">还没有书籍</div>
+		<% }%>
+	</ul>
+  </div>
+  <div class="tab-pane fade" id="makeList">
+   	<ul class="nav nav-list " >
+   		<% if(makeList[0]){%>
+	   		<% for(var i=0;i<makeList.length;i++){%>
+				<li><a href="/book/<%= makeList[i]._id %>"><%= makeList[i].bookName %></a></li>
+			<%}%>
+		<% }else {%>
+			<div class="alert alert-info span10">还没有书籍</div>
+		<% }%>
+	</ul>
+  </div>
+</div>
+
+<div class="modal hide fade" id="error">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>提示</h3>
+  </div>
+  <div class="modal-body">
+    <p>删除出错，请重新操作</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">确定</a>
+  </div>
+</div>
+
+
+<script>
+	$(document).ready(function () {
+		$('.delete').bind('click',function(){
+			bid = $(this).attr('bid');
+			$.post('/user/delRead',{'bid':bid},function(req, res){
+				if(res !=='success'){
+					$('#error').show();
+				}else{
+					location.reload();
+				}
+				
+			});
+		});
+	});
+</script>

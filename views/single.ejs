@@ -1,0 +1,18 @@
+
+<div class="span10">
+  <form action="/book/search" method="get" class="form-inline ">
+    <input type="text" name="key" placeholder="内容及标题" class="input-large"/>
+    <button type="submit" class="btn">搜索</button>
+  </form>
+</div>
+
+
+
+
+<ul class="span10">
+<% for(var i=0; i<books.length; i++) {%>
+   <li><%= books[i].bookName %></li>
+   <li><%= books[i].author %></li>
+   <li><%= books[i].cata %></li>
+<% } %>
+</ul>
