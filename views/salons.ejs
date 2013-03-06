@@ -1,0 +1,11 @@
+
+<h1><%= title%></h1>
+<div class="alert alert-info span8">共<%= salons.length %>条记录</div>
+<ul class="span10">
+<% for(var i=0; i<salons.length; i++) {%>
+  <li>title:<a href="/book/<%= book._id %>/salon/salon_<%= i%>"><%= salons[i].title %></a></li>
+   <li>author:<%= salons[i].user.name %></li>
+   <li>time:<%= salons[i].time %></li>
+   <li>content:<%= salons[i].content %></li>
+<% } %>
+</ul>

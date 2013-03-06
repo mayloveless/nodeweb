@@ -9,62 +9,7 @@ module.exports = Salon;
 
 
 /*
-Salon.get = function (username, callback) {
-	//check db
-	mongodb.open(function(err, db) {
-		if (err) {
-			return callback(err);
-		}
-		db.collection('user', function(err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
 
-			collection.findOne({name: username}, function(err, doc) {
-				mongodb.close();
-				if (doc) {
-					var user = {
-						name : doc.name,
-						password : doc.password
-					};
-					if(doc['admin']){
-						user['admin'] = doc['admin'];
-					}
-					callback(err, user);
-				} else {
-					callback(err, null);
-				}
-			});
-		});
-	});
-};
-
-Salon.save = function (user,callback) {
-
-	mongodb.open(function(err, db) {
-		if (err) {
-		  return callback(err);
-		}
-
-		//获取users集合
-		db.collection('user', function(err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
-
-			//为name属性添加索引
-			//collection.ensureIndex('name', {unique: true});
-
-			//save
-			collection.insert(user, {safe: true}, function(err, user) {
-				mongodb.close();
-				callback(err, user);
-			});
-		});
-	});
-};
 
 Salon.update = function (user,callback) {
 
@@ -113,7 +58,7 @@ Salon.getAll = function (callback) {
 		if (err) {
 			return callback(err);
 		}
-		db.collection('salon', function(err, collection) {
+		db.collection('book', function(err, collection) {
 			if (err) {
 				mongodb.close();
 				return callback(err);
@@ -123,7 +68,15 @@ Salon.getAll = function (callback) {
 			collection.find({}).toArray(function(err, docs) {
 				mongodb.close();
 				if (docs) {
-					callback(err, docs);
+					var sl = [ ];
+					for(var i=0;i<docs.length;i++){
+						if(docs[i].salons){
+							for(var j=0;j<docs[i].salons.length;j++){
+								sl.push(docs[i].salons[j]);
+							}
+						}
+					}
+					callback(err, sl);
 				} else {
 					callback(err, null);
 				}

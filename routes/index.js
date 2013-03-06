@@ -89,7 +89,7 @@ exports.single = function(req, res){
 		}else{
 			res.render('single', {
 				title: book[0].bookName,
-				books : book,
+				book : book[0],
 				user : req.session.user,
 				curPage :"index",
 				success : req.flash('success').toString(),
@@ -157,5 +157,46 @@ exports.userDelRead = function(req, res){
 		}
 		return res.json({'success':1});
 		
+	});
+};
+
+exports.getSalons = function(req, res){
+	//check db from model then execute callback below
+
+	Books.getSalons(req.params.bookid,function(err, book) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/book'+req.params.bookid);
+		}
+
+		res.render('salons', {
+			title: '读者沙龙:'+book.bookName,
+			user : req.session.user,
+			book:book,
+			salons : book.salons,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});	
+	});
+};
+
+exports.getOneSalon = function(req, res){
+	//check db from model then execute callback below
+
+	Books.getOneSalon(req.params.bookid,req.params.salonid,function(err, book,salon) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/book'+req.params.bookid);
+		}
+		res.render('oneSalon', {
+			title: '读者沙龙:'+book.bookName,
+			user : req.session.user,
+			book:book,
+			salon : salon,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});	
 	});
 };

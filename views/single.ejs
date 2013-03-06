@@ -6,13 +6,12 @@
   </form>
 </div>
 
-
-
-
 <ul class="span10">
-<% for(var i=0; i<books.length; i++) {%>
-   <li><%= books[i].bookName %></li>
-   <li><%= books[i].author %></li>
-   <li><%= books[i].cata %></li>
-<% } %>
+   <li><%= book.bookName %></li>
+   <li><%= book.author %></li>
+   <li><%= book.cata %></li>
+
+	<li><a href="/book/<%= book._id%>/salon">书评</a></li>
 </ul>
+
+

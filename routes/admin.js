@@ -91,7 +91,7 @@ exports.salon = function(req, res){
 			req.flash('error', err);
 			return res.redirect('/admin');
 		}
-	
+		
 		res.render('mgSalon', {
 			title: '管理中心',
 			salon : salons,

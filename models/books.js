@@ -348,3 +348,54 @@ Book.delRead = function (bid,user, callback) {
 		});
 	});
 };
+
+Book.getSalons = function (bid, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(bid);
+			collection.findOne({'_id':id}, function(err, doc) {
+				mongodb.close();
+				if (err) {
+					callback(err, null);
+				}
+				if(!doc.salons){
+					doc.salons =[]
+				}
+				callback(err, doc);
+			});
+		});
+	});
+};
+
+Book.getOneSalon = function (bid,sid, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(bid);
+			collection.findOne({'_id':id}, function(err, doc) {
+				mongodb.close();
+				if (err) {
+					callback(err, null);
+				}
+				var salonid = sid.split('_')[1];
+				var salon = doc.salons[salonid];
+				callback(err, doc,salon);
+			});
+		});
+	});
+};

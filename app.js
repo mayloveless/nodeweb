@@ -95,6 +95,9 @@ app.get('/book/:bookid',routes.single);
 app.get('/user/:userid',routes.user);
 app.post('/user/delRead',routes.userDelRead);
 
+app.get('/book/:bookid/salon',routes.getSalons);
+app.get('/book/:bookid/salon/:salonid',routes.getOneSalon);
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
