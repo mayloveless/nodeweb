@@ -97,6 +97,12 @@ app.post('/user/delRead',routes.userDelRead);
 
 app.get('/book/:bookid/salon',routes.getSalons);
 app.get('/book/:bookid/salon/:salonid',routes.getOneSalon);
+app.get('/book/:bookid/newSalon',routes.addSalonPage);
+app.post('/addSalon',routes.addSalon);
+app.post('/editSalon',routes.editSalon);
+app.get('/book/:bookid/salon/:salonid/edit',routes.salonEdit);
+app.post('/book/:bookid/salon/:salonid/del',routes.salonDel);
+app.post('/book/:bookid/salon/:salonid/like',routes.salonLike);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

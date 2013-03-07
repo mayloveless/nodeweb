@@ -169,6 +169,16 @@ exports.getSalons = function(req, res){
 			return res.redirect('/book'+req.params.bookid);
 		}
 
+		var temp;
+		for(var i=0;i<book.salons.length-1;i++){
+			for(var j=1;j<book.salons.length;j++){
+				if(book.salons[j].like > book.salons[i].like){
+					temp = book.salons[j];
+					book.salons[j] = book.salons[i];
+					book.salons[i] =temp;
+				}
+			}
+		}
 		res.render('salons', {
 			title: '读者沙龙:'+book.bookName,
 			user : req.session.user,
@@ -189,7 +199,77 @@ exports.getOneSalon = function(req, res){
 			req.flash('error', err);
 			return res.redirect('/book'+req.params.bookid);
 		}
+		if(req.session.user.name ===salon.user.name.toString() ){
+			var isMine = true;
+		}else{
+			var isMine = false;
+		}
+
 		res.render('oneSalon', {
+			title: '读者沙龙:'+book.bookName,
+			user : req.session.user,
+			book:book,
+			isMine: isMine,
+			salon : salon,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});	
+	});
+};
+
+exports.addSalonPage = function(req, res){
+	//check db from model then execute callback below
+
+	Books.getSingle(req.params.bookid,function(err, book) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/book'+req.params.bookid);
+		}
+		res.render('addSalon', {
+			title: '读者沙龙:'+book[0].bookName,
+			user : req.session.user,
+			book:book[0],
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});	
+	});
+};
+
+exports.addSalon = function(req, res){
+	//check db from model then execute callback below
+
+	if (req.body['salonTitle'] === '' || req.body['salonContent'] === ''){
+		req.flash('error', '请检查输入');
+		return res.redirect('/book/'+req.body.bookid+'/newSalon');
+	}
+	req.body['user'] ={
+		name :req.session.user.name,
+		avatar :req.session.user.avatar
+	} ;
+	Books.addSalon(req.body,function(err, book) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/book/'+req.body.bookid);
+		}
+		return res.redirect('/book/'+req.body.bookid+'/salon');	
+	});
+};
+
+exports.salonEdit = function(req, res){
+	//check db from model then execute callback below
+
+	Books.getOneSalon(req.params.bookid,req.params.salonid,function(err, book,salon) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/book'+req.params.bookid);
+		}
+		if(req.session.user.name !==salon.user.name.toString() ){
+			return res.redirect('/book'+req.params.bookid);
+		}
+
+		res.render('oneSalonEdit', {
 			title: '读者沙龙:'+book.bookName,
 			user : req.session.user,
 			book:book,
@@ -198,5 +278,51 @@ exports.getOneSalon = function(req, res){
 			success : req.flash('success').toString(),
 			error : req.flash('error').toString()
 		});	
+	});
+	
+};
+
+exports.editSalon = function(req, res){
+	//check db from model then execute callback below
+
+	if (req.body['salonTitle'] === '' || req.body['salonContent'] === ''){
+		req.flash('error', '请检查输入');
+		return res.redirect('/book/'+req.body.bookid+'/newSalon');
+	}
+	req.body['user'] ={
+		name :req.session.user.name,
+		avatar :req.session.user.avatar
+	} ;
+	req.body['newtime'] = new Date().valueOf();
+	Books.editSalon(req.body,function(err, book) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/book/'+req.body.bookid);
+		}
+		return res.redirect('/book/'+req.body.bookid+'/salon/salon_'+req.body['newtime']);	
+	});
+};
+
+exports.salonDel = function(req, res){
+	//check db from model then execute callback below
+	Books.delSalon(req.body,function(err, book) {
+		if (err) {
+			req.flash('error', err);
+			return res.json({'success':0});
+		}
+		return res.json({'success':1});
+	});
+};
+
+
+exports.salonLike = function(req, res){
+	//check db from model then execute callback below
+
+	Books.likeSalon(req.body,function(err, book) {
+		if (err) {
+			req.flash('error', err);
+			return res.json({'success':0});
+		}
+		return res.json({'success':1});
 	});
 };

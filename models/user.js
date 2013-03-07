@@ -25,7 +25,8 @@ User.get = function (username, callback) {
 					var user = {
 						name : doc.name,
 						password : doc.password,
-						id : doc._id
+						id : doc._id,
+						avatar : doc.avatar
 					};
 					if(doc['admin']){
 						user['admin'] = doc['admin'];

@@ -1,0 +1,27 @@
+
+<h1><%= title%></h1>
+
+<form class="form-horizontal" method="post"  action="/editSalon">
+  <fieldset>
+    <legend>修改《<%= book.bookName%>》的书评：</legend>
+    <input type="hidden" value="<%=book._id%>" name="bookid" />
+    <input type="hidden" value="<%=salon.sid%>" name="sid" />
+    <input type="hidden" value="<%=salon.time%>" name="time" />
+    <input type="hidden" value="<%=salon.like%>" name="like" />
+    <div class="control-group">
+      <label class="control-label" for="salonTitle">名称</label>
+      <div class="controls">
+        <input type="text" value="<%= salon.title %>" class="input-xlarge" id="salonTitle" name="salonTitle" placeholder="标题">
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="salonContent">内容</label>
+      <div class="controls">
+        <textarea type="text" style="min-height:300px;"  class="input-xlarge" id="salonContent" name="salonContent" placeholder="内容"><%= salon.content %></textarea>
+      </div>
+    </div>
+     <div class="form-actions">
+    	<button type="submit" class="btn">提交</button>
+    </div>
+  </fieldset>
+</form>

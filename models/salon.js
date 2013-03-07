@@ -8,49 +8,6 @@ var Salon = function(){
 module.exports = Salon;
 
 
-/*
-
-
-Salon.update = function (user,callback) {
-
-	mongodb.open(function(err, db) {
-		if (err) {
-		  return callback(err);
-		}
-
-		//获取users集合
-		db.collection('user', function(err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
-
-			//为name属性添加索引
-			//collection.ensureIndex('name', {unique: true});
-
-			//update
-			var newUser = {	};
-			if(user.avatar){
-				newUser['avatar'] = user.avatar;
-			}
-			if(user.password){
-				newUser['password']= user.password;
-			}
-			if(user.newName){
-				newUser['name']= user.newName;
-			}
-			if(user.ifAdmin){
-				newUser['admin']= user.ifAdmin;
-			}
-			collection.update({"name":user.name}, { $set :newUser}, function(err, doc) {
-				mongodb.close();
-				callback(err, doc);
-			});
-		});
-	});
-};
-*/
-
 
 Salon.getAll = function (callback) {
 	//check db
@@ -72,6 +29,9 @@ Salon.getAll = function (callback) {
 					for(var i=0;i<docs.length;i++){
 						if(docs[i].salons){
 							for(var j=0;j<docs[i].salons.length;j++){
+								docs[i].salons[j]['bookid']  = docs[i]._id;
+								docs[i].salons[j]['bookName']  = docs[i].bookName;
+								docs[i].salons[j]['sid']  = j;
 								sl.push(docs[i].salons[j]);
 							}
 						}
@@ -86,27 +46,7 @@ Salon.getAll = function (callback) {
 };
 
 
-Salon.delete = function (sid,callback) {
-	mongodb.open(function(err, db) {
-		if (err) {
-		  return callback(err);
-		}
 
-		//获取users集合
-		db.collection('salon', function(err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
-			var salon = new ObjectID(sid)
-			
-			collection.remove({'_id':salon},function(err, doc) {
-				mongodb.close();
-				callback(err, doc);
-			});
-		});
-	});
-};
 
 Salon.search = function (content,callback) {
 	//check db
@@ -114,16 +54,18 @@ Salon.search = function (content,callback) {
 		if (err) {
 			return callback(err);
 		}
-		db.collection('salon', function(err, collection) {
+		db.collection('book', function(err, collection) {
 			if (err) {
 				mongodb.close();
 				return callback(err);
 			}
 
 			var searchContent = eval("/"+content+"/i");
-			collection.find({'$or':[{'content':searchContent},{'title':searchContent}]}).toArray(function(err, docs) {
+//{'salons': { $elemMatch: {'$or':[{'content':searchContent},{'title':searchContent}]} } }
+			collection.find({'salons': { '$elemMatch': { 'title': '22' }}}).toArray(function(err, docs) {
 				mongodb.close();
 				if (docs) {
+					console.log(docs);
 					callback(err, docs);
 				} else {
 					callback(err, null);

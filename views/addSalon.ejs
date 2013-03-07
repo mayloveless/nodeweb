@@ -1,0 +1,23 @@
+
+<form class="form-horizontal" method="post"  action="/addSalon">
+  <fieldset>
+    <legend>添加《<%= book.bookName%>》的书评：</legend>
+    <input type="hidden" value="<%=book._id%>" name="bookid"/>
+    <input type="hidden" value="<%=book.bookName%>" name="bookName"/>
+    <div class="control-group">
+      <label class="control-label" for="salonTitle">名称</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" id="salonTitle" name="salonTitle" placeholder="标题">
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="salonContent">内容</label>
+      <div class="controls">
+        <textarea type="text" style="min-height:300px;"  class="input-xlarge" id="salonContent" name="salonContent" placeholder="内容"></textarea>
+      </div>
+    </div>
+     <div class="form-actions">
+    	<button type="submit" class="btn">提交</button>
+    </div>
+  </fieldset>
+</form>

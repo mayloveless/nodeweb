@@ -18,12 +18,12 @@
 </ul>
 
 <div class="alert alert-info span8">共<%= salon.length %>条记录</div>
-<div class="span8">
+<!-- <div class="span8">
 	<form action="/admin/salon/search" method="get" class="form-inline ">
 		<input type="text" name="content" placeholder="内容及标题" class="input-large"/>
 		<button type="submit" class="btn">搜索</button>
 	</form>
-</div>
+</div> -->
 
 <table class="table table-striped span8">
 	 <tr>
@@ -38,10 +38,10 @@
 	<tr>
 	   <td><%= salon[i].title %></td>
 	   <td style="width:200px;overflow:hidden"><%= salon[i].content %></td>
-	   <td><%= salon[i].like.num %></td>
+	   <td><%= salon[i].like ? salon[i].like : 0 %></td>
 	   <td><%= salon[i].user.name %></td>
-	   
-	   <td><a href="javascript:;" class="delete">删除</a></td>
+	   <td><a href="/book/<%= salon[i].bookid %>/salon/salon_<%=salon[i].time%>"><%= salon[i].bookName %></a></td>
+	   <td><a href="javascript:;" class="delete" time="<%= salon[i].time %>" bookid="<%= salon[i].bookid %>"  >删除</a></td>
 	</tr>
 <% } %>
 </table>
@@ -63,9 +63,9 @@
 <script>
 
 	$('.delete').bind('click',function(){
-		var sidArr = $(this).parent().prev().children('a').attr('href').split('/');
-		var sid = sidArr[sidArr.length-1];
-		$.post('/admin/delSalon',{'sid':sid},function(req, res){
+		var time = $(this).attr('time');
+		var bid = $(this).attr('bookid');
+		$.post('/book/'+bid+'/salon/salon_'+time+'/del',{'bookid':bid,'salonTime':time},function(req, res){
 			if(res !=='success'){
 				$('#error').show();
 			}else{

@@ -392,10 +392,108 @@ Book.getOneSalon = function (bid,sid, callback) {
 				if (err) {
 					callback(err, null);
 				}
-				var salonid = sid.split('_')[1];
-				var salon = doc.salons[salonid];
-				callback(err, doc,salon);
+				var salonid = Number(sid.split('_')[1]);
+				for(var i=0;i<doc.salons.length;i++){
+					if(doc.salons[i].time === salonid){
+						callback(err, doc,doc.salons[i]);
+					}
+				}
+				
 			});
+		});
+	});
+};
+
+Book.addSalon = function (salon, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(salon.bookid);
+			var one  ={};
+			one['content'] = salon['salonContent'];
+			one['title'] = salon['salonTitle'];
+			one['user'] = salon['user'];
+			one['time'] =  new Date().valueOf();
+			one['like'] = 0;
+			collection.update({'_id':id}, { $push :{'salons':one}},function(err, doc) {
+				mongodb.close();
+				callback(err, doc);
+			});
+		});
+
+	});
+};
+
+Book.editSalon = function (salon, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(salon.bookid);
+			var one  ={};
+			one['content'] = salon['salonContent'];
+			one['title'] = salon['salonTitle'];
+			one['user'] = salon['user'];
+			one['like'] = salon['like'];
+			one['time'] =  salon['newtime'];
+			collection.update({'_id':id,'salons.time':Number(salon['time'])},{"$set":{'salons.$':one}},function(err, doc) {
+				mongodb.close();
+				callback(err, doc);
+			})
+		});
+	});
+};
+
+Book.delSalon = function (salon,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(salon.bookid);
+
+			collection.update({'_id':id},{"$pull":{'salons':{'time':Number(salon.salonTime)}}},function(err, doc) {
+				mongodb.close();
+				callback(err, doc);
+			})
+		});
+	});
+};
+
+Book.likeSalon = function (salon,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(salon.bookid);
+			collection.update({'_id':id,'salons.time':Number(salon.salonTime)},{"$inc":{'salons.$.like' : 1}},function(err, doc) {
+				mongodb.close();
+				callback(err, doc);
+			})
 		});
 	});
 };

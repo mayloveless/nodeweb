@@ -7,5 +7,58 @@
    <li>author:<%= salon.user.name %></li>
    <li>time:<%= salon.time %></li>
    <li>content:<%= salon.content %></li>
-
+   <li>like:<%= salon.like %></li>
+   <% if(isMine === true){%>
+		<li><a href="/book/<%= book._id%>/salon/salon_<%=salon.time%>/edit">修改</a></li>
+		<li><a href="javascript:;" id="del">删除</a></li>
+	<% }else  {%>
+		<li><span id="likeNum"><%= salon.like %></span>人喜欢<a href="javascript:;" id="like">喜欢</a></li>
+	<%}%>
 </ul>
+
+
+<div class="modal hide fade" id="error">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>提示</h3>
+  </div>
+  <div class="modal-body">
+    <p>删除出错，请重新操作</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn btn-primary" data-dismiss="modal" aria-hidden="true">确定</a>
+  </div>
+</div>
+
+
+<script>
+	$(document).ready(function(){
+		
+		$('#del').bind('click',function(){
+			var time = <%= salon.time %>;
+			$.post('/book/<%= book._id%>/salon/salon_<%=salon.time%>/del',{'salonTime':time,'bookid':'<%= book._id%>'},function(req, res){
+				if(res !=='success'){
+					$('#error').show();
+				}else{
+					location.href="/book/<%= book._id%>/salon/";
+				}
+				
+			});
+		});
+		$('#like').bind('click',function(){
+			var time = <%= salon.time %>;
+			$.post('/book/<%= book._id%>/salon/salon_<%=salon.time%>/like',{'salonTime':time,'bookid':'<%= book._id%>'},function(req, res){
+				if(res !=='success'){
+					$('#error').show();
+				}else{
+					var num = $('#likeNum').text();
+					$('#likeNum').text(++num);
+					$('#like').unbind('click').bind('click',function(){
+						alert('已喜欢!');
+					});
+				}
+				
+			});
+		});
+	});
+</script>
