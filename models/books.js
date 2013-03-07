@@ -422,6 +422,7 @@ Book.addSalon = function (salon, callback) {
 			one['user'] = salon['user'];
 			one['time'] =  new Date().valueOf();
 			one['like'] = 0;
+			one['comment'] = [];
 			collection.update({'_id':id}, { $push :{'salons':one}},function(err, doc) {
 				mongodb.close();
 				callback(err, doc);
@@ -449,10 +450,24 @@ Book.editSalon = function (salon, callback) {
 			one['user'] = salon['user'];
 			one['like'] = salon['like'];
 			one['time'] =  salon['newtime'];
-			collection.update({'_id':id,'salons.time':Number(salon['time'])},{"$set":{'salons.$':one}},function(err, doc) {
+			collection.findOne({'_id':id}, function(err, doc) {
 				mongodb.close();
-				callback(err, doc);
-			})
+				if (err) {
+					callback(err, null);
+				}
+				var salonid =Number(salon['time']);	
+				for(var i=0;i<doc.salons.length;i++){
+					if(doc.salons[i].time === salonid){
+						one['comment'] = doc.salons[i].comment;
+						collection.update({'_id':id,'salons.time':Number(salon['time'])},{"$set":{'salons.$':one}},function(err, doc) {
+							mongodb.close();
+							callback(err, doc);
+						})
+					}
+				}
+				
+			});
+			
 		});
 	});
 };
