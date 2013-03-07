@@ -103,6 +103,8 @@ app.post('/editSalon',routes.editSalon);
 app.get('/book/:bookid/salon/:salonid/edit',routes.salonEdit);
 app.post('/book/:bookid/salon/:salonid/del',routes.salonDel);
 app.post('/book/:bookid/salon/:salonid/like',routes.salonLike);
+app.post('/book/:bookid/salon/:salonid/pubCmt',routes.pubCmt);
+app.post('/book/:bookid/salon/:salonid/delCmt',routes.delCmt);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

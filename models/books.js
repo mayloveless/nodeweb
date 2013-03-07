@@ -497,3 +497,48 @@ Book.likeSalon = function (salon,callback) {
 		});
 	});
 };
+
+Book.pubCmt = function (salon, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(salon.bookid);
+			var one = {};
+			one['content'] = salon['content'];
+			one['user'] = salon['user'];
+			one['time'] = new Date().valueOf();
+			collection.update({'_id':id,'salons.time':Number(salon['time'])},{"$push":{'salons.$.comment':one}},function(err, doc) {
+				mongodb.close();
+				callback(err, doc);
+			})
+		});
+
+	});
+};
+
+Book.delCmt = function (salon,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(salon.bookid);
+			collection.update({'_id':id,'salons.time':Number(salon.stime)},{"$pull":{'salons.$.comment':{'time':Number(salon.time)}}},function(err, doc) {
+				mongodb.close();
+				callback(err, doc);
+			})
+		});
+	});
+};

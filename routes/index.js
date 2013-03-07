@@ -326,3 +326,34 @@ exports.salonLike = function(req, res){
 		return res.json({'success':1});
 	});
 };
+
+exports.pubCmt = function(req, res){
+	//check db from model then execute callback below
+	if (req.body['content'] === ''){
+		req.flash('error', '请检查输入');
+		return res.redirect('/book/'+req.body.bookid+'/salon/salon_'+req.body['time']);	
+	}
+	req.body['user'] ={
+		name :req.session.user.name,
+		avatar :req.session.user.avatar
+	} ;
+	Books.pubCmt(req.body,function(err, book) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/book/'+req.body.bookid);
+		}
+		return res.redirect('/book/'+req.body.bookid+'/salon/salon_'+req.body['time']);	
+	});
+};
+
+exports.delCmt = function(req, res){
+	//check db from model then execute callback below
+	
+	Books.delCmt(req.body,function(err, book) {
+		if (err) {
+			req.flash('error', err);
+			return res.json({'success':0});
+		}
+		return res.json({'success':1});
+	});
+};
