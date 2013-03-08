@@ -47,6 +47,21 @@
                 <% } %>
               <% } else { %>
                 <li><a href='javascript:;'>欢迎您,<%= user.name%></a></li>
+                
+               <% if (curPage == 'create') {%>
+                  <li class="active" ><a href="/create">制作</a></li>
+                <% } else { %>
+                  <li><a href="/create">制作</a></li>
+                <% } %>
+                 <% if (curPage == 'msg') {%>
+                  <li class="active" ><a href="/msg">提醒</a></li>
+                <% } else { %>
+                 <li><a href="/msg">提醒</a></li>
+                <% } %>
+                
+                <% if (user.admin) {%>
+                  <li ><a href="/admin">管理</a></li>
+                <% }  %>
                 <li class="btn-group">
                   <a class="dropdown" data-toggle="dropdown" href="#">
                     设置
@@ -58,16 +73,9 @@
                     <li><a href="/logout">退出</a></li>
                   </ul>
                 </li>
-               <% if (curPage == 'create') {%>
-                  <li class="active" ><a href="/create">制作</a></li>
-                <% } else { %>
-                  <li><a href="/create">制作</a></li>
-                <% } %>
-                  
-                <% if (user.admin) {%>
-                  <li ><a href="/admin">管理</a></li>
-                <% }  %>
+                
               <% } %>
+
             </ul>
           </div>
         </div>

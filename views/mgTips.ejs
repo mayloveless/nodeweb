@@ -19,15 +19,16 @@
 <div class="alert alert-info span8">共<%= tips.length %>条记录</div>
 <table class="table table-striped span8">
 	 <tr>
-	  <td >内容</td>
+	  <td >用户</td>
 	  <td>类型</td>
 	  <td>链接</td>
 	</tr>
 <% for(var i=0; i<tips.length; i++) {%>
 	<tr>
-	   <td style="width:300px;overflow:hidden"><%= tips[i].content %></td>
+		<td><%= tips[i].relate.name %></td>
 	   <td><%= tips[i].type %></td>
 	   <td><%= tips[i].url %></td>
+	   
 	</tr>
 <% } %>
 </table>

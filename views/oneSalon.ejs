@@ -7,12 +7,21 @@
    <li>author:<%= salon.user.name %></li>
    <li>time:<%= salon.time %></li>
    <li>content:<%= salon.content %></li>
-   <li>like:<%= salon.like %></li>
-   <% if(isMine === true){%>
+   <% if(isMine === true ){%>
 		<li><a href="/book/<%= book._id%>/salon/salon_<%=salon.time%>/edit">修改</a></li>
 		<li><a href="javascript:;" id="del">删除</a></li>
 	<% }else  {%>
-		<li><span id="likeNum"><%= salon.like %></span>人喜欢<a href="javascript:;" id="like">喜欢</a></li>
+		<li><span id="likeNum"><%= salon.like.num %></span>人喜欢
+		<% if(salon.like.num != 0 ){%>
+			<span>ta 们是:
+				<% for(var i=0;i<salon.like.users.length;i++){%>
+					<%=salon.like.users[i]%>
+				<%}%>
+			</span>
+		<%}%>
+		<% if(canLike === 1 ){%>
+			<a href="javascript:;" id="like">喜欢</a></li>
+		<%}%>
 	<%}%>
 </ul>
 

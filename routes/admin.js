@@ -189,7 +189,7 @@ exports.tip = function(req, res){
 		return res.redirect('/');
 	}
 	//check db from model then execute callback below
-	Tips.getAll(function(err, tips) {
+	Tips.adminGetAll(function(err, tips) {
 		if (err) {
 			req.flash('error', err);
 			return res.redirect('/admin');

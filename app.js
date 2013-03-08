@@ -106,6 +106,9 @@ app.post('/book/:bookid/salon/:salonid/like',routes.salonLike);
 app.post('/book/:bookid/salon/:salonid/pubCmt',routes.pubCmt);
 app.post('/book/:bookid/salon/:salonid/delCmt',routes.delCmt);
 
+app.get('/msg',routes.getMsg);
+app.post('/readMsg',routes.readMsg);
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

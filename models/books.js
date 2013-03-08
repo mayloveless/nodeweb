@@ -421,7 +421,10 @@ Book.addSalon = function (salon, callback) {
 			one['title'] = salon['salonTitle'];
 			one['user'] = salon['user'];
 			one['time'] =  new Date().valueOf();
-			one['like'] = 0;
+			one['like'] = {
+				num : 0,
+				users :[]
+			};
 			one['comment'] = [];
 			collection.update({'_id':id}, { $push :{'salons':one}},function(err, doc) {
 				mongodb.close();
@@ -448,7 +451,6 @@ Book.editSalon = function (salon, callback) {
 			one['content'] = salon['salonContent'];
 			one['title'] = salon['salonTitle'];
 			one['user'] = salon['user'];
-			one['like'] = salon['like'];
 			one['time'] =  salon['newtime'];
 			collection.findOne({'_id':id}, function(err, doc) {
 				mongodb.close();
@@ -459,6 +461,7 @@ Book.editSalon = function (salon, callback) {
 				for(var i=0;i<doc.salons.length;i++){
 					if(doc.salons[i].time === salonid){
 						one['comment'] = doc.salons[i].comment;
+						one['like'] = doc.salons[i].like;
 						collection.update({'_id':id,'salons.time':Number(salon['time'])},{"$set":{'salons.$':one}},function(err, doc) {
 							mongodb.close();
 							callback(err, doc);
@@ -493,7 +496,7 @@ Book.delSalon = function (salon,callback) {
 	});
 };
 
-Book.likeSalon = function (salon,callback) {
+Book.likeSalon = function (salon,username,callback) {
 	//check db
 	mongodb.open(function(err, db) {
 		if (err) {
@@ -505,7 +508,7 @@ Book.likeSalon = function (salon,callback) {
 				return callback(err);
 			}
 			var id = new ObjectID(salon.bookid);
-			collection.update({'_id':id,'salons.time':Number(salon.salonTime)},{"$inc":{'salons.$.like' : 1}},function(err, doc) {
+			collection.update({'_id':id,'salons.time':Number(salon.salonTime)},{"$inc":{'salons.$.like.num' : 1},"$push":{'salons.$.like.users' : username}},function(err, doc) {
 				mongodb.close();
 				callback(err, doc);
 			})
@@ -531,10 +534,11 @@ Book.pubCmt = function (salon, callback) {
 			one['time'] = new Date().valueOf();
 			collection.update({'_id':id,'salons.time':Number(salon['time'])},{"$push":{'salons.$.comment':one}},function(err, doc) {
 				mongodb.close();
-				callback(err, doc);
-			})
+				one['bookid'] = salon.bookid;
+				callback(err, one);
+			});
 		});
-
+		
 	});
 };
 

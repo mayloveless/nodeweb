@@ -5,6 +5,7 @@
 var crypto = require('crypto');
 var Books = require('../models/books.js');
 var User = require('../models/user.js');
+var Msg = require('../models/tips.js');
 
 exports.index = function(req, res){
 	//check db from model then execute callback below
@@ -172,7 +173,7 @@ exports.getSalons = function(req, res){
 		var temp;
 		for(var i=0;i<book.salons.length-1;i++){
 			for(var j=1;j<book.salons.length;j++){
-				if(book.salons[j].like > book.salons[i].like){
+				if(book.salons[j].like.num > book.salons[i].like.num){
 					temp = book.salons[j];
 					book.salons[j] = book.salons[i];
 					book.salons[i] =temp;
@@ -205,11 +206,20 @@ exports.getOneSalon = function(req, res){
 			var isMine = false;
 		}
 
+		var canLike = 1;
+		for(var i=0;i<salon.like.users.length;i++){
+			if(salon.like.users[i] == req.session.user.name){
+				canLike = 0;
+				break;
+			}
+		}
+		console.log(canLike);
 		res.render('oneSalon', {
 			title: '读者沙龙:'+book.bookName,
 			user : req.session.user,
 			book:book,
 			isMine: isMine,
+			canLike: canLike,
 			salon : salon,
 			curPage :"",
 			success : req.flash('success').toString(),
@@ -318,12 +328,16 @@ exports.salonDel = function(req, res){
 exports.salonLike = function(req, res){
 	//check db from model then execute callback below
 
-	Books.likeSalon(req.body,function(err, book) {
+	Books.likeSalon(req.body,req.session.user.name,function(err, book) {
 		if (err) {
 			req.flash('error', err);
 			return res.json({'success':0});
 		}
-		return res.json({'success':1});
+		//return res.json({'success':1});
+		//发表评论之后发布一条消息
+		Msg.addLike(req.body,function() {
+			return res.json({'success':1});
+		});	
 	});
 };
 
@@ -342,7 +356,10 @@ exports.pubCmt = function(req, res){
 			req.flash('error', err);
 			return res.redirect('/book/'+req.body.bookid);
 		}
-		return res.redirect('/book/'+req.body.bookid+'/salon/salon_'+req.body['time']);	
+		//发表评论之后发布一条消息
+		Msg.addSalon(book,function() {
+			return res.redirect('/book/'+req.body.bookid+'/salon/salon_'+req.body['time']);	
+		});	
 	});
 };
 
@@ -350,6 +367,36 @@ exports.delCmt = function(req, res){
 	//check db from model then execute callback below
 	
 	Books.delCmt(req.body,function(err, book) {
+		if (err) {
+			req.flash('error', err);
+			return res.json({'success':0});
+		}
+		return res.json({'success':1});
+	});
+};
+
+exports.getMsg = function(req, res){
+	//check db from model then execute callback below
+	Msg.getAll(req.session.user.name,function(err, msg) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/');
+		}
+
+		res.render('msg', {
+			title: '提醒',
+			user : req.session.user,
+			msg:msg,
+			curPage :"msg",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});	
+	});
+};
+
+exports.readMsg = function(req, res){
+	//check db from model then execute callback below
+	Msg.read(req.body.mid,function(err, msg) {
 		if (err) {
 			req.flash('error', err);
 			return res.json({'success':0});

@@ -38,7 +38,7 @@
 	<tr>
 	   <td><%= salon[i].title %></td>
 	   <td style="width:200px;overflow:hidden"><%= salon[i].content %></td>
-	   <td><%= salon[i].like ? salon[i].like : 0 %></td>
+	   <td><%= salon[i].like.num ? salon[i].like.num : 0 %></td>
 	   <td><%= salon[i].user.name %></td>
 	   <td><a href="/book/<%= salon[i].bookid %>/salon/salon_<%=salon[i].time%>"><%= salon[i].bookName %></a></td>
 	   <td><a href="javascript:;" class="delete" time="<%= salon[i].time %>" bookid="<%= salon[i].bookid %>"  >删除</a></td>
