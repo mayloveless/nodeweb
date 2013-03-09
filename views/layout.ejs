@@ -15,6 +15,7 @@
 	<![endif]-->
     <script src="/javascripts/jquery.js"></script>
     <script src="/javascripts/bootstrap.js"></script>
+    <script src="/javascripts/socket.io.js"></script>
   </head>
   <body>
   
@@ -54,9 +55,9 @@
                   <li><a href="/create">制作</a></li>
                 <% } %>
                  <% if (curPage == 'msg') {%>
-                  <li class="active" ><a href="/msg">提醒</a></li>
+                  <li class="active" ><a href="/msg">提醒<span id="msgNum"></span></a></li>
                 <% } else { %>
-                 <li><a href="/msg">提醒</a></li>
+                 <li><a href="/msg">提醒<span id="msgNum"></span></a></li>
                 <% } %>
                 
                 <% if (user.admin) {%>
@@ -102,3 +103,24 @@
     </div>
   </body>
 </html>
+
+<style>
+  #msgNum{
+    color: yellow;
+  }
+</style>
+<script>
+      $(document).ready(function(){
+        //connect socket
+        var socket = io.connect('http://127.0.0.1:3000/');
+        //listen channel msg / unread
+        socket.on('msg', function (data) {
+          var num = parseInt($('#msgNum').text()) ? parseInt($('#msgNum').text()) + data.num : 1;
+          $('#msgNum').text(num);
+        });
+        socket.on('unread', function (data) {
+          $('#msgNum').text(data.num);
+        });
+
+      }); 
+</script>

@@ -35,6 +35,7 @@ exports.doLogin = function(req, res){
 			return res.redirect('/login');
 		} 
 		req.session.user = user;
+		req.session.user['unread'] = 0;
    		res.redirect('/');
 	});
 };

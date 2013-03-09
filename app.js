@@ -9,8 +9,12 @@ var MongoStore = require('connect-mongo')(express);
 var partials = require('express-partials');
 var flash = require('connect-flash');
 var settings = require('./settings');
+var express_cookie = require('express/node_modules/cookie');
+var parseCookie = require('express/node_modules/connect/lib/utils').parseSignedCookie;
+
 var sessionStore = new MongoStore({
-  db : settings.db
+  db : settings.db,
+  reapInterval: 60000 * 10
 }, function() {
     console.log('connect mongodb success...');
 });
@@ -21,7 +25,7 @@ var admin = require('./routes/admin');
 
 var app = express();
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
+  app.set('port', 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
 
@@ -52,19 +56,20 @@ app.configure('development', function(){
 });
 
 //route
+//account
 app.get('/', routes.index);
 app.get('/login', account.login);
 app.post('/login', account.doLogin);
 app.get('/logout', account.logout);
 app.get('/reg', account.reg);
 app.post('/reg', account.doReg);
-
+//setting
 app.get('/setting', account.setting);
 app.post('/changePwd', account.changePwd);
 app.post('/changeAvatar', account.changeAvatar);
 app.get('/forgetPwd', account.forgetPwd);
 app.post('/forgetPwd', account.pwdMail);
-
+//admin 
 app.get('/admin', admin.index);
 app.post('/admin/editUser', admin.editUser);
 app.post('/admin/delUser', admin.delUser);
@@ -89,6 +94,7 @@ app.get('/admin/book/search', admin.searchBook);
 app.get('/create', admin.createBook);
 app.post('/create',admin.uploadBook);
 
+//pages:salons
 app.get('/cata/:cata',routes.cata);
 app.get('/book/search',routes.searchBook);
 app.get('/book/:bookid',routes.single);
@@ -102,32 +108,60 @@ app.post('/addSalon',routes.addSalon);
 app.post('/editSalon',routes.editSalon);
 app.get('/book/:bookid/salon/:salonid/edit',routes.salonEdit);
 app.post('/book/:bookid/salon/:salonid/del',routes.salonDel);
-app.post('/book/:bookid/salon/:salonid/like',routes.salonLike);
-app.post('/book/:bookid/salon/:salonid/pubCmt',routes.pubCmt);
+//app.post('/book/:bookid/salon/:salonid/like',routes.salonLike);
+//app.post('/book/:bookid/salon/:salonid/pubCmt',routes.pubCmt);
 app.post('/book/:bookid/salon/:salonid/delCmt',routes.delCmt);
 
+//message
 app.get('/msg',routes.getMsg);
 app.post('/readMsg',routes.readMsg);
 
-http.createServer(app).listen(app.get('port'), function(){
+
+var server = http.createServer(app);
+server.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
 
+//socketio 
+var socketio = require('socket.io').listen(server );
+socketio.set('authorization', function(handshakeData, callback){
+  // 通过客户端的cookie字符串来获取其session数据
+  if (!handshakeData.headers.cookie) {
+    return callback('socket.io: no found cookie.', false);
+  }
+  var signedCookies = express_cookie.parse(handshakeData.headers.cookie);
+  handshakeData.cookies = parseCookie(signedCookies['connect.sid'],settings['cookie_secret']);
+  //把session值传到socketio里去
+  sessionStore.get(handshakeData.cookies, function(err,session){
+    if(err || !session) return callback('socket.io: no found session.', false);
+    handshakeData.session = session;
+    if(handshakeData.session.user){ 
+      return callback(null, true);
+    }else{
+      return callback('socket.io: no found session.user', false);
+    }
+  })
+});
 
-/**
-* node-mongodb-native   https://github.com/christkv/node-mongodb-native
-* 
-* ejs https://github.com/visionmedia/ejs
-* 
-* express-Migrating from 2.x to 3.x   https://github.com/visionmedia/express/wiki/Migrating-from-2.x-to-3.x
-* 
-* Express 3.x + Socket.IO   http://blog.lyhdev.com/2012/07/nodejs-express-3x-socketio.html
-* 
-* express-partials    https://github.com/publicclass/express-partials
-* 
-* connect-flash   https://github.com/jaredhanson/connect-flash
-*
-* connect-mongodb   https://github.com/masylum/connect-mongodb
-*
-* 
-*/
+//socketio connect
+socketio.on('connection', function (socket) {
+   //连接上socketio之后，获取未读信息条数
+   routes.getUnread(socket);
+   //在发评论之后，给在线的相关人员提醒
+   app.post('/book/:bookid/salon/:salonid/pubCmt',function(req,res){
+      routes.pubCmt(req,res,socket);
+   });
+   //在发like之后，给在线的相关人员提醒
+   //p.s 这种方式太慢，网页经常死掉。先不传socket，找到原因再说
+   app.post('/book/:bookid/salon/:salonid/like',function(req,res){
+      routes.salonLike(req,res,null);
+   });
+});
+
+
+
+
+
+
+
+

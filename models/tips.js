@@ -62,7 +62,7 @@ Tips.getAll = function (username,callback) {
 	});
 };
 
-Tips.addSalon = function (pubComment,callback) {
+Tips.addSalon = function (pubComment,socket,callback) {
 	//check db
 	mongodb.open(function(err, db) {
 		if (err) {
@@ -93,7 +93,7 @@ Tips.addSalon = function (pubComment,callback) {
 						url : salonUrl,
 						urlTitle : salonTitle,
 						content : msgTip,
-						type : 'salons',
+						type : 'salonsComment',
 						relate :user,
 						time : new Date().valueOf()
 					};
@@ -104,6 +104,7 @@ Tips.addSalon = function (pubComment,callback) {
 						}
 						collection.insert(msg, {safe: true}, function(err, msg) {
 							
+							//发提醒
 							
 						})
 					});
@@ -115,10 +116,14 @@ Tips.addSalon = function (pubComment,callback) {
 								mongodb.close();
 								callback();
 						}
+						if(socket && socket.handshake.session['user']['name'] == cleanUser[i]['name']){
+							socket.emit('msg', { num: 1});
+						}
 						//是自己发的评论,就不用发消息了
 						if(cleanUser[i]['name'] !== pubComment['user']['name']){
 							 $await(insert(cleanUser[i])); 
 						}
+
 				    }
 				}));
 				//用户去重
@@ -146,7 +151,7 @@ Tips.addSalon = function (pubComment,callback) {
 
 
 
-Tips.addLike = function (like,callback) {
+Tips.addLike = function (like,socket,callback) {
 	//check db
 	mongodb.open(function(err, db) {
 		if (err) {
@@ -159,15 +164,18 @@ Tips.addLike = function (like,callback) {
 			}
 
 			var id = new ObjectID(like.bookid);
-			console.log(like);
 			collection.find({'_id':id},{'salons':{'$elemMatch':{'time':Number(like['salonTime'])}}}).toArray(function(err, doc) {
 				var curSalon = doc[0].salons[0];
+				console.log();
+				if(socket && socket.handshake.session['user']['name'] == curSalon['user']['name']){
+					socket.emit('msg', { num: 1});
+				}
 				var msg ={
 					status : 0,
 					url : '/book/'+like.bookid+'/salon/salon_'+curSalon.time,
 					urlTitle : curSalon.title,
 					content : '您的书评有了新喜欢 : ',
-					type : 'salons',
+					type : 'salonsLike',
 					relate :curSalon.user,
 					time : new Date().valueOf()
 				};
@@ -208,4 +216,29 @@ Tips.read = function (mid,callback) {
 			});
 		});
 	});
+};
+
+Tips.unRead = function (socket) {
+	//check db
+	if(socket){
+		mongodb.open(function(err, db) {
+		
+			mongodb.collection('msg', function(err, collection) {
+				if (err) {
+					mongodb.close();
+					return callback(err);
+				}
+				collection.count({
+					'relate.name':socket.handshake.session['user']['name'],
+					'status':0
+				},function(err, num) {
+					mongodb.close();
+					if(num != 0){
+						//socket send message to channel unread
+						socket.emit('unread', { num: num});
+					}
+				});
+			});
+		});
+	}
 };

@@ -9,6 +9,7 @@ var Msg = require('../models/tips.js');
 
 exports.index = function(req, res){
 	//check db from model then execute callback below
+
 	Books.get(null, function(err, books,cata) {
 		if (err) {
 			posts = [];
@@ -325,7 +326,7 @@ exports.salonDel = function(req, res){
 };
 
 
-exports.salonLike = function(req, res){
+exports.salonLike = function(req, res,socket){
 	//check db from model then execute callback below
 
 	Books.likeSalon(req.body,req.session.user.name,function(err, book) {
@@ -335,13 +336,13 @@ exports.salonLike = function(req, res){
 		}
 		//return res.json({'success':1});
 		//发表评论之后发布一条消息
-		Msg.addLike(req.body,function() {
+		Msg.addLike(req.body,socket,function() {
 			return res.json({'success':1});
 		});	
 	});
 };
 
-exports.pubCmt = function(req, res){
+exports.pubCmt = function(req, res,socket){
 	//check db from model then execute callback below
 	if (req.body['content'] === ''){
 		req.flash('error', '请检查输入');
@@ -357,7 +358,7 @@ exports.pubCmt = function(req, res){
 			return res.redirect('/book/'+req.body.bookid);
 		}
 		//发表评论之后发布一条消息
-		Msg.addSalon(book,function() {
+		Msg.addSalon(book,socket,function() {
 			return res.redirect('/book/'+req.body.bookid+'/salon/salon_'+req.body['time']);	
 		});	
 	});
@@ -403,4 +404,9 @@ exports.readMsg = function(req, res){
 		}
 		return res.json({'success':1});
 	});
+};
+
+exports.getUnread = function(socket){
+	//check db from model then execute callback below
+	Msg.unRead(socket);
 };
