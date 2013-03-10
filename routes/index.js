@@ -30,7 +30,7 @@ exports.index = function(req, res){
 exports.cata = function(req, res){
 	//check db from model then execute callback below
 	var cname = req.params.cata;
-	console.log(cname);
+	//console.log(cname);
 	if(cname === 'all'){
 		cname = null
 	}
@@ -214,7 +214,7 @@ exports.getOneSalon = function(req, res){
 				break;
 			}
 		}
-		console.log(canLike);
+		//console.log(canLike);
 		res.render('oneSalon', {
 			title: '读者沙龙:'+book.bookName,
 			user : req.session.user,

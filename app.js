@@ -144,17 +144,23 @@ socketio.set('authorization', function(handshakeData, callback){
 });
 
 //socketio connect
-socketio.on('connection', function (socket) {
+var usersWS = {};
+socketio.sockets.on('connection', function (socket) {
+  //一个用户一个socket连接,用usersWS记录下来
+    var session = socket.handshake.session;
+    var name = session.user.name;
+    usersWS[name] = socket;
+
    //连接上socketio之后，获取未读信息条数
    routes.getUnread(socket);
    //在发评论之后，给在线的相关人员提醒
    app.post('/book/:bookid/salon/:salonid/pubCmt',function(req,res){
-      routes.pubCmt(req,res,socket);
+      routes.pubCmt(req,res,usersWS);
    });
    //在发like之后，给在线的相关人员提醒
    //p.s 这种方式太慢，网页经常死掉。先不传socket，找到原因再说
    app.post('/book/:bookid/salon/:salonid/like',function(req,res){
-      routes.salonLike(req,res,null);
+      routes.salonLike(req,res,usersWS);
    });
 });
 

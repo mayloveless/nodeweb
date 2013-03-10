@@ -116,9 +116,11 @@ Tips.addSalon = function (pubComment,socket,callback) {
 								mongodb.close();
 								callback();
 						}
-						if(socket && socket.handshake.session['user']['name'] == cleanUser[i]['name']){
-							socket.emit('msg', { num: 1});
+						//判断当前用户名是否在socket连接池里，有的话给这个用户的socket的推送一条消息
+						if(socket &&  cleanUser[i]['name'] in socket){
+							socket[ cleanUser[i]['name'] ].emit('msg', { num: 1});
 						}
+
 						//是自己发的评论,就不用发消息了
 						if(cleanUser[i]['name'] !== pubComment['user']['name']){
 							 $await(insert(cleanUser[i])); 
@@ -166,9 +168,10 @@ Tips.addLike = function (like,socket,callback) {
 			var id = new ObjectID(like.bookid);
 			collection.find({'_id':id},{'salons':{'$elemMatch':{'time':Number(like['salonTime'])}}}).toArray(function(err, doc) {
 				var curSalon = doc[0].salons[0];
-				console.log();
-				if(socket && socket.handshake.session['user']['name'] == curSalon['user']['name']){
-					socket.emit('msg', { num: 1});
+
+				//判断当前用户名是否在socket连接池里，有的话给这个用户的socket的推送一条消息
+				if(socket &&  curSalon['user']['name'] in socket){
+					socket[ curSalon['user']['name'] ].emit('msg', { num: 1});
 				}
 				var msg ={
 					status : 0,
