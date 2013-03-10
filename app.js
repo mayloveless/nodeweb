@@ -145,6 +145,7 @@ socketio.set('authorization', function(handshakeData, callback){
 
 //socketio connect
 var usersWS = {};
+//多个socket connect
 socketio.sockets.on('connection', function (socket) {
   //一个用户一个socket连接,用usersWS记录下来
     var session = socket.handshake.session;
@@ -158,7 +159,6 @@ socketio.sockets.on('connection', function (socket) {
       routes.pubCmt(req,res,usersWS);
    });
    //在发like之后，给在线的相关人员提醒
-   //p.s 这种方式太慢，网页经常死掉。先不传socket，找到原因再说
    app.post('/book/:bookid/salon/:salonid/like',function(req,res){
       routes.salonLike(req,res,usersWS);
    });
