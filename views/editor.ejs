@@ -4,8 +4,9 @@
 
 <h3>编辑图书《<%=book.bookName%>》内容</h3>
 
+<div id="containter" style="display:none"><%=file%></div>
 <form action="" method="post">
-    <script type="text/plain" id="editor" name="content"><%=file%></script>
+    <script type="text/plain" id="editor" name="content">.</script>
     <input type="hidden" name="bookName" value="<%=book.bookName%>"/>
     <input type="hidden" name="bookType" value="<%=book.bookType%>"/>
     <input type="hidden" name="bookid" value="<%=book._id%>"/>
@@ -14,5 +15,8 @@
 
 <script type="text/javascript">
     var editor = new UE.ui.Editor();
-    editor.render("editor");
+    editor.render("editor");	
+	setTimeout(function(){
+		editor.execCommand("insertHtml",UE.utils.html($('#containter').html()))
+	},1000);
 </script>

@@ -12,12 +12,17 @@ exports.index = function(req, res){
 
 	Books.get(null, function(err, books,cata) {
 		if (err) {
-			posts = [];
+			canShow = [];
 		}
-
+		var canShow=[];
+		for(var i=0;i<books.length;i++){
+			if(books[i].status == 1){
+				canShow.push(books[i]);
+			}
+		}
 		res.render('index', {
 			title: '首页',
-			books : books,
+			books : canShow,
 			cata :cata,
 			user : req.session.user,
 			curPage :"index",

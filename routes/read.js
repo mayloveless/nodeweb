@@ -22,7 +22,9 @@ exports.loadBook = function(req, res){
 			req.flash('error', err);
 			return res.redirect('/admin');
 		}
-		fs.readFile('./bookFiles/'+book[0].bookName+'.'+book[0].bookType, "binary", function(err, file) {    
+
+		fs.readFile('./bookFiles/'+book[0].bookName+'.'+book[0].bookType, function(err, file) {    
+           	console.log(file);
             res.render('editor', {
 				title: '图书编辑',
 				book:book[0],
