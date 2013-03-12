@@ -488,7 +488,7 @@ exports.uploadBook = function(req, res){
 	        });
 	    });
 
-		Books.create(bookName,cataName,req.session.user.name,desc,function(err,docs) {
+		Books.create(bookName,cataName,req.session.user.name,desc,bookType,function(err,docs) {
 			if (err) {
 				req.flash('error', err);
 				return res.redirect('/create');

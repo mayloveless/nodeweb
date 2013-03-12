@@ -1,6 +1,7 @@
 var mongodb = require('./db');
 var BSON = require('mongodb').BSON;
 var ObjectID = require('mongodb').ObjectID;
+var fs = require('fs');
 //Book is a function container
 var Book = function(){
 	
@@ -216,7 +217,7 @@ Book.getContent= function (key, callback) {
 	});
 };
 
-Book.create = function (bookName,cata,uploader,desc,callback) {
+Book.create = function (bookName,cata,uploader,desc,bookType,callback) {
 	mongodb.open(function(err, db) {
 		if (err) {
 		  return callback(err);
@@ -236,6 +237,8 @@ Book.create = function (bookName,cata,uploader,desc,callback) {
 			book['uploader'] = uploader;
 			book['status'] = 0;
 			book['descption'] = desc;
+			book['bookType'] = bookType;
+			book['content'] = '';
 			collection.insert(book, {safe: true}, function(err, book) {
 				db.collection('cata', function(err, collection) {
 					if (err) {
@@ -560,4 +563,34 @@ Book.delCmt = function (salon,callback) {
 			})
 		});
 	});
+};
+
+Book.saveEdited = function(book,callback){
+	fs.writeFile('./bookFiles/'+book.bookName+'.'+book.bookType, book.content, function (err) {
+		  if (err) {
+		  	callback(err)
+		  }
+		  
+
+		mongodb.open(function(err, db) {
+			if (err) {
+			  return callback(err);
+			}
+
+			//获取users集合
+			db.collection('book', function(err, collection) {
+				if (err) {
+					mongodb.close();
+					return callback(err);
+				}
+
+				var id = new ObjectID(book.bookid)
+				collection.update({"_id":id}, { $set :{'content':book.content}}, function(err, doc) {
+					mongodb.close();
+					callback(err, book.bookid);
+				});
+			});
+		});
+	});
+
 };

@@ -22,6 +22,7 @@ var sessionStore = new MongoStore({
 var routes = require('./routes');
 var account = require('./routes/account');
 var admin = require('./routes/admin');
+var read = require('./routes/read');
 
 var app = express();
 app.configure(function(){
@@ -108,14 +109,15 @@ app.post('/addSalon',routes.addSalon);
 app.post('/editSalon',routes.editSalon);
 app.get('/book/:bookid/salon/:salonid/edit',routes.salonEdit);
 app.post('/book/:bookid/salon/:salonid/del',routes.salonDel);
-//app.post('/book/:bookid/salon/:salonid/like',routes.salonLike);
-//app.post('/book/:bookid/salon/:salonid/pubCmt',routes.pubCmt);
 app.post('/book/:bookid/salon/:salonid/delCmt',routes.delCmt);
 
 //message
 app.get('/msg',routes.getMsg);
 app.post('/readMsg',routes.readMsg);
 
+//editor
+app.get('/editor/:bookid',read.loadBook);
+app.post('/editor/:bookid',read.saveEdited);
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){

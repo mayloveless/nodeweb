@@ -55,6 +55,7 @@
 	        <li><a href="/admin/book/status/reject">拒绝</a></li>
 	      </ul>
 	    </td>
+	  <td>编辑</td>
 	  <td>修改</td>
 	  <td>删除</td>
 	</tr>
@@ -73,6 +74,7 @@
 	  	<% }else {%>
 	  		<td>拒绝</td>
 	  	<%}%>
+	  	<td><a href="/editor/<%=books[i]._id %>" >编辑</a></td>
 	   <input type="hidden" value="<%= books[i]['_id'] %>"/>
 	   <td><a href="#edit" role="button" data-toggle="modal" class="edit">修改</a></td>
 	   <td><a href="javascript:;" class="delete">删除</a></td>
