@@ -566,6 +566,7 @@ Book.delCmt = function (salon,callback) {
 };
 
 Book.saveEdited = function(book,callback){
+
 	fs.writeFile('./bookFiles/'+book.bookName+'.'+book.bookType, book.content, function (err) {
 		  if (err) {
 		  	callback(err)
@@ -584,8 +585,13 @@ Book.saveEdited = function(book,callback){
 					return callback(err);
 				}
 
-				var id = new ObjectID(book.bookid)
-				collection.update({"_id":id}, { $set :{'content':book.content}}, function(err, doc) {
+				var id = new ObjectID(book.bookid);
+				if(book.status){
+					status = 1;
+				}else{
+					status = 0;
+				}
+				collection.update({"_id":id}, { $set :{'content':book.content,'status':status}}, function(err, doc) {
 					mongodb.close();
 					callback(err, book.bookid);
 				});

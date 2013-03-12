@@ -62,19 +62,22 @@
 <% for(var i=0; i<books.length; i++) {%>
 
 	<tr>
-	   <td style="width:300px;overflow:hidden"><%= books[i].content %></td>
+	   <td style="width:300px;overflow:hidden;max-height:50px;display: block;"><%= books[i].content %></td>
 	   <td style="width:100px;overflow:hidden"><%= books[i].index %></td>
 	   <td><%= books[i].bookName %></td>
 	   <td><%= books[i].cata %></td>
 	   <td><%= books[i].uploader %></td>
 	   <% if(Number(books[i].status) === 0) { %>
 	   		<td>审核</td>
+	   		<td><a href="/editor/<%=books[i]._id %>" >编辑</a></td>
 	  	<%}else if(Number(books[i].status) === 1) {%>
 	  		<td>线上</td>
+	  		<td><a href="/editor/<%=books[i]._id %>" >编辑</a></td>
 	  	<% }else {%>
 	  		<td>拒绝</td>
+	  		<td><a href="/editor/<%=books[i]._id %>" >-</a></td>
 	  	<%}%>
-	  	<td><a href="/editor/<%=books[i]._id %>" >编辑</a></td>
+	  	
 	   <input type="hidden" value="<%= books[i]['_id'] %>"/>
 	   <td><a href="#edit" role="button" data-toggle="modal" class="edit">修改</a></td>
 	   <td><a href="javascript:;" class="delete">删除</a></td>
