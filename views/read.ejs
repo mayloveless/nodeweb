@@ -1,7 +1,16 @@
 <style>
-	.psignal {
-		display: none;
+	#catalogue{
+		border: 1px solid #000;
 	}
+	#content{
+		width: 600px;
+		overflow: hidden;
+	}
+	.pone{
+		margin: 0;
+		line-height: 20px;
+	}
+
 </style>
 
 
@@ -23,10 +32,45 @@
         }) : '';
     };
 
-    $('#content').html(Tohtml($('#hideContent').html()));
-
-    $('.csignal').parent().each(function(){
-    	$('#catalogue').append($(this).clone());
+    //将段落存起来，方便控制和扩展
+    $('#hideContent').html(Tohtml($('#hideContent').html()));
+    var pList = [];
+    $('.psignal').parent().each(function(){
+    	var htmlSection = '<p style="'+$(this).attr('style')+'" class="pone">'+$(this).html()+'</p>';
+    	pList.push(htmlSection);
     });
+    var cList = [];
+    $('.csignal').parent().each(function(){
+    	var htmlSection = '<p class="pone">'+$(this).html()+'</p>';
+    	cList.push(htmlSection);
+    });
+
+    //show
+    for(var i=0;i<pList.length;i++){
+    	$('#content').append(pList[i]);
+    }
+    var viewHeight = $(window).height()-100;
+	var curHeight = 0;
+	var pages = [];
+	var pageContent = '';
+	for(var i=0;i<pList.length;i++){
+		pageContent += pList[i];
+		if(curHeight<viewHeight){
+			curHeight = curHeight + $('#content>p:eq('+i+')').height();
+		}else{
+			pages.push(pageContent);
+			pageContent = '';
+			curHeight = 0;
+		}
+	}
 	
+	//catalogue
+	for(var i=0;i<cList.length;i++){
+    	$('#catalogue').append(cList[i]);
+    }
+
+    $(document).ready(function(){
+    	$('#content').html(pages[0]);
+    });
+
 </script>

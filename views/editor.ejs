@@ -14,7 +14,7 @@
 <h3>编辑图书《<%=book.bookName%>》内容<small> <% if(Number(book.status)){ %>已上线<%}%></small></h3>
 <div>
     <p>标记段落HTML<input style="width:70%;" value='&lt;span style="color:#00b0f0;" class="psignal"&gt; |&lt;/span&gt;'/></p>
-    <p>标记目录HTML<input style="width:70%;" value='&lt;span style="color:#00b0f0;" class="csignal"&gt; ||&lt;/span&gt;'/></p></p>
+    <p>标记目录HTML<input style="width:70%;" value='&lt;span style="color:#00b0f0;" class="psignal csignal"&gt; ||&lt;/span&gt;'/></p></p>
 </div>
 <div id="containter" style="display:none"><%=file%></div>
 <form action="" method="post">
@@ -23,7 +23,7 @@
     <input type="hidden" name="bookType" value="<%=book.bookType%>"/>
     <input type="hidden" name="bookid" value="<%=book._id%>"/>
     <div id="tool">
-        <p><a href="/editor/<%=book._id%>?isGBK=1">乱码？转换到GBK</a></p>
+        <p><a href="/editor/<%=book._id%>?isGBK=1">乱码？转换到GBK试试</a></p>
         <input type="checkbox" name="status" value="1" id="status"/>
         <span id="isOnlineLable">是否上线</span>
         <input type="submit" name="submit" value="提交" id="submit"/>
