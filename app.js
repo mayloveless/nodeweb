@@ -119,6 +119,9 @@ app.post('/readMsg',routes.readMsg);
 app.get('/editor/:bookid',read.loadBook);
 app.post('/editor/:bookid',read.saveEdited);
 
+//read
+app.get('/book/:bookid/read',read.core);
+
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

@@ -1,0 +1,32 @@
+<style>
+	.psignal {
+		display: none;
+	}
+</style>
+
+
+<div id="hideContent" style="display:none"><%= book.content %></div> 
+
+
+<div id="content"></div>
+
+<div id="catalogue"></div>
+<script>
+	var Tohtml = function (str) {
+        return str ? str.replace(/&((g|l|quo)t|amp);/g, function (m) {
+            return {
+                '&lt;':'<',
+                '&amp;':'&',
+                '&quot;':'"',
+                '&gt;':'>'
+            }[m]
+        }) : '';
+    };
+
+    $('#content').html(Tohtml($('#hideContent').html()));
+
+    $('.csignal').parent().each(function(){
+    	$('#catalogue').append($(this).clone());
+    });
+	
+</script>
