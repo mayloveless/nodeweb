@@ -118,9 +118,12 @@ app.post('/readMsg',routes.readMsg);
 //editor
 app.get('/editor/:bookid',read.loadBook);
 app.post('/editor/:bookid',read.saveEdited);
+app.post('/imageUp',read.imageUp);
+app.get('/checkOriginal/:bookid',read.original);
 
 //read
 app.get('/book/:bookid/read',read.core);
+
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){

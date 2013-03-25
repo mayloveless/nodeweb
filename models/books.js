@@ -2,6 +2,7 @@ var mongodb = require('./db');
 var BSON = require('mongodb').BSON;
 var ObjectID = require('mongodb').ObjectID;
 var fs = require('fs');
+
 //Book is a function container
 var Book = function(){
 	
@@ -567,7 +568,7 @@ Book.delCmt = function (salon,callback) {
 
 Book.saveEdited = function(book,callback){
 
-	fs.writeFile('./bookFiles/'+book.bookName+'.'+book.bookType, book.content, function (err) {
+	fs.writeFile('./bookFiles/'+book.bookName+'.txt', book.content, function (err) {
 		  if (err) {
 		  	callback(err)
 		  }

@@ -25,7 +25,7 @@ exports.loadBook = function(req, res){
 			return res.redirect('/admin');
 		}
 
-		fs.readFile('./bookFiles/'+book[0].bookName+'.'+book[0].bookType, function(err, file) {    
+		fs.readFile('./bookFiles/'+book[0].bookName+'.txt', function(err, file) {    
             if(isGBK ===1){
             	var file = iconv.decode(file, 'GBK'); 
             }
@@ -38,7 +38,7 @@ exports.loadBook = function(req, res){
 				success : req.flash('success').toString(),
 				error : req.flash('error').toString()
 			}); 
-          });    
+        });    
 	});
 };
 
@@ -78,5 +78,45 @@ exports.core = function(req, res){
 			});	
 		}
 		
+	});
+};
+
+exports.imageUp = function(req, res){
+	var random = new Date().valueOf();
+	var image = req.files.upfile.name.split('.');
+	var imageName = image[0]+random+'.'+image[1];
+	var tmp_path = req.files.upfile.path;
+    // 指定文件上传后的目录 
+    var target_path = './public/images/figure/' + imageName;
+    // 移动文件
+    fs.rename(tmp_path, target_path, function(err) {
+        if (err) throw err;
+      // 删除临时文件夹文件, 
+        fs.unlink(tmp_path, function() {
+           if (err) throw err;
+
+            var imageJson = {
+		    	'url':'./images/figure/'+imageName,
+		    	'title':imageName,
+		    	'state':'SUCCESS'
+		    };
+		    return res.json(imageJson);
+        });
+    });
+    
+};
+
+//管理员可访问源文件
+exports.original = function(req, res){
+	if(!req.session.user || !req.session.user.admin){
+		return res.redirect('/');
+	}
+	Books.getSingle(req.params.bookid, function(err, book) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/');
+		}
+		var fullName = book[0].bookName+'.'+book[0].bookType;
+    	return res.download('./bookFiles/'+fullName);
 	});
 };

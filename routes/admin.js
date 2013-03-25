@@ -10,6 +10,8 @@ var Salon = require('../models/salon.js');
 var Note = require('../models/note.js');
 var Comment = require('../models/comment.js');
 var Tips = require('../models/tips.js');
+var exec = require('child_process').exec;
+var childProcess;
 
 exports.index = function(req, res){
 	//check db from model then execute callback below
@@ -461,7 +463,6 @@ exports.uploadBook = function(req, res){
 	var cataName = req.body['cata'];
 	var desc = req.body['desc'];
 	Books.get(bookName, function(err, docs,cata) {
-		console.log(docs);
 		if (docs[0])
 			err = '书籍名已存在，请更换';
 		if (err) {
@@ -484,8 +485,33 @@ exports.uploadBook = function(req, res){
 	        if (err) throw err;
 	      // 删除临时文件夹文件, 
 	        fs.unlink(tmp_path, function() {
-	           if (err) throw err;
-	        });
+	            if (err) throw err;
+	            
+	            if(bookType === 'txt'){
+	           	  return;
+	            }
+	            //针对非txt文档
+		        var fullName = bookName + '.' +bookType;
+		        //存一份txt的，好读取文件
+			    childProcess = exec('docsplit text ./bookFiles/'+fullName,function (error, stdout, stderr) {
+				    if (error !== null) {
+				      console.log('exec error: ' + error);
+				    }else{
+				    	//把转成txt的文件存在tmp下
+				    	var newText = bookName+'.txt';
+				    	console.log(newText);
+				    	fs.rename('./'+newText, './bookFiles/'+newText, function(err) {
+					        if (err) throw err;
+					        //删除临时文件夹文件, 
+					        fs.unlink('./'+newText, function() {
+					           if (err) throw err;
+					        });
+						});  
+
+				    }
+				});
+			});
+
 	    });
 
 		Books.create(bookName,cataName,req.session.user.name,desc,bookType,function(err,docs) {
