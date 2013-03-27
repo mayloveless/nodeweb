@@ -1,25 +1,76 @@
 <style>
 	#catalogue{
 		border: 1px solid #000;
+        display: none;
+        position: absolute;
+        background: #eee;
+        right: 100px;
+        width: 200px;
 	}
+    .cataList{
+        float: left;
+        width: 100%;
+        display: block;
+    }
 	#content{
 		width: 600px;
 		overflow: hidden;
+        margin: 0 auto;
+        height: 100%;
 	}
+    #tool{
+        position: fixed;
+        top:120px;
+    }
 	.pone{
 		margin: 0;
 		line-height: 20px;
 	}
+    #pageWrap{
+        height: 100%;
+        position: relative;
+        left: 0;
+    }
+    .page{
+        width: 600px;
+        float: left;
+    }
+
+    :-webkit-full-screen{
+        width: 100%;
+    }
+    :-moz-full-screen {
+        width: 100%;
+        background: #fff;
+    }
+    :-moz-full-screen #tool {
+        display: none;
+    }
+    :-webkit-full-screen #tool {
+        display: none;
+    }
 
 </style>
 
 
 <div id="hideContent" style="display:none"><%= book.content %></div> 
 
-
-<div id="content"></div>
-
+<ul id="tool">
+    <li><a href="javascript:;" class="showCata">目录</a></li>
+    <li><a href="/book/<%= book._id %>/salon" class="salan">长评</a></li>
+    <li><a href="javascript:;" class="fullScreen">全屏</a></li>
+    <li>共<span id="total"></span>页</li>
+    <li>当前<span id="curPage"></span>页</li>
+    <li><a id="pre" href="javascript:;">上一页</a></li>
+    <li><a id="next" href="javascript:;">下一页</a></li>
+</ul>
 <div id="catalogue"></div>
+
+<div id="content">
+   <div id="pageWrap"></div>
+</div>
+
+
 
 <div id="largeImg" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">
@@ -35,6 +86,9 @@
 </div>
 
 <script>
+    var curPage,pageNum,pages;
+    var isMoveing = false;
+
 	var Tohtml = function (str) {
         return str ? str.replace(/&((g|l|quo)t|amp);/g, function (m) {
             return {
@@ -46,46 +100,159 @@
         }) : '';
     };
 
-    //将段落存起来，方便控制和扩展
-    $('#hideContent').html(Tohtml($('#hideContent').html()));
-    var pList = [];
-    $('.psignal').parent().each(function(){
-    	var htmlSection = '<p style="'+$(this).attr('style')+'" class="pone">'+$(this).html()+'</p>';
-    	pList.push(htmlSection);
-    });
-    var cList = [];
-    $('.csignal').parent().each(function(){
-    	var htmlSection = '<p class="pone">'+$(this).html()+'</p>';
-    	cList.push(htmlSection);
-    });
+    //初始化
+    var init = function(){
+        //将段落存起来，方便控制和扩展
+        $('#hideContent').html(Tohtml($('#hideContent').html()));
+        var pList = [];
+        var cList = [];
+        var pCount = 0;
+        var cataInPage = [];
+        $('.psignal').parent().each(function(){
+            ++pCount;
+        	var htmlSection = '<p id="p_'+pCount+'" style="'+$(this).attr('style')+'" class="pone">'+$(this).html()+'</p>';
+        	pList.push(htmlSection);
+        });
+        
+        //device pages  user #pageWrap dom to calculate 
+        for(var i=0;i<pList.length;i++){
+        	$('#pageWrap').append(pList[i]);
+        }
+        var viewHeight = $(window).height()-100;
+    	var curHeight = 0;
+    	pages = [];
+    	var pageContent = '';
+    	for(var i=0;i<pList.length;i++){
+    		pageContent += pList[i];
+    		if(curHeight<viewHeight){
+    			curHeight = curHeight + $('#pageWrap>p:eq('+i+')').height();
+    		}else{
+    			pages.push(pageContent);
+    			pageContent = '';
+    			curHeight = 0;
+    		}
 
-    //show
-    for(var i=0;i<pList.length;i++){
-    	$('#content').append(pList[i]);
-    }
-    var viewHeight = $(window).height()-100;
-	var curHeight = 0;
-	var pages = [];
-	var pageContent = '';
-	for(var i=0;i<pList.length;i++){
-		pageContent += pList[i];
-		if(curHeight<viewHeight){
-			curHeight = curHeight + $('#content>p:eq('+i+')').height();
-		}else{
-			pages.push(pageContent);
-			pageContent = '';
-			curHeight = 0;
-		}
-	}
-	
-	//catalogue
-	/*for(var i=0;i<cList.length;i++){
-    	$('#catalogue').append(cList[i]);
-    }*/
+            if($('#pageWrap>p:eq('+i+')').children('span').hasClass('csignal')){
+                cList.push($('#pageWrap>p:eq('+i+')').text());
+                cataInPage.push(pages.length+1);
+            }
+    	}
+    	//catalogue
+    	for(var i=0;i<cList.length;i++){
+            var cataHTML = '<a class="cataList" href="javascript:;" '+
+                                'link="'+
+                                cataInPage[i]+'">'+
+                                cList[i]+
+                            '</a>';
+        	$('#catalogue').append(cataHTML);
+        }
+
+        //show
+        pageNum = pages.length;
+        $('#pageWrap').html('').css('width',pageNum*600);
+        for(var i=0;i<pageNum;i++){
+            var pageHTML = '<div class="page">'+
+                                '<div class="title"><%=book.bookName%></div>'+
+                                '<div class="curPageNum">'+(i+1)+'</div>'+
+                                 pages[i]+
+                            '</div>';
+            $('#pageWrap').append(pageHTML);
+        }
+
+        //show page info
+        curPage = 1;
+        $('#total').text(pageNum);
+        $('#curPage').text(curPage);
+    };
+
+
+    var preAction = function(){
+        //lock
+        if(isMoveing){
+            return;
+        }
+        var left = parseInt($('#pageWrap').css('left'));
+        if(curPage == 1){
+            alert('已然第一页了');
+        }else{
+            isMoveing = true;
+            $('#pageWrap').animate({
+                'left':  left+600
+            },1000,function(){
+                --curPage;
+                $('#curPage').text(curPage);
+                isMoveing = false;
+                location.hash = curPage;
+            });
+        }
+
+    };
+
+    var nextAction = function(){
+        //lock
+        if(isMoveing){
+            return;
+        }
+        var left = parseInt($('#pageWrap').css('left'));
+        if(curPage == pageNum){
+            alert('已然最后一页了');
+        }else{
+            isMoveing = true;
+            $('#pageWrap').animate({
+                'left':  left-600
+            },1000,function(){
+                ++curPage;
+                $('#curPage').text(curPage);
+                isMoveing = false;
+                location.hash = curPage;
+            });
+        }
+    };
+
+    var goTo = function(gotoNum){
+        if(gotoNum > pageNum){
+            gotoNum = pageNum
+        }
+        if(gotoNum < 1){
+            gotoNum = 1;
+        }
+        if(parseInt(gotoNum)){
+            gotoNum = parseInt(gotoNum);
+            $('#pageWrap').css('left',(gotoNum-1)*-600);
+            curPage = gotoNum;
+            $('#curPage').text(curPage);
+            location.hash = curPage;
+        }
+    };
 
     $(document).ready(function(){
-    	$('#content').html(pages[0]);
-        
+        init();
+        var urlPage = location.hash;
+        if(urlPage){
+            goTo(parseInt(urlPage.split('#')[1]));
+        }
+        //hash change 
+        if("onhashchange" in window){
+            window.onhashchange = function(){
+               goTo(parseInt(location.hash.split('#')[1]));
+            };
+        }else{
+            // ie
+        }
+
+        //pre page
+        $('#pre').bind('click',preAction);
+        //next page
+        $('#next').bind('click',nextAction);
+        //key events
+        $(document).bind('keydown',function(event){
+            var key = event.which || event.keyCode ;
+            if(key == 39 || key == 40){
+                nextAction();
+            }else if(key == 37 || key == 38){
+                preAction();
+            }
+        });
 
 
         //check big image
@@ -93,9 +260,49 @@
            var src = $(this).children().attr('src');
            $('#largeImg > .modal-body').html('<img src="'+src+'"/>');
         });
+        //tool
+        //show catalogue
+        var isShow = 0;
+        $('.showCata').bind('click',function(){
+            if(isShow){
+                $('#catalogue').hide();
+                isShow = 0;
+            }else{
+                $('#catalogue').show();
+                isShow = 1;
+            }
+        });
+        $('.cataList').bind('click',function(){
+            location.hash = $(this).attr('link');
+            $('#catalogue').hide();
+            isShow = 0;
+        });
 
+        //full screen
+        $('.fullScreen').bind('click',function(){
+            //HTML5 full screen API
+            // Webkit (works in Safari5.1 and Chrome 15) , Firefox (works in nightly)
+            var node = $('#container')[0];
+
+            if (!document.fullscreenElement &&    
+                  !document.mozFullScreenElement && !document.webkitFullscreenElement) { 
+                if (node.requestFullscreen) {
+                  node.requestFullscreen();
+                } else if (node.mozRequestFullScreen) {
+                  node.mozRequestFullScreen();
+                } else if (node.webkitRequestFullscreen) {
+                  node.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+            } else {
+                if (document.cancelFullScreen) {
+                     document.cancelFullScreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitCancelFullScreen) {
+                     document.webkitCancelFullScreen();
+                }
+            }
+
+        });
     });
-
-
-
 </script>
