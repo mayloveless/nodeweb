@@ -61,6 +61,7 @@
     <li><a href="javascript:;" class="fullScreen">全屏</a></li>
     <li>共<span id="total"></span>页</li>
     <li>当前<span id="curPage"></span>页</li>
+    <li>跳转到<input id="jump" style="width:20px;"/>页</li>
     <li><a id="pre" href="javascript:;">上一页</a></li>
     <li><a id="next" href="javascript:;">下一页</a></li>
 </ul>
@@ -88,6 +89,7 @@
 <script>
     var curPage,pageNum,pages;
     var isMoveing = false;
+    var pageWidth = $('#content').width();
 
 	var Tohtml = function (str) {
         return str ? str.replace(/&((g|l|quo)t|amp);/g, function (m) {
@@ -149,7 +151,7 @@
 
         //show
         pageNum = pages.length;
-        $('#pageWrap').html('').css('width',pageNum*600);
+        $('#pageWrap').html('').css('width',pageNum*pageWidth);
         for(var i=0;i<pageNum;i++){
             var pageHTML = '<div class="page">'+
                                 '<div class="title"><%=book.bookName%></div>'+
@@ -177,7 +179,7 @@
         }else{
             isMoveing = true;
             $('#pageWrap').animate({
-                'left':  left+600
+                'left':  left+pageWidth
             },1000,function(){
                 --curPage;
                 $('#curPage').text(curPage);
@@ -199,7 +201,7 @@
         }else{
             isMoveing = true;
             $('#pageWrap').animate({
-                'left':  left-600
+                'left':  left-pageWidth
             },1000,function(){
                 ++curPage;
                 $('#curPage').text(curPage);
@@ -218,7 +220,7 @@
         }
         if(parseInt(gotoNum)){
             gotoNum = parseInt(gotoNum);
-            $('#pageWrap').css('left',(gotoNum-1)*-600);
+            $('#pageWrap').css('left',(gotoNum-1)*-pageWidth);
             curPage = gotoNum;
             $('#curPage').text(curPage);
             location.hash = curPage;
@@ -252,6 +254,13 @@
             }else if(key == 37 || key == 38){
                 preAction();
             }
+        });
+
+        $('#jump').bind('keydown',function(){
+            var key = event.which || event.keyCode ;
+            if(key == 13){
+                goTo(parseInt($(this).val()));
+            };
         });
 
 
