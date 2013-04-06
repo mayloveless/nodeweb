@@ -240,6 +240,7 @@ Book.create = function (bookName,cata,uploader,desc,bookType,callback) {
 			book['descption'] = desc;
 			book['bookType'] = bookType;
 			book['content'] = '';
+			book['note'] = {};
 			collection.insert(book, {safe: true}, function(err, book) {
 				db.collection('cata', function(err, collection) {
 					if (err) {
@@ -600,4 +601,53 @@ Book.saveEdited = function(book,callback){
 		});
 	});
 
+};
+
+Book.getNoteNum = function(socket,data){
+	//check db
+	if(socket){
+		mongodb.open(function(err, db) {
+		
+			mongodb.collection('book', function(err, collection) {
+				if (err) {
+					mongodb.close();
+					return callback(err);
+				}
+				var id = new ObjectID(data.id);
+				collection.findOne({'_id':id}, function(err, doc) {
+					mongodb.close();
+					if (err) {
+						callback(err, null);
+					}
+					if(!doc.note){
+						doc.note ={}
+					}
+					socket.emit('reNoteNum', { note: doc.note});
+				});
+			});
+		});
+	}
+};
+
+Book.getNotes = function (req,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(req.id);
+			collection.findOne({'_id':id},function(err, doc) {
+				mongodb.close();
+				if(!doc.note){
+					doc.note ={};
+				}
+				callback(err, doc.note[req.pid]);
+			})
+		});
+	});
 };

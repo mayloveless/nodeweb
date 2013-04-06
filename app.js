@@ -123,6 +123,7 @@ app.get('/checkOriginal/:bookid',read.original);
 
 //read
 app.get('/book/:bookid/read',read.core);
+app.post('/getNotes',read.getNotes);
 
 
 var server = http.createServer(app);
@@ -162,6 +163,11 @@ socketio.sockets.on('connection', function (socket) {
 
    //连接上socketio之后，获取未读信息条数
    routes.getUnread(socket);
+   
+   socket.on('getNoteNum', function (data) {
+      read.getNoteNum(socket,data);
+   });
+   
    //在发评论之后，给在线的相关人员提醒
    app.post('/book/:bookid/salon/:salonid/pubCmt',function(req,res){
       routes.pubCmt(req,res,usersWS);

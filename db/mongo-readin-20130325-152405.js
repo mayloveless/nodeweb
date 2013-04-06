@@ -20,13 +20,6 @@ db.getCollection("msg").ensureIndex({
   
 ]);
 
-/** note indexes **/
-db.getCollection("note").ensureIndex({
-  "_id": NumberInt(1)
-},[
-  
-]);
-
 /** sessions indexes **/
 db.getCollection("sessions").ensureIndex({
   "_id": NumberInt(1)
@@ -55,9 +48,32 @@ db.getCollection("book").insert({
   "bookName": "西西弗的神话",
   "bookType": "txt",
   "cata": "哲学",
-  "content": "&lt;p&gt;.&lt;\/p&gt;&lt;p style=\"text-align:center;\"&gt;&lt;span style=\"color:#00b0f0;\" class=\"psignal csignal\"&gt; ||&lt;\/span&gt;&lt;span style=\"color:#f79646;font-size:36px;\"&gt;&lt;span style=\"color:#f79646;font-size:18px;\"&gt;&lt;西西弗的神话：加缪荒谬与反抗论集&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;\/span&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;!--西西弗的神话：加缪荒谬与反抗论集--&gt;&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal csignal\"&gt; ||&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;内容提要&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal csignal\"&gt; ||&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;《西西弗的神话》&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt; &nbsp; &nbsp;被人称作是存在主&lt;a href=\"#largeImg\" class=\"img\" data-toggle=\"modal\" role=\"button\"&gt;&lt;img src=\"\/javascripts\/ueditor\/..\/..\/.\/images\/figure\/apache_ld1364114920863.JPG\" title=\"apache_ld1364114920863.JPG\" width=\"100\" height=\"81\" border=\"0\" hspace=\"0\" vspace=\"0\" style=\"width:100px;height:81px;\" \/&gt;&lt;\/a&gt;义的封篇之作，它以优美如诗&lt;a href=\"#largeImg\" class=\"img\" data-toggle=\"modal\" role=\"button\"&gt;&lt;img src=\"\/javascripts\/ueditor\/..\/..\/.\/images\/figure\/大话西游 - 谍报封面1364115356807.png\" title=\"大话西游 - 谍报封面1364115356807.png\" width=\"120\" height=\"154\" border=\"0\" hspace=\"0\" vspace=\"0\" style=\"width:120px;height:154px;\" \/&gt;&lt;\/a&gt;的语言，&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;提出了与人的生命息息相关的一个个命题。加缪曾在诺贝尔文学奖获奖演说中说他不信神，但他仍然崇拜一个圣徒，仍&lt;span style=\"font-size:18px;\"&gt;然要跪在一个圣徒面前祈祷－这个圣徒就是加缪笔下的西西弗。&lt;\/span&gt;&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt; 1957年，加缪由于“他重要的文学作品——它们透过明敏与挚忱阐明了我们这个时代人类良心的种种问题”荣获诺贝尔文学奖。&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt; 本书由北京大学外国哲学研究所杜小真教授翻&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;译，中国社会科学院外国文学所柳鸣九教师作序介绍。杜小真老师长期从事法国哲学研究，对法国思想和文化有着通透的理解。&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;《西西弗的神话》 题　　记 《西西弗的神话》 编辑推荐&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal csignal\"&gt; ||&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;编辑推荐&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;阿尔贝·加缪，法国著名的小说家，戏剧家和理论家，存在主义主要代表人物之一。本书集合了他的文集，从创意、到写作、定稿，是在1936年到1941年的&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;几年间断续写成的，但它仍具有哲理上内在的完整性与推理上的系统性，它从荒诞感的萌生到荒诞概念的界定出发，进而论述面对荒诞的态度与化解荒诞的方法并延伸到文学创作与荒诞的关系，这一系列论述构成了20世纪西方文学中最具有规模、最具有体系的荒诞哲理。加缪是向那些觉得世界是荒谬的人说话，是向那些觉得人类历史和存在没有任何意义或目的但仍然在这个荒谬世界中从事活动的人说话。&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;如果说陀思妥耶夫斯基的《地下室手记》可以称作是存在主义最好的序曲的话，那么加缪的《西西弗的神话》也就是存在主义的一篇最出色的结尾。&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;——[美]W.考夫曼&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;加缪向那一代的学生传播了一个简明扼要的思想：人与世界之间的关系是荒谬的，异化是人类生存条件的组成部分，必须抗拒死亡。&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;——[美]科特金&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;16:10:09&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;二十多年来，加缪的作品始终与追求正义紧密相连。&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;——[法]马尔罗&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;他在本世纪顶住了历史潮流，独自继承着源远流长的警世文学。他怀着顽强、严格、纯洁、肃穆、热情的人道主义，向当今时代的种种粗俗丑陋发起胜负未卜的宣战。但是反过来，他以自己始终如一的拒绝，在我们的时代，再次重申反对摈弃道德的马基雅弗利主义，反对趋炎附势的现实主义，证实道德的存在。&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;&lt;span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"&gt; |&lt;\/span&gt;&lt;span style=\"font-size:18px;\"&gt;——[法]萨特&lt;\/span&gt;&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;&lt;p&gt;加缪是向那些觉得世界是荒谬的人说话，是向那些觉得人类历史和存在没有任何固定意义或目的，但仍然在这个荒谬世界中从事活动&lt;\/p&gt;&lt;p&gt;&lt;br \/&gt;&lt;\/p&gt;",
+  "content": "<p>.<\/p><p style=\"text-align:center;\"><span style=\"color:#00b0f0;\" class=\"psignal csignal\"> ||<\/span><span style=\"color:#f79646;font-size:36px;\"><span style=\"color:#f79646;font-size:18px;\"><西西弗的神话：加缪荒谬与反抗论集><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><\/span><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><!--西西弗的神话：加缪荒谬与反抗论集--><\/span><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal csignal\"> ||<\/span><span style=\"font-size:18px;\">内容提要<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal csignal\"> ||<\/span><span style=\"font-size:18px;\">《西西弗的神话》<\/span><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\">    被人称作是存在主<a href=\"#largeImg\" class=\"img\" data-toggle=\"modal\" role=\"button\"><img src=\"\/javascripts\/ueditor\/..\/..\/.\/images\/figure\/apache_ld1364114920863.JPG\" title=\"apache_ld1364114920863.JPG\" width=\"100\" height=\"81\" border=\"0\" hspace=\"0\" vspace=\"0\" style=\"width:100px;height:81px;\" \/><\/a>义的封篇之作，它以优美如诗<a href=\"#largeImg\" class=\"img\" data-toggle=\"modal\" role=\"button\"><img src=\"\/javascripts\/ueditor\/..\/..\/.\/images\/figure\/大话西游 - 谍报封面1364115356807.png\" title=\"大话西游 - 谍报封面1364115356807.png\" width=\"120\" height=\"154\" border=\"0\" hspace=\"0\" vspace=\"0\" style=\"width:120px;height:154px;\" \/><\/a>的语言，<\/span><span style=\"font-size:18px;\">提出了与人的生命息息相关的一个个命题。加缪曾在诺贝尔文学奖获奖演说中说他不信神，但他仍然崇拜一个圣徒，仍<span style=\"font-size:18px;\">然要跪在一个圣徒面前祈祷－这个圣徒就是加缪笔下的西西弗。<\/span><\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\"> 1957年，加缪由于“他重要的文学作品——它们透过明敏与挚忱阐明了我们这个时代人类良心的种种问题”荣获诺贝尔文学奖。<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\"> 本书由北京大学外国哲学研究所杜小真教授翻<\/span><span style=\"font-size:18px;\">译，中国社会科学院外国文学所柳鸣九教师作序介绍。杜小真老师长期从事法国哲学研究，对法国思想和文化有着通透的理解。<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\">《西西弗的神话》 题　　记 《西西弗的神话》 编辑推荐<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal csignal\"> ||<\/span><span style=\"font-size:18px;\">编辑推荐<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\">阿尔贝·加缪，法国著名的小说家，戏剧家和理论家，存在主义主要代表人物之一。本书集合了他的文集，从创意、到写作、定稿，是在1936年到1941年的<\/span><span style=\"font-size:18px;\">几年间断续写成的，但它仍具有哲理上内在的完整性与推理上的系统性，它从荒诞感的萌生到荒诞概念的界定出发，进而论述面对荒诞的态度与化解荒诞的方法并延伸到文学创作与荒诞的关系，这一系列论述构成了20世纪西方文学中最具有规模、最具有体系的荒诞哲理。加缪是向那些觉得世界是荒谬的人说话，是向那些觉得人类历史和存在没有任何意义或目的但仍然在这个荒谬世界中从事活动的人说话。<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\">如果说陀思妥耶夫斯基的《地下室手记》可以称作是存在主义最好的序曲的话，那么加缪的《西西弗的神话》也就是存在主义的一篇最出色的结尾。<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\">——[美]W.考夫曼<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\">加缪向那一代的学生传播了一个简明扼要的思想：人与世界之间的关系是荒谬的，异化是人类生存条件的组成部分，必须抗拒死亡。<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\">——[美]科特金<\/span><\/p><p>16:10:09<\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\">二十多年来，加缪的作品始终与追求正义紧密相连。<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\">——[法]马尔罗<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\">他在本世纪顶住了历史潮流，独自继承着源远流长的警世文学。他怀着顽强、严格、纯洁、肃穆、热情的人道主义，向当今时代的种种粗俗丑陋发起胜负未卜的宣战。但是反过来，他以自己始终如一的拒绝，在我们的时代，再次重申反对摈弃道德的马基雅弗利主义，反对趋炎附势的现实主义，证实道德的存在。<\/span><\/p><p><br \/><\/p><p><span style=\"color:#00b0f0;font-size:18px;\" class=\"psignal\"> |<\/span><span style=\"font-size:18px;\">——[法]萨特<\/span><\/p><p><br \/><\/p><p>加缪是向那些觉得世界是荒谬的人说话，是向那些觉得人类历史和存在没有任何固定意义或目的，但仍然在这个荒谬世界中从事活动<\/p><p><br \/><\/p><p>.<\/p><p style=\"text-align:center;\"><span class=\"psignal csignal\" style=\"color:#00b0f0;\"> ||<\/span><span style=\"color:#f79646;font-size:36px;\"><span style=\"font-size:18px;\"><西西弗的神话：加缪荒谬与反抗论集><\/span><\/span><\/p><p><span class=\"psignal csignal\" style=\"color:#00b0f0;font-size:18px;\"> ||<\/span><span style=\"font-size:18px;\">内容提要<\/span><\/p><p><br \/><\/p><p><span class=\"psignal csignal\" style=\"color:#00b0f0;font-size:18px;\"> ||<\/span><span style=\"font-size:18px;\">《西西弗的神话》<\/span><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\">    被人称作是存在主<a href=\"http:\/\/127.0.0.1:3000\/editor\/514ae74d957f41df63000004#largeImg\" class=\"img\" data-toggle=\"modal\" role=\"button\"><img src=\"\/javascripts\/ueditor\/..\/..\/.\/images\/figure\/apache_ld1364114920863.JPG\" title=\"apache_ld1364114920863.JPG\" width=\"100\" height=\"81\" border=\"0\" hspace=\"0\" vspace=\"0\" style=\"width:100px;height:81px;\" \/><\/a>义的封篇之作，它以优美如诗<a href=\"http:\/\/127.0.0.1:3000\/editor\/514ae74d957f41df63000004#largeImg\" class=\"img\" data-toggle=\"modal\" role=\"button\"><img src=\"\/javascripts\/ueditor\/..\/..\/.\/images\/figure\/大话西游 - 谍报封面1364115356807.png\" title=\"大话西游 - 谍报封面1364115356807.png\" width=\"120\" height=\"154\" border=\"0\" hspace=\"0\" vspace=\"0\" style=\"width:120px;height:154px;\" \/><\/a>的语言，<\/span><span style=\"font-size:18px;\">提出了与人的生命息息相关的一个个命题。加缪曾在诺贝尔文学奖获奖演说中说他不信神，但他仍然崇拜一个圣徒，仍然要跪在一个圣徒面前祈祷－这个圣徒就是加缪笔下的西西弗。<\/span><\/p><p><br \/><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\"> 1957年，加缪由于“他重要的文学作品——它们透过明敏与挚忱阐明了我们这个时代人类良心的种种问题”荣获诺贝尔文学奖。<\/span><\/p><p><br \/><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\"> 本书由北京大学外国哲学研究所杜小真教授翻<\/span><span style=\"font-size:18px;\">译，中国社会科学院外国文学所柳鸣九教师作序介绍。杜小真老师长期从事法国哲学研究，对法国思想和文化有着通透的理解。<\/span><\/p><p><br \/><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\">《西西弗的神话》 题　　记 《西西弗的神话》 编辑推荐<\/span><\/p><p><br \/><\/p><p><span class=\"psignal csignal\" style=\"color:#00b0f0;font-size:18px;\"> ||<\/span><span style=\"font-size:18px;\">编辑推荐<\/span><\/p><p><br \/><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\">阿尔贝·加缪，法国著名的小说家，戏剧家和理论家，存在主义主要代表人物之一。本书集合了他的文集，从创意、到写作、定稿，是在1936年到1941年的<\/span><span style=\"font-size:18px;\">几年间断续写成的，但它仍具有哲理上内在的完整性与推理上的系统性，它从荒诞感的萌生到荒诞概念的界定出发，进而论述面对荒诞的态度与化解荒诞的方法并延伸到文学创作与荒诞的关系，这一系列论述构成了20世纪西方文学中最具有规模、最具有体系的荒诞哲理。加缪是向那些觉得世界是荒谬的人说话，是向那些觉得人类历史和存在没有任何意义或目的但仍然在这个荒谬世界中从事活动的人说话。<\/span><\/p><p><br \/><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\">如果说陀思妥耶夫斯基的《地下室手记》可以称作是存在主义最好的序曲的话，那么加缪的《西西弗的神话》也就是存在主义的一篇最出色的结尾。<\/span><\/p><p><br \/><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\">——[美]W.考夫曼<\/span><\/p><p><br \/><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\">加缪向那一代的学生传播了一个简明扼要的思想：人与世界之间的关系是荒谬的，异化是人类生存条件的组成部分，必须抗拒死亡。<\/span><\/p><p><br \/><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\">——[美]科特金<\/span><\/p><p>16:10:09<\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\">二十多年来，加缪的作品始终与追求正义紧密相连。<\/span><\/p><p><br \/><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\">——[法]马尔罗<\/span><\/p><p><br \/><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\">他在本世纪顶住了历史潮流，独自继承着源远流长的警世文学。他怀着顽强、严格、纯洁、肃穆、热情的人道主义，向当今时代的种种粗俗丑陋发起胜负未卜的宣战。但是反过来，他以自己始终如一的拒绝，在我们的时代，再次重申反对摈弃道德的马基雅弗利主义，反对趋炎附势的现实主义，证实道德的存在。<\/span><\/p><p><br \/><\/p><p><span class=\"psignal\" style=\"color:#00b0f0;font-size:18px;\"> |<\/span><span style=\"font-size:18px;\">——[法]萨特<\/span><\/p><p><br \/><\/p><p>加缪是向那些觉得世界是荒谬的人说话，是向那些觉得人类历史和存在没有任何固定意义或目的，但仍然在这个荒谬世界中从事活动<\/p><p><br \/><\/p><p>.<\/p><p><br \/><\/p>",
   "descption": "加缪",
   "index": "undefined",
+  "note": {
+    "1": [
+      {
+        "content": "fasdf",
+        "user": {
+          "name": "test",
+          "avatar": "default.png"
+        },
+        "pcontent": "sd",
+        "comments": [
+          {
+            "content": "fasdf",
+            "user": {
+              "name": "test",
+              "avatar": "default.png"
+            },
+            "time": 1364201985543
+          }
+        ],
+        "time": 1364201985542
+      }
+    ]
+  },
   "salons": [
     {
       "comment": [
@@ -68,6 +84,14 @@ db.getCollection("book").insert({
             "avatar": "wolf.jpg"
           },
           "time": 1363863884916
+        },
+        {
+          "content": "fasdf",
+          "user": {
+            "name": "test",
+            "avatar": "default.png"
+          },
+          "time": 1364201985543
         }
       ],
       "content": "pp",
@@ -85,19 +109,19 @@ db.getCollection("book").insert({
       }
     }
   ],
-  "status": "1",
+  "status": NumberInt(1),
   "time": ISODate("2013-03-21T10:56:13.245Z"),
   "uploader": "wolf"
 });
 db.getCollection("book").insert({
-  "_id": ObjectId("514e8c6cbd65e89712000001"),
-  "bookName": "doc",
+  "_id": ObjectId("514ffbf59ccd486b4d000002"),
+  "bookName": "doc2",
   "bookType": "docx",
   "cata": "小说",
-  "content": "<p><img src=\"\/javascripts\/ueditor\/..\/..\/.\/images\/figure\/大话西游 - 谍报封面1364192437322.png\" title=\"大话西游 - 谍报封面1364192437322.png\" \/>&lt;span style=&quot;color:#00b0f0;&quot; class=&quot;psignal&quot;&gt; |&lt;\/span&gt;文献调研在线阅读现状：【大阅读环境下高校学生阅读行为调查及图书馆对策 ，李铁梅 ，书馆学研究 2011-04-23】该文指出：纸质阅读与电子阅读成为高校学生最主要的阅读方式。传统的阅读习惯使纸质阅读占有一定地位，而内容丰富、方便快捷的优势使网络、手机等电子阅读方式发起了对纸质阅读的强大冲击。这两种美国图书馆经过大力推行，表明电子阅读在未来不可或缺的地位。然而还存在版权保护，缺乏读者互相交流沟通渠道等问题&lt;span style=&quot;color:#00b0f0;&quot; class=&quot;psignal&quot;&gt; |&lt;\/span&gt;需要亟待解决。在线阅读发展迅速，需要丰富交流渠道。【数字阅读,内容供应才是王道，作者 陈小庚； 钟琳； 陈若然；南方日报 2013-01-13】该文指出：数字出版的现状：移动平台让更多人开始阅读。 中西比照：数字图书出版要形成产业链。 阅读习惯：阅读变身为“零碎的整合”。数字出版之“太囧”：“阅读设备很好,但是\f读者买不到书”。由此看出，电子阅读虽然丰富了人们的阅读渠道，但读书效果下降了。读者读到的好书少，碎片化，还没有形成产业链。所以，在线阅读需要保证资源的优质。【网络环境下大学生阅读现象分析和思考，吴晶娥情报探索】该文指出：　网络阅读缺少思考。然而,网上信息虽然丰富多样,但是无论是好的或有用的信息,还是一些不良的信息,读者往往只有被动接受,如果没有良好的自我管理和控制能力,就只能花费大量时间在茫茫网海中随波逐流,失去方向,无法自拔。长此以往,将不利于大学生思想的健康成长,不利于大学生读者人文素养的培养。网络时代阅读环境更加开放、丰富和互动,拓展了大学生阅读的空间和渠道。图书馆要加强传统纸质书刊的阅读指导,定期推出新书和好书,请专家举办阅读讲座,成立读者好书交流会,交流阅读体会,吸引大学生多来图书馆查阅资料,积极参与图书馆阅读活动,鼓励大学生多读书,读好书,形成良好阅读风气和习惯,共享阅读乐趣。【网络环境下大学生阅读心理初探张琴办公室业务 2013-01-05 】大学生阅读需求呈现出多样化，大学生阅读需要的个性化。由于网络所带动的阅读及认知革命还在持续的进行，在正视其不可替代的发展优势的同时，我们还应该根据网络阅读的主体——大学生的阅读心理需求结构的变化而进行适当的调整，帮助他们解决在阅读过程中所遇到的困难，通过对其进行阅读心理调整来提高他们的阅读能力和质量。由此看出，大学生阅读需要引导，需要形成一个良好的阅读环境和习惯。在线阅读需要提供一些良好阅读习惯的引导，才能形成一个良好的社区文化。【肖学斌新环境下图书馆建设与发展——第六届中国社区和乡镇图书馆发展战略研讨\f会征文集（下册）【2007-07-01 中国会议】电子阅读器与手机阅读对比浅析周小琴群文天地2012-08-25 期刊】该文指出：决定阅读器选择的因素有：性价比影响选择、使用感受差异、便捷性差异、电池续航能力差异、受众使用接受程度差异。从上述几点来看，电子阅读器与手机阅读各有利弊。电子阅读器应抓住自身的专业性，走细分受众市场的道路，将主要功能细化，可以研制商务人士量身定做的商务专业类阅读器；为法律人士开发的涵括各种法律文典著作的阅读器等。例如，以“易博士”电子阅读器为典型进行的行业细分，推出了针对棋谱、司法的行业产品，虽然小众，但针对性强、竞争力小，收获颇佳。对于手机而言，若要走好手机阅读的发展之路，必须提高技术以改善受众的阅读体验。【电子阅读器融入 SNS 方有出路 本报记者 毛启盈 计算机世界2012-04-09 报纸】该文指出：第一，电子阅读器要彰显“大众化、娱乐化、人性化”的特点。第二，电子阅读器需要 Web2.0 的互动效果。未来的电子阅读器必将是彩色化、功能多样化，同时增加社交功能等互联网应用。由此看出，在线阅读应该增强用户的阅读体验。摆脱对硬件的依赖，用网络的便利将各种硬件设备体验统一化。【RSS 在线阅读器设计与实现 王秀慧; 赵治军电脑编程技巧与维护 2009-02-18 期刊】该文指出：基于下架构的在线阅读器的总体设计和实现。实验结果表明该系统的正常运行,是一个较为完善的、稳定的、灵活的在线阅读系统, 具有良好的实用价值,为上网用户信息的获取提供了一个新的途径。【Facilitating communication about books throughanonline community】\f【 Malani, Roshni. Public digital note-taking in lectures. ProQuest Dissertations andTheses.2009】【Savage, John Paul, Jr.. Technography and the sociology of texts: Reading phenomena inthedigitalhumanities. ProQuest Dissertations and Theses.2011】Reading books can serve as a means ofgatheringinformation, relaxing and escaping dailystress. Although reading is often primarily an individualactivity,many readers also enjoysharing reading experiences with friends, relatives, colleagues and,through theinternet,even with strangers. Apart from valuing these individual and collective bookactivities,books asphysical artifacts are also valued, for example because of the memoriesassociated withthem. This paperinvestigates how books can be enhanced with a newproduct, system or service. In aqualitative interviewstudy, the main reasons for valuingbooks were found to be related to the self(individual activities andfeelings), experiences(e.g., enjoyment or release) and personal values (e.g.,embodiment of idealsorpersonification). As a result, it was decided for the remainder of this study tofocus oncommunicationabout books, because in addition to individual book-related activities andfeelings,users indicated tocommunicate about books a lot. A book community Web site,called Shelf, wasdeveloped to investigatewhether book communication could beincreased by facilitating an onlinecommunity and whether userswould appreciate theWeb site functionality. Shelf was used in a 14-day userevaluation, and it wasconcludedthat the Web site increased the extent to which readers communicatedabout books. We\fexpect that such an online book community would be a valuable enhancement of currentbook customs,inparticular in combination with the current e-book trend, for various typesof readers who would liketoshare their experiences.由此看出：通过书籍的在线社区有助于人们自由地交流思想，观点，使人们相互学习进步 。在线笔记的功能也在国外提出。\f.\f.\f.<\/p><p>.<br \/><\/p>",
-  "descption": "doc test",
+  "content": "<p><span style=\"color:#00b0f0;\" class=\"psignal\">|<\/span>文献调研在线阅读现状：【大阅读环境下高校学生阅读行为调查及图书馆对策 ，李铁梅 ，书馆学研究 2011-04-23】该文指出：纸质阅读与电子阅读成为高校学生最主要的阅读方式。传统的阅读习惯使纸质阅读占有一定地位，而内容丰富、方便快捷的优势使网络、手机等电子阅读方式发起了对纸质阅读的强大冲击。这两种美国图书馆经过大力推行，表明电子阅读在未来不可或缺的地位。然而还存在版权保护，缺乏读者互相交流沟通渠道等问题<span style=\"color:#00b0f0;\" class=\"psignal\"> |<\/span>需要亟待解决。在线阅读发展迅速，需要丰富交流渠道。【数字阅读,内容供应才是王道，作者 陈小庚； 钟琳；陈若然；南方日报 2013-01-13】该文指出：数字出版的现状：移动平台让更多人开始阅读。 中西比照：数字图书出版要形成产业链。 阅读习惯：阅读变身为“零碎的整合”。数字出版之“太囧”：“阅读设备很好,但是\f读者买不到书”。由此看出，电子阅读虽然丰富了人们的阅读渠道，但读书效果下降了。读者读到的好书少，碎片化，还没有形成产业链。所以，在线阅读需要保证资源的优质。【网络环境下大学生阅读现象分析和思考，吴晶娥情报探索】该文指出：　网络阅读缺少思考。然而,网上信息虽然丰富多样,但是无论是好的或有用的信息,还是一些不良的信息,读者往往只有被动接受,如果没有良好的自我管理和控制能力,就只能花费大量时间在茫茫网海中随波逐流,失去方向,无法自拔。长此以往,将不利于大学生思想的健康成长,不利于大学生读者人文素养的培养。网络时代阅读环境更加开放、丰富和互动,拓展了大学生阅读的空间和渠道。图书馆要加强传统纸质书刊的阅读指导,定期推出新书和好书,请专家举办阅读讲座,成立读者好书交流会,交流阅读体会,吸引大学生多来图书馆查阅资料,积极参与图书馆阅读活动,鼓励大学生多读书,读好书,形成良好阅读风气和习惯,共享阅读乐趣。【网络环境下大学生阅读心理初探张琴办公室业务 2013-01-05 】大学生阅读需求呈现出多样化，大学生阅读需要的个性化。由于网络所带动的阅读及认知革命还在持续的进行，在正视其不可替代的发展优势的同时，我们还应该根据网络阅读的主体——大学生的阅读心理需求结构的变化而进行适当的调整，帮助他们解决在阅读过程中所遇到的困难，通过对其进行阅读心理调整来提高他们的阅读能力和质量。由此看出，大学生阅读需要引导，需要形成一个良好的阅读环境和习惯。在线阅读需要提供一些良好阅读习惯的引导，才能形成一个良好的社区文化。【肖学斌新环境下图书馆建设与发展——第六届中国社区和乡镇图书馆发展战略研讨\f会征文集（下册）【2007-07-01 中国会<img src=\"\/javascripts\/ueditor\/..\/..\/.\/images\/figure\/大话西游 - 谍报封面1364196414297.png\" title=\"大话西游 - 谍报封面1364196414297.png\" \/>议】电子阅读器与手机阅读对比浅析周小琴群文天地2012-08-25 期刊】该文指出：决定阅读器选择的因素有：性价比影响选择、使用感受差异、便捷性差异、电池续航能力差异、受众使用接受程度差异。从上述几点来看，电子阅读器与手机阅读各有利弊。电子阅读器应抓住自身的专业性，走细分受众市场的道路，将主要功能细化，可以研制商务人士量身定做的商务专业类阅读器；为法律人士开发的涵括各种法律文典著作的阅读器等。例如，以“易博士”电子阅读器为典型进行的行业细分，推出了针对棋谱、司法的行业产品，虽然小众，但针对性强、竞争力小，收获颇佳。对于手机而言，若要走好手机阅读的发展之路，必须提高技术以改善受众的阅读体验。【电子阅读器融入 SNS 方有出路 本报记者 毛启盈 计算机世界2012-04-09 报纸】该文指出：第一，电子阅读器要彰显“大众化、娱乐化、人性化”的特点。第二，电子阅读器需要 Web2.0 的互动效果。未来的电子阅读器必将是彩色化、功能多样化，同时增加社交功能等互联网应用。由此看出，在线阅读应该增强用户的阅读体验。摆脱对硬件的依赖，用网络的便利将各种硬件设备体验统一化。【RSS 在线阅读器设计与实现 王秀慧; 赵治军电脑编程技巧与维护 2009-02-18 期刊】该文指出：基于下架构的在线阅读器的总体设计和实现。实验结果表明该系统的正常运行,是一个较为完善的、稳定的、灵活的在线阅读系统, 具有良好的实用价值,为上网用户信息的获取提供了一个新的途径。【Facilitating communication about booksthroughanonline community】\f【 Malani, Roshni. Public digital note-taking in lectures. ProQuest Dissertations andTheses.2009】【Savage, John Paul, Jr.. Technography and the sociology of texts: Reading phenomenainthedigitalhumanities. ProQuest Dissertations and Theses.2011】Reading books can serve as a meansofgatheringinformation, relaxing and escaping dailystress. Although reading is often primarily anindividualactivity,many readers also enjoysharing reading experiences with friends, relatives, colleaguesand,through theinternet,even with strangers. Apart from valuing these individual and collectivebookactivities,books asphysical artifacts are also valued, for example because of the memoriesassociatedwiththem. This paperinvestigates how books can be enhanced with a newproduct, system or service. Inaqualitative interviewstudy, the main reasons for valuingbooks were found to be related to theself(individual activities andfeelings), experiences(e.g., enjoyment or release) and personal values(e.g.,embodiment of idealsorpersonification). As a result, it was decided for the remainder of this studytofocus oncommunicationabout books, because in addition to individual book-related activitiesandfeelings,users indicated tocommunicate about books a lot. A book community Web site,called Shelf,wasdeveloped to investigatewhether book communication could beincreased by facilitating anonlinecommunity and whether userswould appreciate theWeb site functionality. Shelf was used in a14-day userevaluation, and it wasconcludedthat the Web site increased the extent to which readerscommunicatedabout books. We\fexpect that such an online book community would be a valuable enhancement of currentbookcustoms,inparticular in combination with the current e-book trend, for various typesof readers who wouldliketoshare their experiences.由此看出：通过书籍的在线社区有助于人们自由地交流思想，观点，使人们相互学习进步 。在线笔记的功能也在国外提出。\f.\f.\f..\f.<\/p><p>.<br \/><\/p><p>.<br \/><\/p>",
+  "descption": "fasdf",
   "status": NumberInt(1),
-  "time": ISODate("2013-03-24T05:17:32.564Z"),
+  "time": ISODate("2013-03-25T07:25:41.777Z"),
   "uploader": "wolf"
 });
 
@@ -289,77 +313,25 @@ db.getCollection("msg").insert({
   "time": 1362914317810,
   "_id": ObjectId("513c6c0d190057f162000001")
 });
-
-/** note records **/
-db.getCollection("note").insert({
-  "_id": ObjectId("512e4086d048f86b65000004"),
-  "bookId": {
-    "bookName": "dd"
+db.getCollection("msg").insert({
+  "status": NumberInt(1),
+  "url": "\/book\/514ae74d957f41df63000004\/salon\/salon_1363863879573",
+  "urlTitle": "sdfds",
+  "content": "您的书评有了新评论 : ",
+  "type": "salonsComment",
+  "relate": {
+    "name": "wolf",
+    "avatar": "wolf.jpg"
   },
-  "comment": [
-    {
-      "user": "uid",
-      "time": "dd",
-      "content": "",
-      "from": "512c8d51e7d3c3a00f000001",
-      "type": "note"
-    },
-    {
-      "user": "uid",
-      "time": "dd",
-      "content": "",
-      "from": "512c8d51e7d3c3a00f000001",
-      "type": "note"
-    }
-  ],
-  "content": "我的发生地方",
-  "pageNum": NumberInt(0),
-  "pic": "",
-  "time": "dd",
-  "user": {
-    "name": "wolf"
-  }
-});
-db.getCollection("note").insert({
-  "_id": ObjectId("512e42d7d048f8f327000000"),
-  "bookId": {
-    "bookName": "dd"
-  },
-  "comment": [
-    {
-      "user": "uid",
-      "time": "dd",
-      "content": "",
-      "from": "512c8d51e7d3c3a00f000001",
-      "type": "note"
-    },
-    {
-      "user": "uid",
-      "time": "dd",
-      "content": "",
-      "from": "512c8d51e7d3c3a00f000001",
-      "type": "note"
-    }
-  ],
-  "content": "asdfasdfasdfa",
-  "pageNum": NumberInt(0),
-  "pic": "",
-  "time": "dd",
-  "user": {
-    "name": "wolf"
-  }
+  "time": 1364201985720,
+  "_id": ObjectId("51501201c9cd3f5c65000001")
 });
 
 /** sessions records **/
 db.getCollection("sessions").insert({
-  "_id": "1NTk896XeqKkJbqkr7f06gwJ",
-  "session": "{\"cookie\":{\"originalMaxAge\":11999998,\"expires\":\"2013-03-25T09:32:26.077Z\",\"httpOnly\":true,\"path\":\"\/\"},\"flash\":{},\"user\":{\"name\":\"wolf\",\"password\":\"v0OX2LTcBh4bbRkaNS6RNA==\",\"id\":\"512c8d51e7d3c3a00f000001\",\"avatar\":\"wolf.jpg\",\"admin\":1}}",
-  "expires": ISODate("2013-03-25T09:32:26.77Z")
-});
-db.getCollection("sessions").insert({
-  "_id": "Rv64DVuObbJNHUK4OgsltosJ",
-  "session": "{\"cookie\":{\"originalMaxAge\":11999994,\"expires\":\"2013-03-25T10:42:35.378Z\",\"httpOnly\":true,\"path\":\"\/\"},\"flash\":{},\"user\":{\"name\":\"wolf\",\"password\":\"v0OX2LTcBh4bbRkaNS6RNA==\",\"id\":\"512c8d51e7d3c3a00f000001\",\"avatar\":\"wolf.jpg\",\"admin\":1}}",
-  "expires": ISODate("2013-03-25T10:42:35.378Z")
+  "_id": "E54fBerefMAKUZ0LIfcTvKms",
+  "session": "{\"cookie\":{\"originalMaxAge\":11999997,\"expires\":\"2013-04-06T18:37:16.079Z\",\"httpOnly\":true,\"path\":\"\/\"},\"flash\":{},\"user\":{\"name\":\"wolf\",\"password\":\"v0OX2LTcBh4bbRkaNS6RNA==\",\"id\":\"512c8d51e7d3c3a00f000001\",\"avatar\":\"wolf.jpg\",\"admin\":1}}",
+  "expires": ISODate("2013-04-06T18:37:16.79Z")
 });
 
 /** system.indexes records **/
@@ -402,14 +374,6 @@ db.getCollection("system.indexes").insert({
     "_id": NumberInt(1)
   },
   "ns": "readin.msg",
-  "name": "_id_"
-});
-db.getCollection("system.indexes").insert({
-  "v": NumberInt(1),
-  "key": {
-    "_id": NumberInt(1)
-  },
-  "ns": "readin.note",
   "name": "_id_"
 });
 db.getCollection("system.indexes").insert({

@@ -120,3 +120,21 @@ exports.original = function(req, res){
     	return res.download('./bookFiles/'+fullName);
 	});
 };
+
+//实时获取笔记数量
+exports.getNoteNum = function(socket,data){
+	//check db from model then execute callback below
+	Books.getNoteNum(socket,data);
+};
+
+//获取笔记
+exports.getNotes = function(req,res){
+	//check db from model then execute callback below
+	Books.getNotes(req.body, function(err, notes) {
+		if (err) {
+			req.flash('error', err);
+			return res.json({'fail':1});
+		}
+		return res.json({'success':{'data':notes}});
+	});
+};
