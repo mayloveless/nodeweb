@@ -1,0 +1,103 @@
+
+<div>
+	<p>段落:</p>
+	<p><%=note.pcontent%></p>
+</div>
+<div>
+	<p>内容:</p>
+	<p><%=note.content%></p>
+	<p><%= (new Date(note.time)).toString().substr(10,15)%></p>
+	<% if(user.name == note.user.name){ %>
+		<a class="edit">修改</a>
+		<a class="del">删除</a>
+	<%}%>
+</div>
+<hr>
+<div>
+	<% for(var i=0;i<note.comment.length;i++){%>
+		<p>内容:<%= note.comment[i].content%></p>
+		<p>名字:<%= note.comment[i].user.name%><p>
+		<p>时间:<%= note.comment[i].time%><p>
+		<%if(note.comment[i].user.name == user.name){%>
+			<p><a href="###" time="<%=note.comment[i].time%>" class="delCmt">删除</a></p>
+		<%}%>
+	<%}%>
+</div>
+
+<form class="form-horizontal" method="post" action="/book/<%= book._id%>/note/<%=note.time%>/pubCmt">
+  <fieldset>
+  	<input type="hidden" value="<%=note.time%>" name="time"/>
+  	<input type="hidden" value="<%=book._id%>" name="bookid"/>
+  	<input type="hidden" value="<%=pid%>" name="pid"/>
+    <div class="control-group">
+      <label class="control-label" for="content">发表评论</label>
+      <div class="controls">
+        <textarea type="text" class="input-xlarge" id="content" name="content"></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">发布</button>
+    </div>
+  </fieldset>
+</form>
+
+
+<div id="editNote" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">段落笔记</h3>
+  </div>
+  <div class="modal-body">
+    <textarea></textarea>
+  </div>
+   <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+    <button class="btn btn-primary editSure">确定</button>
+  </div>
+</div>
+
+
+<script>
+	var pid = '<%=pid%>';
+    var tid = '<%=note.time%>';
+    var bid = '<%=book._id%>';
+    var username = '<%=user.name%>';
+	$(document).ready(function(){
+		$('.del').bind('click',function(){
+            $.post('/delNote',{id:bid,pid:pid,tid:tid},function(data){
+                location.href="/book/"+bid+'/read';
+            });
+		});
+
+		$('.edit').bind('click',function(){
+			$('#editNote').modal('show');
+			$('textarea').val("<%=note.content%>");
+		});
+
+		$('.editSure').bind('click',function(){
+			var content = $.trim($('textarea').val());
+            $.post('/editNote',{id:bid,pid:pid,tid:tid,content:content},function(data){
+                location.href="/book/"+bid+'/note/'+data['success'];
+            });
+		});
+
+		$('.delCmt').bind('click',function(){
+			var ctime = $(this).attr('time');
+			$.post('/book/'+bid+'/note/'+tid+'/delCmt',{
+					'bookid':bid,
+					'tid':tid,
+					'pid':pid,
+					'name':username,
+					'ctime':ctime
+			},function(req, res){
+				if(res !=='success'){
+					$('#error').show();
+				}else{
+					location.reload();
+				}
+				
+			});
+		});
+
+	});
+</script>

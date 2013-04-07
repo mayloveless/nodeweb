@@ -245,3 +245,103 @@ Tips.unRead = function (socket) {
 		});
 	}
 };
+
+//笔记评论新消息
+Tips.addNoteCmt = function (note,socket,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			var id = new ObjectID(note.bid);
+			
+			collection.find({'_id':id}).toArray(function(err, doc) {
+				if(err){
+					callback(err, 'fail');
+				}
+				mongodb.close();
+				//get note
+				var notes = doc[0].note[note.pid];
+				for(var i=0;i<notes.length;i++){
+					if(notes[i].time == Number(note.tid)){
+						var curNote = notes[i];
+						break;
+					}
+				}
+
+				//插入消息方法
+				var insert = eval(Wind.compile("async", function (user) {
+					if(curNote['user']['name'] == user['name']){
+						var msgTip = '您的笔记有了新评论 : ';
+					}else{
+						var msgTip = '您关注的笔记有了新评论 : ';
+					}
+					var noteUrl = '/book/'+note.bid+'/note/'+note.tid;
+					var msg ={
+						status : 0,
+						url : noteUrl,
+						urlTitle : '去看看',
+						content : msgTip,
+						type : 'notesComment',
+						relate :user,
+						time : new Date().valueOf()
+					};
+					db.collection('msg', function(err, collection) {
+						if (err) {
+							mongodb.close();
+							return callback(err);
+						}
+						collection.insert(msg, {safe: true}, function(err, msg) {
+							
+							//发提醒
+							
+						})
+					});
+				}));
+				//插入消息外层的循环方法
+				var insertEachMsg = eval(Wind.compile("async", function (cleanUser) {
+				    for (var i = 0; i < cleanUser.length; i++) {
+				    	if(i == cleanUser.length -1){
+								mongodb.close();
+								callback();
+						}
+						//判断当前用户名是否在socket连接池里，有的话给这个用户的socket的推送一条消息
+						if(socket &&  cleanUser[i]['name'] in socket){
+							socket[ cleanUser[i]['name'] ].emit('msg', { num: 1});
+						}
+
+						//是自己发的评论,就不用发消息了
+						if(cleanUser[i]['name'] !== note['user']['name']){
+							 $await(insert(cleanUser[i])); 
+						}
+
+				    }
+				}));
+				//用户去重
+				var cleanUser = [note.user];
+				for (var i = 0; i < curNote['comment'].length; i++) {
+					var flag = 1;
+			    	for(var j = 0; j < cleanUser.length; j++){
+				    	if(curNote['comment'][i]['user']['name'] == cleanUser[j]['name']){
+				    		flag =0;
+				    		break;
+				    	}
+			    	}
+			    	if(flag){
+			    		cleanUser.push(curNote['comment'][i]['user']);
+			    	}
+			    }
+			    //wind.js启动
+				var task = insertEachMsg(cleanUser);
+				task.start();
+				
+			});
+		});
+	});
+};

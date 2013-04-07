@@ -316,36 +316,99 @@
         //增加新笔记的时候,显示黄背景
         socketNote.on('addNoteNum', function (data) {
             var which = data.note;
-            var cur = $('#p_'+which+'>.psignal').text();
-            $('#p_'+which+'>.psignal').text(++cur);
-            $('#p_'+which+'>.psignal').css('background','yellow');
+             console.log(which['bid'] == bid);
+            if(which['bid'] == bid){
+                 var cur = $('#p_'+which['pid']+'>.psignal').text();
+                $('#p_'+which['pid']+'>.psignal').text(++cur);
+                $('#p_'+which['pid']+'>.psignal').css('background','#ffff00');
+            }
+        });
+
+        //show theirs notes
+        $('.showMine').live('click',function(){
+            $('.mine').show();
+            $('.theirs').hide();
+        });
+        //show mine notes
+        $('.showTheirs').live('click',function(){
+            $('.theirs').show();
+            $('.mine').hide();
+        });
+
+        //add note
+        $('.addNote').live('click',function(){
+            var text = $.trim($('textarea').val());
+            var pcontent = $('.pcontent').text();
+            var pid = $('#notes>.contents').attr('pid');
+            $.post('/addNote',{'content':text,'pcontent':pcontent,id:bid,pid:pid},function(data){
+                var one = data['success']['data'];
+                var html = '<p tid="'+one['time']+'">'+one['content']+'时间'+new Date(one['time'])+
+                                '<a target="_blank" href="/book/'+bid+'/note/'+one['time']+'">查看</a>/'+
+                                '<a href="###" class="delNote">删除</a></p>'+
+                                '<a class="showTheirs">查看其他人的笔记</a>';
+                $('.mine').html(html);
+            });
+        });
+
+        //del note
+        $('.delNote').live('click',function(){
+            var pid = $('#notes>.contents').attr('pid');
+            var tid = $(this).parent().attr('tid');
+            $.post('/delNote',{id:bid,pid:pid,tid:tid},function(data){
+                var html = '<h4>增加笔记</h4>'+
+                                '<textarea></textarea>'+
+                                '<a class="btn addNote">增加</a>'+
+                            "</div>"+    
+                            '<div class="theirs"><a class="showMine">查看我的笔记</a>'+  
+                            "</div>";
+               $('.mine').html(html);
+            });
         });
 
         //显示所有笔记
         $('.psignal').bind('click',function(){
-            var pid = $(this).parent().attr('id').split('p_')[1];
+            var node = $(this).parent();
+            var pid = node.attr('id').split('p_')[1];
             $.post('/getNotes',{id:bid,pid:pid},function(data){
                 var notes = data['success']['data']
                 if(notes){
-                    var html ='';
-                    var hasMine = false;
+                    var theirs ='<div class="theirs">';
+                    var hasMine = "";
                     for(var i=0;i<notes.length;i++){
                         if(notes[i]['user']['name'] == username){
-                            html += '<p>'+notes[i]['content']+
-                            '<a>查看</a>/<a>删除</a></p>';
-                            hasMine = true;
+                            hasMine = '<p tid="'+notes[i]['time']+'">'+notes[i]['content']+
+                            '<a href="/book/'+bid+'/note/'+notes[i]['time']+'"target="_blank">查看</a>/'+
+                            '<a href="###" class="delNote">删除</a></p>';
                         }else{
-                            html += '<p >'+notes[i]['content']+
-                            '<a>查看</a></p>';
+                            theirs += '<p >'+notes[i]['content']+"时间："+new Date(notes[i]['time'])+
+                            '<a href="/book/'+bid+'/note/'+notes[i]['time']+'" target="_blank">查看</a></p>';
                         }
                     }
+                    theirs +="<a class='showMine'>查看我的笔记</a>"+"</div>";
                     if(!hasMine){
-                        html = '<a>增加笔记</a>'+html;
+                        var html = '<div class="mine"><h4>增加笔记</h4>'+
+                                    '<textarea></textarea>'+
+                                    '<a class="btn addNote">增加</a>'+
+                                    '<a class="showTheirs">查看其他人的笔记</a></div>' +
+                                        theirs+"</div>";
+                    }else{
+                        var html = "<div class='mine'>"+hasMine +"<a class='showTheirs'>查看其他人的笔记</a></div>"+theirs;
                     }
+                    html ='<div class="pcontent">'+node.text()+"</div>"+html;
                     $('#notes>.contents').html(html);
+                    $('#notes>.contents').attr('pid',pid);
                     $('#notes').modal('show');
                 }else{
-                    console.log('nothing');
+                    var html = '<div class="mine"><h4>增加笔记</h4>'+
+                                    '<textarea></textarea>'+
+                                    '<a class="btn addNote">增加</a>'+
+                                "</div>"+    
+                                '<div class="theirs"><a class="showMine">查看我的笔记</a>'+  
+                                "</div>";
+
+                    $('#notes>.contents').html(html);
+                    $('#notes>.contents').attr('pid',pid);
+                    $('#notes').modal('show');
                 }
             });
 

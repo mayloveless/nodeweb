@@ -124,6 +124,10 @@ app.get('/checkOriginal/:bookid',read.original);
 //read
 app.get('/book/:bookid/read',read.core);
 app.post('/getNotes',read.getNotes);
+app.post('/delNote',read.delNote);
+app.post('/editNote',read.editNote);
+app.get('/book/:bookid/note/:noteid',read.getOneNote);
+app.post('/book/:bookid/note/:noteid/delCmt',read.delCmt);
 
 
 var server = http.createServer(app);
@@ -163,15 +167,22 @@ socketio.sockets.on('connection', function (socket) {
 
    //连接上socketio之后，获取未读信息条数
    routes.getUnread(socket);
-   
+   //连接上socketio之后，获取笔记条数
    socket.on('getNoteNum', function (data) {
       read.getNoteNum(socket,data);
    });
-   
+   //发笔记之后，给在线的相关人员提醒
+   app.post('/addNote',function(req,res){
+      read.addNote(req,res,usersWS);
+   });
    //在发评论之后，给在线的相关人员提醒
    app.post('/book/:bookid/salon/:salonid/pubCmt',function(req,res){
       routes.pubCmt(req,res,usersWS);
    });
+   app.post('/book/:bookid/note/:salonid/pubCmt',function(req,res){
+      read.pubCmt(req,res,usersWS);
+   });
+
    //在发like之后，给在线的相关人员提醒
    app.post('/book/:bookid/salon/:salonid/like',function(req,res){
       routes.salonLike(req,res,usersWS);

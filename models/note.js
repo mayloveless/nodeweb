@@ -8,174 +8,312 @@ var Note = function(){
 module.exports = Note;
 
 
-/*
-Salon.get = function (username, callback) {
+Note.getNoteNum = function(socket,data){
 	//check db
-	mongodb.open(function(err, db) {
-		if (err) {
-			return callback(err);
-		}
-		db.collection('user', function(err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
-
-			collection.findOne({name: username}, function(err, doc) {
-				mongodb.close();
-				if (doc) {
-					var user = {
-						name : doc.name,
-						password : doc.password
-					};
-					if(doc['admin']){
-						user['admin'] = doc['admin'];
+	if(socket){
+		mongodb.open(function(err, db) {
+		
+			mongodb.collection('book', function(err, collection) {
+				if (err) {
+					mongodb.close();
+					return callback(err);
+				}
+				var id = new ObjectID(data.id);
+				collection.findOne({'_id':id}, function(err, doc) {
+					mongodb.close();
+					if (err) {
+						callback(err, null);
 					}
-					callback(err, user);
-				} else {
-					callback(err, null);
-				}
+					if(!doc.note){
+						doc.note ={}
+					}
+					socket.emit('reNoteNum', { note: doc.note});
+				});
 			});
 		});
-	});
+	}
 };
 
-Salon.save = function (user,callback) {
-
-	mongodb.open(function(err, db) {
-		if (err) {
-		  return callback(err);
-		}
-
-		//获取users集合
-		db.collection('user', function(err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
-
-			//为name属性添加索引
-			//collection.ensureIndex('name', {unique: true});
-
-			//save
-			collection.insert(user, {safe: true}, function(err, user) {
-				mongodb.close();
-				callback(err, user);
-			});
-		});
-	});
-};
-
-Salon.update = function (user,callback) {
-
-	mongodb.open(function(err, db) {
-		if (err) {
-		  return callback(err);
-		}
-
-		//获取users集合
-		db.collection('user', function(err, collection) {
-			if (err) {
-				mongodb.close();
-				return callback(err);
-			}
-
-			//为name属性添加索引
-			//collection.ensureIndex('name', {unique: true});
-
-			//update
-			var newUser = {	};
-			if(user.avatar){
-				newUser['avatar'] = user.avatar;
-			}
-			if(user.password){
-				newUser['password']= user.password;
-			}
-			if(user.newName){
-				newUser['name']= user.newName;
-			}
-			if(user.ifAdmin){
-				newUser['admin']= user.ifAdmin;
-			}
-			collection.update({"name":user.name}, { $set :newUser}, function(err, doc) {
-				mongodb.close();
-				callback(err, doc);
-			});
-		});
-	});
-};
-*/
-
-
-Note.getAll = function (callback) {
+Note.getNotes = function (req,callback) {
 	//check db
 	mongodb.open(function(err, db) {
 		if (err) {
 			return callback(err);
 		}
-		db.collection('note', function(err, collection) {
+		db.collection('book', function(err, collection) {
 			if (err) {
 				mongodb.close();
 				return callback(err);
 			}
-
-
-			collection.find({}).toArray(function(err, docs) {
+			var id = new ObjectID(req.id);
+			collection.findOne({'_id':id},function(err, doc) {
 				mongodb.close();
-				if (docs) {
-					callback(err, docs);
-				} else {
-					callback(err, null);
+				if(!doc.note){
+					doc.note ={};
 				}
-			});
+				return callback(err, doc.note[req.pid]);
+			})
 		});
 	});
 };
 
-
-Note.delete = function (nid,callback) {
+Note.addNote = function (req,callback) {
+	//check db
 	mongodb.open(function(err, db) {
 		if (err) {
-		  return callback(err);
+			return callback(err);
 		}
-
-		//获取users集合
-		db.collection('note', function(err, collection) {
+		db.collection('book', function(err, collection) {
 			if (err) {
 				mongodb.close();
 				return callback(err);
 			}
-			var note = new ObjectID(nid)
+			var id = new ObjectID(req.id);
+			var one = {};
+			one['content'] = req.content;
+			one['pcontent'] = req.pcontent;
+			one['comment'] = [];
+			one['time'] = new Date().valueOf();;
+			one['user']={}
+			one['user']['name'] = req.user.name;
+			one['user']['avatar'] = req.user.avatar;
 			
-			collection.remove({'_id':note},function(err, doc) {
+			collection.findOne({'_id':id},function(err, doc) {
+				if(err){
+					callback(err, 'fail');
+				}
 				mongodb.close();
-				callback(err, doc);
-			});
+				
+				if(!doc.note){
+					doc.note = {};
+				}
+				if(!doc.note[req.pid]){
+					doc.note[req.pid] = [];
+				}
+				//手动把新note放进去
+				doc.note[req.pid].push(one);
+				
+				collection.update({'_id':id},{"$set":{'note':doc.note}},function(err, doc) {
+
+					return callback(err, one);
+				});
+				
+			})
 		});
 	});
 };
 
-Note.search = function (content,callback) {
+Note.editNote = function (req,callback) {
 	//check db
 	mongodb.open(function(err, db) {
 		if (err) {
 			return callback(err);
 		}
-		db.collection('note', function(err, collection) {
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(req.id);
+			collection.findOne({'_id':id},function(err, doc) {
+				if(err){
+					callback(err, 'fail');
+				}
+				mongodb.close();
+				
+				//手动把新note放进去
+				var curNote = doc.note[req.pid];
+				var newTime = new Date().valueOf()
+				for(var i=0;i<curNote.length;i++){
+					if(curNote[i].time == Number(req.tid)&& req.user.name == curNote[i].user.name){
+						curNote[i]['content']=req.content;
+						curNote[i]['time'] = newTime;
+						break;
+					}
+				}
+				
+				collection.update({'_id':id},{"$set":{'note':doc.note}},function(err, doc) {
+					return callback(err, newTime);
+				});
+				
+			})
+		});
+	});
+};
+
+Note.delNote = function (req,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(req.id);
+			
+			
+			collection.findOne({'_id':id},function(err, doc) {
+				if(err){
+					return callback(err, 'fail');
+				}
+				mongodb.close();
+				
+				if(!doc.note){
+					doc.note = {};
+				}
+				if(!doc.note[req.pid]){
+					doc.note[req.pid] = [];
+				}
+				//手动把新note放进去
+				var curNote = doc.note[req.pid];
+				for(var i=0;i<curNote.length;i++){
+					if(curNote[i].time == Number(req.tid)&& req.user.name == curNote[i].user.name){
+						curNote.splice(i,1);
+						break;
+					}
+				}
+				collection.update({'_id':id},{"$set":{'note':doc.note}},function(err, doc) {
+
+					return callback(err, 'success');
+				});
+				
+			})
+		});
+	});
+};
+
+Note.getOneNote = function (req,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
 			if (err) {
 				mongodb.close();
 				return callback(err);
 			}
 
-			var searchContent = eval("/"+content+"/i");
-			collection.find({'content':searchContent}).toArray(function(err, docs) {
+			var id = new ObjectID(req.bookid);
+			collection.findOne({'_id':id}, function(err, doc) {
 				mongodb.close();
-				if (docs) {
-					callback(err, docs);
-				} else {
-					callback(err, null);
+				if (err) {
+					return callback(err, null);
 				}
+				if(!doc.note){
+					return callback(err, {});
+				}
+
+				//手动把note找出来
+				var notes = doc.note;
+				var hasOne = false;
+				for(var key in notes){
+					if(hasOne){
+						break;
+					}
+					var curNote = notes[key];
+					for(var i=0;i<curNote.length;i++){
+						if(curNote[i].time == Number(req.noteid)){
+							hasOne = true;
+							return callback(err,curNote[i],key,doc);
+							break;
+						}
+					}
+				}
+				return callback(err, {});
 			});
 		});
 	});
 };
+
+Note.pubCmt = function (note,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(note.bookid);
+			var one = {};
+			one['content'] = note['content'];
+			one['user'] = note['user'];
+			one['time'] = new Date().valueOf();
+
+			collection.findOne({'_id':id},function(err, doc) {
+				if(err){
+					callback(err, 'fail');
+				}
+				mongodb.close();
+				
+				//手动把新note放进去
+				var curNote = doc.note[note.pid];
+				var newTime = new Date().valueOf()
+				for(var i=0;i<curNote.length;i++){
+					if(curNote[i].time == Number(note.time)){
+						curNote[i]['comment'].push(one);
+						break;
+					}
+				}
+				
+				collection.update({'_id':id},{"$set":{'note':doc.note}},function(err, doc) {
+					one['bid'] = note.bookid;
+					one['pid'] = note.pid;
+					one['tid'] = note.time;
+					callback(err, one);
+				});
+				
+			});
+		});
+		
+	});
+};
+
+Note.delCmt = function (note,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(note.bookid);
+			collection.findOne({'_id':id},function(err, doc) {
+				if(err){
+					callback(err, 'fail');
+				}
+				mongodb.close();
+				
+				//手动把新note放进去
+				var curNote = doc.note[note.pid];
+				for(var i=0;i<curNote.length;i++){
+					if(curNote[i].time == Number(note.tid)&& note.name == curNote[i].user.name){
+						var comments = curNote[i]['comment'];
+						for(var j=0;j<comments.length;j++){
+							if(comments[j]['time'] == note['ctime']){
+								curNote[i]['comment'].splice(j,1);
+								break;
+							}
+						}
+						break;
+					}
+				}
+				collection.update({'_id':id},{"$set":{'note':doc.note}},function(err, doc) {
+					mongodb.close();
+					return callback(err, doc);
+				});
+				return callback(err,doc)
+			});
+		});
+	});
+};
+

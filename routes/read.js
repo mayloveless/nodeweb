@@ -9,7 +9,7 @@ var Books = require('../models/books.js');
 var Salon = require('../models/salon.js');
 var Note = require('../models/note.js');
 var Comment = require('../models/comment.js');
-var Tips = require('../models/tips.js');
+var Msg = require('../models/tips.js');
 var iconv = require('iconv-lite');
 
 exports.loadBook = function(req, res){
@@ -124,17 +124,118 @@ exports.original = function(req, res){
 //实时获取笔记数量
 exports.getNoteNum = function(socket,data){
 	//check db from model then execute callback below
-	Books.getNoteNum(socket,data);
+	Note.getNoteNum(socket,data);
 };
 
 //获取笔记
 exports.getNotes = function(req,res){
 	//check db from model then execute callback below
-	Books.getNotes(req.body, function(err, notes) {
+	Note.getNotes(req.body, function(err, notes) {
 		if (err) {
 			req.flash('error', err);
 			return res.json({'fail':1});
 		}
 		return res.json({'success':{'data':notes}});
+	});
+};
+
+//增加笔记
+exports.addNote = function(req,res,socket){
+	//check db from model then execute callback below
+	req.body.user = req.session.user;
+	Note.addNote(req.body, function(err, one) {
+		if (err) {
+			req.flash('error', err);
+			return res.json({'fail':1});
+		}
+		//发表笔记之后发布一条消息
+		one['bid'] = req.body.id;
+		one['pid'] = req.body.pid;
+		for(user in socket){
+			socket[ user ].emit('addNoteNum', { note: one});
+		}
+		return res.json({'success':{'data':one}});
+	});
+};
+
+//删除笔记
+exports.delNote = function(req,res){
+	//check db from model then execute callback below
+	req.body.user = req.session.user;
+	Note.delNote(req.body, function(err, one) {
+		if (err) {
+			req.flash('error', err);
+			return res.json({'fail':1});
+		}
+		return res.json({'success':1});
+	});
+};
+
+//修改笔记
+exports.editNote = function(req,res){
+	//check db from model then execute callback below
+	req.body.user = req.session.user;
+	Note.editNote(req.body, function(err, newTime) {
+		if (err) {
+			req.flash('error', err);
+			return res.json({'fail':1});
+		}
+		return res.json({'success':newTime});
+	});
+};
+
+//获取笔记
+exports.getOneNote = function(req,res){
+	//check db from model then execute callback below
+	Note.getOneNote(req.params, function(err, note,key,book) {
+		if (err || note=={}) {
+			req.flash('error', err);
+			return res.redirect('/book'+req.params.bookid);
+		}
+		res.render('oneNote', {
+			title: '读者笔记:'+book.bookName,
+			user : req.session.user,
+			book:book,
+			note : note,
+			pid:key,
+			curPage :"",
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});	
+	});
+};
+
+
+//增加笔记评论
+exports.pubCmt = function(req,res,socket){
+	//check db from model then execute callback below
+	if (req.body['content'] === ''){
+		req.flash('error', '请检查输入');
+		return res.redirect('/book/'+req.body.bookid+'/note/'+req.body['time']);	
+	}
+	req.body['user'] ={
+		name :req.session.user.name,
+		avatar :req.session.user.avatar
+	} ;
+	Note.pubCmt(req.body,function(err, noteCmt) {
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/book/'+req.body.bookid);
+		}
+		//发表评论之后发布一条消息
+		Msg.addNoteCmt(noteCmt,socket,function() {
+			return res.redirect('/book/'+req.body.bookid+'/note/'+req.body['time']);	
+		});	
+	});
+};
+
+exports.delCmt = function(req, res){
+	//check db from model then execute callback below
+	Note.delCmt(req.body,function(err, book) {
+		if (err) {
+			req.flash('error', err);
+			return res.json({'success':0});
+		}
+		return res.json({'success':1});
 	});
 };
