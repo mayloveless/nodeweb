@@ -37,8 +37,8 @@
 	<tr>
 	   <td style="width:300px;overflow:hidden"><%= notes[i].content %></td>
 	   <td><%= notes[i].user.name %></td>
-	   <td><a href="/nid/<%= notes[i]._id %>"><%= notes[i].bookId.bookName %></a></td>
-	   <td><a href="javascript:;" class="delete">删除</a></td>
+	   <td><a href="/book/<%=notes[i].bookId%>/note/<%= notes[i].time %>"><%= notes[i].bookName %>第<%=notes[i]['pid']%>段的笔记</a></td>
+	   <td><a href="javascript:;" bid="<%=notes[i].bookId%>" pid="<%=notes[i]['pid']%>" tid="<%=notes[i]['time']%>"class="delete">删除</a></td>
 	</tr>
 <% } %>
 </table>
@@ -60,15 +60,12 @@
 <script>
 
 	$('.delete').bind('click',function(){
-		var nidArr = $(this).parent().prev().children('a').attr('href').split('/');
-		var nid = nidArr[nidArr.length-1];
-		$.post('/admin/delNote',{'nid':nid},function(req, res){
-			if(res !=='success'){
-				$('#error').show();
-			}else{
-				location.reload();
-			}
-			
-		});
+		var pid = $(this).attr('pid');
+        var tid = $(this).attr('tid');
+        var bid = $(this).attr('bid');
+        $.post('/delNote',{id:bid,pid:pid,tid:tid},function(data){
+            
+           	location.reload();
+        });
 	});
 </script>

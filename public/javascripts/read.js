@@ -169,6 +169,18 @@
 
     $(document).ready(function(){
         init();
+        //if from single note
+        var fromNote = location.search;
+        if(fromNote && fromNote.split('?pid=')){
+            var pid = fromNote.split('?pid=')[1];
+            for(var i=0;i<pages.length;i++){
+                if(pages[i].indexOf('p_'+pid) !== -1){
+
+                    location.href =location.pathname+'#'+(i+1); 
+                }
+            }
+        }
+
         var urlPage = location.hash;
         if(urlPage){
             goTo(parseInt(urlPage.split('#')[1]));

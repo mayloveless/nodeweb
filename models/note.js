@@ -170,7 +170,7 @@ Note.delNote = function (req,callback) {
 				//手动把新note放进去
 				var curNote = doc.note[req.pid];
 				for(var i=0;i<curNote.length;i++){
-					if(curNote[i].time == Number(req.tid)&& req.user.name == curNote[i].user.name){
+					if(curNote[i].time == Number(req.tid)){
 						curNote.splice(i,1);
 						break;
 					}
@@ -296,7 +296,7 @@ Note.delCmt = function (note,callback) {
 				//手动把新note放进去
 				var curNote = doc.note[note.pid];
 				for(var i=0;i<curNote.length;i++){
-					if(curNote[i].time == Number(note.tid)&& note.name == curNote[i].user.name){
+					if(curNote[i].time == Number(note.tid)){
 						var comments = curNote[i]['comment'];
 						for(var j=0;j<comments.length;j++){
 							if(comments[j]['time'] == note['ctime']){
@@ -317,3 +317,38 @@ Note.delCmt = function (note,callback) {
 	});
 };
 
+
+Note.getAll = function (callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			
+			collection.find({}).toArray(function(err, docs) {
+				mongodb.close();
+
+				var notesList = [];
+				for(var i=0;i<docs.length;i++){
+					if(docs[i].note){
+						for(var key in docs[i].note){
+							var notes = docs[i]['note'][key];
+							for(var j=0;j<notes.length;j++){
+								notes[j]['bookName'] = docs[i]['bookName'];
+								notes[j]['bookId'] = docs[i]['_id'];
+								notes[j]['pid'] = key;
+								notesList.push(notes[j]);
+							}
+						}
+					}
+				}
+				return callback(err, notesList);
+			});
+		});
+	});
+};
