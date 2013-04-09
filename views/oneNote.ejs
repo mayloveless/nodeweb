@@ -1,11 +1,45 @@
+<style>
+	#pcontent{
+		width:600px;
+		position:relative;
+	}
+	.ptext{
+		width100%;
+	}
+	#pcontent .pic{
+		position:absolute;
+		top:0;
+		left:0;
+	}
+	.psignal{
+        background: #00b0f0;
+        font-size: 18px;
+        width: 20px;
+        height: 20px;
+        color: #fff!important;
+        display: block;
+        float: left;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+    .pcanvas{
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:-1;
+    }
+</style>
 <a href="/book/<%= book._id%>/read?pid=<%=pid%>">返回</a>
 <div>
 	<p>段落:</p>
-	<p><%=note.pcontent%></p>
+	<div id="pcontent">
+		<img class="pic" src="<%=note.pic%>"/>
+		<div class="ptext"></div>
+	</div>
 </div>
 <div>
 	<p>内容:</p>
-	<p><%=note.content%></p>
+	<p ><%=note.content%></p>
 	<p><%= (new Date(note.time)).toString().substr(10,15)%></p>
 	<% if(user.name == note.user.name){ %>
 		<a class="edit">修改</a>
@@ -16,8 +50,8 @@
 <div>
 	<% for(var i=0;i<note.comment.length;i++){%>
 		<p>内容:<%= note.comment[i].content%></p>
-		<p>名字:<%= note.comment[i].user.name%><p>
-		<p>时间:<%= note.comment[i].time%><p>
+		<p>名字:<%= note.comment[i].user.name%></p>
+		<p>时间:<%= note.comment[i].time%></p>
 		<%if(note.comment[i].user.name == user.name){%>
 			<p><a href="###" time="<%=note.comment[i].time%>" class="delCmt">删除</a></p>
 		<%}%>
@@ -62,7 +96,20 @@
     var tid = '<%=note.time%>';
     var bid = '<%=book._id%>';
     var username = '<%=user.name%>';
+    var pcontent = '<%=note.pcontent%>';
+    var Tohtml = function (str) {
+	    return str ? str.replace(/&((g|l|quo)t|amp);/g, function (m) {
+	        return {
+	            '&lt;':'<',
+	            '&amp;':'&',
+	            '&quot;':'"',
+	            '&gt;':'>'
+	        }[m]
+	    }) : '';
+	};
 	$(document).ready(function(){
+		$('.ptext').html(Tohtml(pcontent));
+
 		$('.del').bind('click',function(){
             $.post('/delNote',{id:bid,pid:pid,tid:tid},function(data){
                 location.href="/book/"+bid+'/read';

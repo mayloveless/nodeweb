@@ -362,7 +362,7 @@ $(document).ready(function(){
     //add note
     $('.addNote').live('click',function(){
         var text = $.trim($('textarea').val());
-        var pcontent = $('.pcontent').text();
+        var pcontent = $('.pcontent').html();
         var pid = $('#notes>.contents').attr('pid');
         $.post('/addNote',{'content':text,'pcontent':pcontent,id:bid,pid:pid},function(data){
             var one = data['success']['data'];
@@ -393,16 +393,21 @@ $(document).ready(function(){
     $('.psignal').bind('click',function(){
         var node = $(this).parent();
         var pid = node.attr('id').split('p_')[1];
+        var imgData ='';
         $.post('/getNotes',{id:bid,pid:pid},function(data){
             var notes = data['success']['data'];
             if(notes){
                 var theirs ='<div class="theirs">';
                 var hasMine = "";
                 for(var i=0;i<notes.length;i++){
-                    if(notes[i]['user']['name'] == username&&notes[i]['content']!==''){
-                        hasMine = '<p tid="'+notes[i]['time']+'">'+notes[i]['content']+
-                        '<a href="/book/'+bid+'/note/'+notes[i]['time']+'"target="_blank">查看</a>/'+
-                        '<a href="###" class="delNote">删除</a></p>';
+                    if(notes[i]['user']['name'] == username){
+                        imgData = notes[i]['pic'];
+                        if(notes[i]['content']!==''){
+                            hasMine = '<p tid="'+notes[i]['time']+'">'+notes[i]['content']+
+                                '<a href="/book/'+bid+'/note/'+notes[i]['time']+
+                                '"target="_blank">查看</a>/'+
+                                '<a href="###" class="delNote">删除</a></p>';
+                        }
                     }else{
                         theirs += '<p >'+notes[i]['content']+"时间："+new Date(notes[i]['time'])+
                         '<a href="/book/'+bid+'/note/'+notes[i]['time']+'" target="_blank">查看</a></p>';
@@ -418,7 +423,10 @@ $(document).ready(function(){
                 }else{
                     var html = "<div class='mine'>"+hasMine +"<a class='showTheirs'>查看其他人的笔记</a></div>"+theirs;
                 }
-                html ='<div class="pcontent">'+node.text()+"</div>"+html;
+                html ='<div class="pcontent" style="position:relative;">'+
+                        node.html()+
+                        '<img src="'+imgData+'" style="position:absolute;top:0;left:0;z-index:-1"/>'+
+                        "</div>"+html;
                 $('#notes>.contents').html(html);
                 $('#notes>.contents').attr('pid',pid);
                 $('#notes').modal('show');
@@ -542,7 +550,8 @@ $(document).ready(function(){
         $.post('/saveNoteImg',{
             pic:data,
             id:bid,
-            pid:curPone+1
+            pid:curPone+1,
+            pcontent:$('.pone')[curPone].innerHTML
         },function(data){
             console.log(data);
         });
