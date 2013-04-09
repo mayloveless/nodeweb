@@ -184,6 +184,19 @@ exports.editNote = function(req,res){
 	});
 };
 
+//上传涂鸦
+exports.saveNoteImg = function(req,res){
+	//check db from model then execute callback below
+	req.body.user = req.session.user;
+	Note.saveNoteImg(req.body, function(err, newTime) {
+		if (err) {
+			req.flash('error', err);
+			return res.json({'fail':1});
+		}
+		return res.json({'success':1});
+	});
+};
+
 //获取笔记
 exports.getOneNote = function(req,res){
 	//check db from model then execute callback below

@@ -126,6 +126,7 @@ app.get('/book/:bookid/read',read.core);
 app.post('/getNotes',read.getNotes);
 app.post('/delNote',read.delNote);
 app.post('/editNote',read.editNote);
+app.post('/saveNoteImg',read.saveNoteImg);
 app.get('/book/:bookid/note/:noteid',read.getOneNote);
 app.post('/book/:bookid/note/:noteid/delCmt',read.delCmt);
 

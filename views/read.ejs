@@ -25,6 +25,8 @@
 	.pone{
 		margin: 0;
 		line-height: 20px;
+        position:relative;
+        padding:10px;
 	}
     #pageWrap{
         height: 100%;
@@ -52,6 +54,62 @@
         display: none;
     }
 
+    #drawPannel{
+        position:fixed;
+        right:100px;
+        top:100px;
+        display:none;
+    }
+    .pcanvas{
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:-1;
+    }
+
+    #draw{
+        position:absolute;
+        left:300px;
+    }
+    #pen_sample{
+        display: block;
+        width: 80px;
+        height: 3px;
+        background: #000;
+        border-radius: 20px;
+    }
+    #canvas_colors{
+        display:none;
+    }
+    #canvas_currentColor{
+        width:20px;
+        height:20px;
+        background-color:#000;
+        display:block;
+    }
+    #canvas_colors li{
+        width:20px;
+        height:20px;
+        float:left;
+        margin-left:10px;
+        display:block;
+    }
+    #canvas_colors li a{
+        background:#000;
+        display:block;
+        width:100%;
+        height:100%;
+    }
+    #canvas_colors .yellow{
+        background-color:yellow;
+    }
+    #canvas_colors .green{
+        background-color:green;
+    }
+    #canvas_colors .red{
+        background-color:red;
+    }
+
     :-webkit-full-screen{
         width: 100%;
     }
@@ -68,7 +126,7 @@
 
 </style>
 
-
+<a id="draw" href="javascript:;">涂鸦</a>
 <div id="hideContent" style="display:none"><%= book.content %></div> 
 
 <ul id="tool">
@@ -86,6 +144,27 @@
 
 <div id="content">
    <div id="pageWrap"></div>
+</div>
+
+<div id="drawPannel">
+    <ul>
+        <li><a href="###" id="canvas_clear">清屏</a></li>
+        <li>
+            <a href="###" id="choose_color">颜色</a>
+            <span id="canvas_currentColor"></span>
+        </li>
+        <li>笔画
+            <a href="###" id="pen_large">粗</a>
+            <a href="###" id="pen_small">细</a>
+            <span id="pen_sample"></span>
+        </li>
+        <li><a href="###" id="saveDrew">保存</a></li>
+    </ul>
+    <ul id="canvas_colors">
+        <li><a href="###" class="red">red</a></li>
+        <li><a href="###" class="green">green</a></li>
+        <li><a href="###" class="yellow">black</a></li>
+    </ul>
 </div>
 
 
@@ -117,6 +196,9 @@
     <button class="btn btn-primary">确定</button>
   </div> -->
 </div>
+
+
+
 
 <script>
    bookName = '<%=book.bookName%>';

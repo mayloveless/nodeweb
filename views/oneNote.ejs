@@ -48,7 +48,7 @@
     <h3 id="myModalLabel">段落笔记</h3>
   </div>
   <div class="modal-body">
-    <textarea></textarea>
+    <textarea class="editeTextarea"></textarea>
   </div>
    <div class="modal-footer">
     <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
@@ -71,11 +71,11 @@
 
 		$('.edit').bind('click',function(){
 			$('#editNote').modal('show');
-			$('textarea').val("<%=note.content%>");
+			$('.editeTextarea').val("<%=note.content%>");
 		});
 
 		$('.editSure').bind('click',function(){
-			var content = $.trim($('textarea').val());
+			var content = $.trim($('.editeTextarea').val());
             $.post('/editNote',{id:bid,pid:pid,tid:tid,content:content},function(data){
                 location.href="/book/"+bid+'/note/'+data['success'];
             });

@@ -68,16 +68,7 @@ Note.addNote = function (req,callback) {
 				mongodb.close();
 				return callback(err);
 			}
-			var id = new ObjectID(req.id);
-			var one = {};
-			one['content'] = req.content;
-			one['pcontent'] = req.pcontent;
-			one['comment'] = [];
-			one['time'] = new Date().valueOf();;
-			one['user']={}
-			one['user']['name'] = req.user.name;
-			one['user']['avatar'] = req.user.avatar;
-			
+			var id = new ObjectID(req.id);			
 			collection.findOne({'_id':id},function(err, doc) {
 				if(err){
 					callback(err, 'fail');
@@ -91,7 +82,41 @@ Note.addNote = function (req,callback) {
 					doc.note[req.pid] = [];
 				}
 				//手动把新note放进去
-				doc.note[req.pid].push(one);
+				var hasMine = false;
+				var curNote = doc.note[req.pid];
+				var newTime = new Date().valueOf();
+				var one;
+				var makeOne = function(){
+					one = {};
+					one['content'] = req.content;
+					one['pcontent'] = req.pcontent;
+					one['comment'] = [];
+					one['time'] = new Date().valueOf();
+					one['pic'] ='';
+					one['user']={};
+					one['user']['name'] = req.user.name;
+					one['user']['avatar'] = req.user.avatar;
+					doc.note[req.pid] = [];
+					doc.note[req.pid].push(one);
+				};
+				
+				if(!curNote[0]){
+					makeOne();
+				}else{
+					for(var i=0;i<curNote.length;i++){
+						if(req.user.name == curNote[i].user.name){
+							curNote[i]['content']=req.content;
+							curNote[i]['pcontent']=req.pcontent;
+							curNote[i]['time'] = newTime;
+							hasMine = true;
+							one = curNote[i];
+							break;
+						}
+					}
+					if(!hasMine){
+						makeOne();
+					}
+				}
 				
 				collection.update({'_id':id},{"$set":{'note':doc.note}},function(err, doc) {
 
@@ -349,6 +374,67 @@ Note.getAll = function (callback) {
 				}
 				return callback(err, notesList);
 			});
+		});
+	});
+};
+
+Note.saveNoteImg = function (req,callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+			var id = new ObjectID(req.id);
+			collection.findOne({'_id':id},function(err, doc) {
+				if(err){
+					callback(err, 'fail');
+				}
+				mongodb.close();
+				
+				//手动把新pic放进去
+				var hasMine = false;
+				var curNote = doc.note[req.pid];
+				var newTime = new Date().valueOf();
+				var makeOne = function(){
+					var one = {};
+					one['content'] = '';
+					one['pcontent'] = '';
+					one['comment'] = [];
+					one['time'] = new Date().valueOf();
+					one['pic'] = req.pic;
+					one['user']={};
+					one['user']['name'] = req.user.name;
+					one['user']['avatar'] = req.user.avatar;
+					doc.note[req.pid] = [];
+					doc.note[req.pid].push(one);
+				};
+				
+				if(!curNote){
+					makeOne();
+				}else{
+					for(var i=0;i<curNote.length;i++){
+						if(req.user.name == curNote[i].user.name){
+							curNote[i]['pic']=req.pic;
+							curNote[i]['time'] = newTime;
+							hasMine = true;
+							break;
+						}
+					}
+					if(!hasMine){
+						makeOne();
+					}
+				}
+				
+				collection.update({'_id':id},{"$set":{'note':doc.note}},function(err, doc) {
+					return callback(err, newTime);
+				});
+				
+			})
 		});
 	});
 };
