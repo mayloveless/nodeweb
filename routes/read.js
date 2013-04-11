@@ -68,10 +68,24 @@ exports.core = function(req, res){
 		        error : req.flash('error').toString()
 		    });
 		}else{
+			var noteList = book[0].note;
+			var pic=[];
+			var picNum =[];
+			for(var key in noteList){
+				for(var i=0;i<noteList[key].length;i++){
+					if(noteList[key][i].user.name == req.session.user.name){
+						pic.push(noteList[key][i].pic+"&&&");
+						picNum.push(key);
+					}
+				}
+			}
+
 			res.render('read', {
 				title: book[0].bookName,
 				book : book[0],
 				user : req.session.user,
+				images : pic,
+				imgNum : picNum,
 				curPage :"",
 				success : req.flash('success').toString(),
 				error : req.flash('error').toString()

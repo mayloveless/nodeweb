@@ -27,6 +27,13 @@
 		line-height: 20px;
         position:relative;
         padding:10px;
+        -webkit-user-select: none;
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;      /* IE 10+ */
+
+          /* No support for these yet, use at own risk */
+        -o-user-select: none;
+        user-select: none; 
 	}
     #pageWrap{
         height: 100%;
@@ -127,7 +134,7 @@
 </style>
 
 <a id="draw" href="javascript:;">涂鸦</a>
-<div id="hideContent" style="display:none"><%= book.content %></div> 
+<div id="hideContent" style="display:none"><%= book.content %></div>
 
 <ul id="tool">
     <li><a href="javascript:;" class="showCata">目录</a></li>
@@ -204,5 +211,7 @@
    bookName = '<%=book.bookName%>';
    bid = "<%=book._id%>";
    username = "<%=user.name%>";
+   imgDataList = "<%=images%>";
+   imgNum = "<%=imgNum%>";
 </script>
 <script src="/javascripts/read.js"></script>

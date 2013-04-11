@@ -23,6 +23,7 @@ var init = function(){
     var cList = [];
     var pCount = 0;
     var cataInPage = [];
+    //make pone
     $('.psignal').parent().each(function(){
         ++pCount;
     	var htmlSection = '<p id="p_'+pCount+'" style="'+
@@ -32,7 +33,19 @@ var init = function(){
                             $(this).html()+'</p>';
     	pList.push(htmlSection);
     });
-    
+    $('#hideContent').html(' ');
+    //make images
+    var imgWhich = imgNum.toString().split(',');
+    var imgData = imgDataList.toString().split('&amp;&amp;&amp;');
+     images ={};
+    for(var i=0;i<imgWhich.length;i++){
+        if(i!==0){
+            thisData = imgData[i].slice(1);
+        }else{
+            thisData = imgData[i];
+        }
+        images[imgWhich[i]] = thisData;
+    }
     //device pages  user #pageWrap dom to calculate 
     for(var i=0;i<pList.length;i++){
     	$('#pageWrap').append(pList[i]);
@@ -89,11 +102,19 @@ var init = function(){
     $('#total').text(pageNum);
     $('#curPage').text(curPage);
 
-    //canvas Height
+    //canvas
     for(var i=0;i<$('.pone').length;i++){
         $('.pcanvas')[i].setAttribute('height',$('.pone')[i].offsetHeight);
+        if(images[i]){
+            var theImg = new Image();
+            theImg.src = images[i];
+            theImg.onload = function(i,img){
+               $('.pone:eq('+i+')').append(img);
+               $('.pone:eq('+i+')>img').css('position','absolute').css('left','0').css('top','0').css('z-index',-1);
+              // $('.pcanvas')[i].getContext('2d').drawImage(img,0,0);
+            }(i-1,theImg);
+        }
     }
-
 };
 
 
@@ -425,9 +446,9 @@ $(document).ready(function(){
                 }
                 html ='<div class="pcontent" style="position:relative;">'+
                         node.html()+
-                        '<img src="'+imgData+'" style="position:absolute;top:0;left:0;z-index:-1"/>'+
                         "</div>"+html;
                 $('#notes>.contents').html(html);
+                $('#notes>.contents  img').attr('src',imgData).css('top','-15px').css('left','5px');
                 $('#notes>.contents').attr('pid',pid);
                 $('#notes').modal('show');
             }else{
@@ -471,13 +492,13 @@ $(document).ready(function(){
             $('#drawPannel').hide();
             $('.pone')[curPone].style.border = 'none';
             //hide canvas
-            $('.pone')[curPone].children[0].style.zIndex = -1;
+            //$('.pone')[curPone].children[0].style.zIndex = -1;
             hasPannel = false;
         }else{
             $('#drawPannel').show();
             $('.pone')[curPone].style.border = '2px dashed red';
             //show canvas
-            $('.pone')[curPone].children[0].style.zIndex = 0;
+            //$('.pone')[curPone].children[0].style.zIndex = 0;
             //预设文字
             context = $('.pcanvas')[curPone].getContext('2d');
             //画布宽高
@@ -493,14 +514,16 @@ $(document).ready(function(){
     var mousePosition = {};
     var drawLeft = 350;
     var drawTop =0;
-    $('.pcanvas').bind('mousedown',function(e){
-        drewAble=1;
-        drawTop =  $('.pone')[curPone].offsetTop - $(document).scrollTop() +60;
-        mousePosition = {x:e.clientX-drawLeft,y : e.clientY-drawTop};
-       // console.log(mousePosition);
+    $('.pone').bind('mousedown',function(e){
+        if(hasPannel){
+            drewAble=1;
+            drawTop =  $('.pone')[curPone].offsetTop - $(document).scrollTop() +60;
+            mousePosition = {x:e.clientX-drawLeft,y : e.clientY-drawTop};
+           // console.log(mousePosition);
+        }
     });
 
-    $('.pcanvas').bind('mousemove',function(e){
+    $('.pone').bind('mousemove',function(e){
         if(drewAble){  
             context.beginPath();  
             context.lineJoin='round';
@@ -514,8 +537,10 @@ $(document).ready(function(){
         }
     });
                         
-    $('.pcanvas').bind('mouseup',function(){
-        drewAble=0;
+    $('.pone').bind('mouseup',function(){
+        if(hasPannel){
+            drewAble=0;
+        }
     });
 
     //canvas功能：清屏
@@ -546,6 +571,8 @@ $(document).ready(function(){
     });
     //保存
     $('#saveDrew').bind('click',function(){
+        var img = $('.pone:eq('+curPone+') img')[0];
+        context.drawImage(img,0,0);
         var data = $('.pcanvas')[curPone].toDataURL();
         $.post('/saveNoteImg',{
             pic:data,
