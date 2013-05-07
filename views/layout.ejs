@@ -98,7 +98,7 @@
       
       <footer style="clear:both">
         <hr />
-        <p style="text-align:center"><a href="http://weibo.com/mayloveless">@mayloveless</a> 2013</p>
+        <!-- <p style="text-align:center"><a href="http://weibo.com/mayloveless">@mayloveless</a> 2013</p> -->
       </footer>
     </div>
   </body>
@@ -112,7 +112,8 @@
 <script>
       $(document).ready(function(){
         //connect socket
-        var socket = io.connect('http://127.0.0.1:3000/');
+        var host = 'http://'+window.location.hostname+':'+window.location.port;
+        var socket = io.connect(host);
         //listen channel msg / unread
         socket.on('msg', function (data) {
           var num = parseInt($('#msgNum').text()) ? parseInt($('#msgNum').text()) + data.num : 1;

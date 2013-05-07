@@ -241,6 +241,7 @@ Book.create = function (bookName,cata,uploader,desc,bookType,callback) {
 			book['bookType'] = bookType;
 			book['content'] = '';
 			book['note'] = {};
+			book['reader'] =[uploader];
 			collection.insert(book, {safe: true}, function(err, book) {
 				db.collection('cata', function(err, collection) {
 					if (err) {
@@ -294,6 +295,36 @@ Book.getSingle = function (bookId, callback) {
 					callback(err, null);
 				}
 				callback(null, docs);
+
+			});
+		});
+	});
+};
+
+Book.addReadList = function (bookId,user, callback) {
+	//check db
+	mongodb.open(function(err, db) {
+		if (err) {
+			return callback(err);
+		}
+		db.collection('book', function(err, collection) {
+			if (err) {
+				mongodb.close();
+				return callback(err);
+			}
+
+			var query = {};
+			if (bookId) {
+				var id = new ObjectID(bookId)
+				query._id = id;
+			}
+
+			collection.update({'_id':id},{ $addToSet :{'reader':user}},function(err, docs) {
+				mongodb.close();
+				if (err) {
+					callback(err, null);
+				}
+				callback(null);
 
 			});
 		});

@@ -344,7 +344,8 @@ $(document).ready(function(){
     });
 
     //connect socket
-    var socketNote = io.connect('http://127.0.0.1:3000/');
+    var host = 'http://'+window.location.hostname+':'+window.location.port;
+    var socketNote = io.connect(host);
     //listen channel note
     socketNote.emit('getNoteNum', { id: bid });
     socketNote.on('reNoteNum', function (data) {
@@ -367,6 +368,11 @@ $(document).ready(function(){
             $('#p_'+which['pid']+'>.psignal').text(++cur);
             $('#p_'+which['pid']+'>.psignal').css('background','#ffff00');
         }
+    });
+    //即时消息
+    socketNote.on('im'+bid, function (data) {
+        var html = '<li>'+data.msg.content+data.msg.time+data.msg.user.name+'</li>';
+        $('#chatWin').append(html);
     });
 
     //show theirs notes
@@ -572,7 +578,9 @@ $(document).ready(function(){
     //保存
     $('#saveDrew').bind('click',function(){
         var img = $('.pone:eq('+curPone+') img')[0];
-        context.drawImage(img,0,0);
+        if(img){
+            context.drawImage(img,0,0);
+        }
         var data = $('.pcanvas')[curPone].toDataURL();
         $.post('/saveNoteImg',{
             pic:data,
@@ -584,5 +592,18 @@ $(document).ready(function(){
         });
     });
 
+    //发即时消息
+    $('.sendMsg').bind('click',function(){
+        var text = $('.msgTextarea').val();
+        if(!text){
+            alert('type anything?');
+            return;
+        }
+        $.post('/sendIm',{
+            content:text,
+            bid:bid
+        });
+        $('.msgTextarea').val('');
+    });
 
 });

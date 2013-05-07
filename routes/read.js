@@ -68,28 +68,31 @@ exports.core = function(req, res){
 		        error : req.flash('error').toString()
 		    });
 		}else{
-			var noteList = book[0].note;
-			var pic=[];
-			var picNum =[];
-			for(var key in noteList){
-				for(var i=0;i<noteList[key].length;i++){
-					if(noteList[key][i].user.name == req.session.user.name){
-						pic.push(noteList[key][i].pic+"&&&");
-						picNum.push(key);
+			Books.addReadList(req.params.bookid,req.session.user.name,function(err) {
+				var noteList = book[0].note;
+				var pic=[];
+				var picNum =[];
+				for(var key in noteList){
+					for(var i=0;i<noteList[key].length;i++){
+						if(noteList[key][i].user.name == req.session.user.name){
+							pic.push(noteList[key][i].pic+"&&&");
+							picNum.push(key);
+						}
 					}
 				}
-			}
+			
+				res.render('read', {
+					title: book[0].bookName,
+					book : book[0],
+					user : req.session.user,
+					images : pic,
+					imgNum : picNum,
+					curPage :"",
+					success : req.flash('success').toString(),
+					error : req.flash('error').toString()
+				});	
 
-			res.render('read', {
-				title: book[0].bookName,
-				book : book[0],
-				user : req.session.user,
-				images : pic,
-				imgNum : picNum,
-				curPage :"",
-				success : req.flash('success').toString(),
-				error : req.flash('error').toString()
-			});	
+			});
 		}
 		
 	});
@@ -265,4 +268,20 @@ exports.delCmt = function(req, res){
 		}
 		return res.json({'success':1});
 	});
+};
+
+exports.sendIm = function(req, res,socket){
+	//check db from model then execute callback below
+	req.body['user'] ={
+		name :req.session.user.name,
+		avatar :req.session.user.avatar
+	} ;
+	var msg = {
+		content:req.body.content,
+		time : new Date(),
+		user : req.body.user
+	}
+	for( user in socket){
+		socket[ user ].emit('im'+req.body.bid, { msg: msg});
+	}
 };

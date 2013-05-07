@@ -188,6 +188,11 @@ socketio.sockets.on('connection', function (socket) {
    app.post('/book/:bookid/salon/:salonid/like',function(req,res){
       routes.salonLike(req,res,usersWS);
    });
+
+   //web im
+   app.post('/sendIm',function(req,res){
+      read.sendIm(req,res,usersWS);
+   });
 });
 
 
