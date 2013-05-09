@@ -6,6 +6,7 @@ var crypto = require('crypto');
 var fs = require('fs');
 var mail = require('nodemailer');  
 var User = require('../models/user.js');
+var Canvas = require('canvas');
 
 exports.login = function(req, res){
 	//login
@@ -45,19 +46,48 @@ exports.logout = function(req, res){
     res.redirect('/');
 };
 
+var makeCap = function(callback){
+	var canvas = new Canvas(100, 30),
+        ctx = canvas.getContext('2d'),
+        items = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPRSTUVWXYZ23456789'.split(''),
+        vcode = '',
+        textColors = ['#FD0', '#6c0', '#09F', '#f30', '#aaa', '#3cc', '#cc0', '#A020F0', '#FFA500', '#A52A2A', '#8B6914', '#FFC0CB', '#90EE90'];
+
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, 100, 30);
+    ctx.font = 'bold 30px sans-serif';
+    ctx.globalAlpha = .8;
+    for (var i = 0; i < 4; i++) {
+        var rnd = Math.random();
+        var item = Math.round(rnd * (items.length - 1));
+        var color = Math.round(rnd * (textColors.length - 1));
+        ctx.fillStyle = textColors[color];
+        ctx.fillText(items[item], 5 + i*23, 25);
+        vcode += items[item];
+    }
+    canvas.toBuffer(function(err, buf){
+    	var obj = {'buf':buf,'text':vcode.toLowerCase()}
+        callback(obj);
+    });
+};
+
 exports.reg = function(req, res){
-	res.render('reg', {
-		title: '注册',
-		user : req.session.user,
-		curPage :"reg",
-		success : req.flash('success').toString(),
-		error : req.flash('error').toString()
+	makeCap(function(obj){
+		req.session.verifycode = obj.text;
+		res.render('reg', {
+			title: '注册',
+			user : req.session.user,
+			curPage :"reg",
+			verifycode : obj.buf.toString('base64'),
+			success : req.flash('success').toString(),
+			error : req.flash('error').toString()
+		});
 	});
 };
 
 exports.doReg = function(req, res) {
 	//检查密码
-	if (req.body['password-repeat'] === '' || req.body['password'] === ''|| req.body['username'] ==='' ){
+	if (req.body['verify'] === ''|| req.body['password-repeat'] === '' || req.body['password'] === ''|| req.body['username'] ==='' ){
 		req.flash('error', '请检查输入');
 		return res.redirect('/reg');
 	}
@@ -65,7 +95,10 @@ exports.doReg = function(req, res) {
 		req.flash('error', '两次输入的密码不一致');
 		return res.redirect('/reg');
     }
-    
+    if(req.body['verify']!= req.session.verifycode){
+    	req.flash('error', '验证码不正确');
+		return res.redirect('/reg');
+    }
 
     //生成md5的密码
     var md5 = crypto.createHash('md5');

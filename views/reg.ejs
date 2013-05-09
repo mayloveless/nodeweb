@@ -26,6 +26,13 @@
         <input type="file" class="input-xlarge" id="avatar" name="avatar">
       </div>
     </div>
+    <div class="control-group">
+      <label class="control-label" for="verify">验证码</label>
+      <div class="controls">
+        <input  class="input-medium" id="verify" name="verify">
+         <img src="data:image/png;base64,<%=verifycode%>"/>
+      </div>
+    </div>
     <div class="form-actions">
       <button type="submit" class="btn btn-primary">注册</button>
     </div>
