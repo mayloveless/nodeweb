@@ -1,19 +1,59 @@
-
+<style>
+  .single{
+     
+  }
+  .single img{
+    width:300px;
+    float:left;
+  }
+  .single .desc{
+    float:left;
+    heigth:100px;
+  }
+  .fn{
+    margin-left:50px;
+  }
+  .fn a{
+    margin-left:40px;
+  }
+  .intro{
+    margin-top:20px;
+    
+  }
+  .intro p{
+    text-indent:20px;
+    font-size:16px;
+  }
+</style>
 <div class="span10">
   <form action="/book/search" method="get" class="form-inline ">
     <input type="text" name="key" placeholder="内容及标题" class="input-large"/>
-    <button type="submit" class="btn">搜索</button>
+    <button type="submit" class="btn btn-danger">搜索</button>
   </form>
 </div>
 
 
-<ul class="span10">
-   <li><%= book.bookName %></li>
-   <li><%= book.author %></li>
-   <li><%= book.cata %></li>
-    <li><%= book.descption %></li>
-
-  <li><a href="/book/<%= book._id%>/salon">书评</a></li>
-	<li><a href="/book/<%= book._id%>/read">阅读</a></li>
-</ul>
+<div class="single span12">
+   <div>
+      <img src="<%= book.cover %>"/>
+      <div class="desc">
+        <div class="span5  hero-unit">
+            <h3>简介:</h3>
+          <p>书名:<%= book.bookName %></p>
+          <p>类别:<%= book.cata %></li></p>
+          <p>作者:<%= book.descption %></li></p>
+        </div>
+        <div class="fn">
+            <a href="/book/<%= book._id%>/salon" class="btn btn-success btn-large">书评</a>
+             <a href="/book/<%= book._id%>/read" class="btn btn-success btn-large">阅读</a>
+         </div>
+        </div>
+   </div>
+   <div style="clear:both"></div>
+   <div class="intro ">
+      <h2>描述:</h2>
+      <p><%= book.descption %></p>
+   </div>
+  
+</div>
 
