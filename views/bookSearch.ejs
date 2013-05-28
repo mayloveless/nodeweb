@@ -41,27 +41,54 @@
 		color:#fff;
 	}
 
+	.header{
+		width:100%;
+		height:120px;
+		
+		background:#fff;
+		border-bottom:2px solid #1d88b4;
+		float:right;
+		margin-top:-8px;
+	}
+	.header .search_area{
+		float:left;
+		margin-top:40px;
+	}
+	.header h2{
+		margin-top:40px;
+	}
+	#search_content{
+		background:#f6f6f1;
+		float:right;
+	}
 </style>
-<div class="span10">
-  <form action="/book/search" method="get" class="form-inline ">
-    <input type="text" name="key" placeholder="内容及标题" class="input-large"/>
-    <button type="submit" class="btn btn-danger">搜索</button>
-  </form>
+<div class="header">
+	<div class="span2"><img src="/images/icon/logo.jpg" width="150"></div>
+	<h2 class="span2">在线阅读社区</h2>
+	<div class="span4 search_area" >
+		<form action="/book/search" method="get" class="form-inline ">
+			<input type="text" name="key" placeholder="内容及标题" class="input-large"/>
+			<button type="submit" class="btn btn-warning ">搜索</button>
+		</form>
+	</div>
 </div>
 
-<% if(books.length){ %>
-	<div class="alert alert-info span10">共搜索到<%= books.length %>条记录</div>
-<% }else { %>
-	<div class="alert alert-info span10">非常抱歉，没有结果</div>
-<% } %>
+<div id="search_content">
+	<div style="margin-top:20px;"></div>
+	<% if(books.length){ %>
+		<div class="alert alert-info span10">共搜索到<%= books.length %>条记录</div>
+	<% }else { %>
+		<div class="alert alert-info span10">非常抱歉，没有结果</div>
+	<% } %>
 
 
-<ul class="span10 bookList">
-<% for(var i=0; i<books.length; i++) {%>
-   <li>
-   		<a href="/book/<%= books[i]._id %>"><img src="<%= books[i].cover %>"/></a>
-   		<a href="/book/<%= books[i]._id %>" class="title"><%= books[i].bookName %></a>
-   		<span class="cata"><%= books[i].cata %></span>
-   </li>
-<% } %>
-</ul>
+	<ul class="span10 bookList">
+	<% for(var i=0; i<books.length; i++) {%>
+	   <li>
+	   		<a href="/book/<%= books[i]._id %>"><img src="<%= books[i].cover %>"/></a>
+	   		<a href="/book/<%= books[i]._id %>" class="title"><%= books[i].bookName %></a>
+	   		<span class="cata"><%= books[i].cata %></span>
+	   </li>
+	<% } %>
+	</ul>
+</div>

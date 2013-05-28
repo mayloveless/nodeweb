@@ -9,6 +9,13 @@
         padding-bottom: 40px;
         background: url('/images/icon/bg.jpg');
       }
+      .navbar .brand:hover{
+        color: #45A8E7;
+      }
+      #top_nav .nav > li > a {
+        line-height: 29px;
+      }
+     
     </style>
     <link href="/stylesheets/bootstrap.css" rel="stylesheet">
 	<!--[if lt IE 9]>
@@ -20,15 +27,15 @@
   </head>
   <body>
   
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
+    <div class="navbar navbar-fixed-top " id="top_nav">
+      <div class="navbar-inner" style="height:50px;font-size:18px;">
+        <div class="container" style="width:940px;">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/">ReadIn</a>
+          <a class="brand" href="/" style="line-height: 35px;font-size: 30px;">ReadIn</a>
           <div class="nav-collapse">
             <ul class="nav">
               <% if (curPage == 'index') {%>

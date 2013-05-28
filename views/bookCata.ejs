@@ -42,12 +42,72 @@
 		color:#fff;
 	}
 	.cata_nav{
-		background:#fff;
+		background:#000;
+		width:15%;
+		margin-left:0;
 	}
+	.cata_nav .active a{
+		background:#f6f6f1;
+		border-radius:0px;
+		color:#000;
+	}
+	.cata_nav .active{
+		background:#fff;
+		border-radius:0px;
+	}
+
+	.cata_nav li a,.cata_nav .nav-header{
+		color:#fff;
+		line-height:40px;
+		height:40px
+		font-size:24px;
+	}
+	
 	.cata_nav li:hover{
-		background:#eee;
+		background:#000;
+	}
+	.nav-pills > li > a:hover{
+		color:#000;
+		border-radius:0px;
+	}
+	.nav-pills.nav-stacked > li > a{
+		margin:0;
+	}
+	.right_section{
+		width:85%;
+		float:right;
+		background:#f6f6f1;
+	}
+	.header{
+		width:100%;
+		height:120px;
+		
+		background:#fff;
+		border-bottom:2px solid #1d88b4;
+		float:right;
+		margin-top:-8px;
+	}
+	.header .search_area{
+		float:left;
+		margin-top:40px;
+	}
+	.header h2{
+		margin-top:40px;
 	}
 </style>
+
+<div class="header">
+	<div class="span2"><img src="/images/icon/logo.jpg" width="150"></div>
+	<h2 class="span2">在线阅读社区</h2>
+	<div class="span4 search_area" >
+		<form action="/book/search" method="get" class="form-inline ">
+			<input type="text" name="key" placeholder="内容及标题" class="input-large"/>
+			<button type="submit" class="btn btn-warning ">搜索</button>
+		</form>
+	</div>
+</div>
+
+
 <ul class="cata_nav nav nav-pills nav-stacked span2">
   <li class="nav-header">书籍分类</li>
   <% if(curCata === 'all'){%>
@@ -64,26 +124,22 @@
 <% } %>
 </ul>
 
-<div class="span8">
-	<form action="/book/search" method="get" class="form-inline ">
-		<input type="text" name="key" placeholder="内容及标题" class="input-large"/>
-		<button type="submit" class="btn btn-danger">搜索</button>
-	</form>
+<div class="right_section">
+	<div style="margin-top:20px;"></div>
+	<% if(books.length){ %>
+		<div class="alert alert-info span8">共<%= books.length %>条记录</div>
+	<% }else { %>
+		<div class="alert alert-info span8">非常抱歉，没有结果</div>
+	<% } %>
+
+
+	<ul class="span8 bookList">
+	<% for(var i=0; i<books.length; i++) {%>
+	   <li>
+	   		<a href="/book/<%= books[i]._id %>"><img src="<%= books[i].cover %>"/></a>
+	   		<a href="/book/<%= books[i]._id %>" class="title"><%= books[i].bookName %></a>
+	   		<span class="cata"><%= books[i].cata %></span>
+	   </li>
+	<% } %>
+	</ul>
 </div>
-
-<% if(books.length){ %>
-	<div class="alert alert-info span8">共<%= books.length %>条记录</div>
-<% }else { %>
-	<div class="alert alert-info span8">非常抱歉，没有结果</div>
-<% } %>
-
-
-<ul class="span8 bookList">
-<% for(var i=0; i<books.length; i++) {%>
-   <li>
-   		<a href="/book/<%= books[i]._id %>"><img src="<%= books[i].cover %>"/></a>
-   		<a href="/book/<%= books[i]._id %>" class="title"><%= books[i].bookName %></a>
-   		<span class="cata"><%= books[i].cata %></span>
-   </li>
-<% } %>
-</ul>

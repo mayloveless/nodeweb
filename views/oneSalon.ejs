@@ -1,39 +1,133 @@
-
+<style>
+	.salon_one{
+		width:100%;
+		border-top:1px solid #eee;
+		
+		overflow:hidden;
+		margin-left:20px;
+		margin-bottom:20px;
+	}
+	.avatar_box{
+		width:70px;
+		height:70px;
+		float:left;
+		overflow:hidden;
+		margin-right:20px;
+		margin-top:10px;
+	}
+	.avatar_box img{
+		width:100%;
+	}
+	.salon_title{
+		font-size:18px;
+		margin-top:10px;
+		display:inline-block;
+	}
+	.salon_content{
+		margin-top:10px;
+		
+		overflow:hidden;
+	}
+	.salon_footer{
+		margin-left:100px;
+	}
+	.panel{
+		background:#fff;
+	}
+	.salon_edit{
+		padding:20px;
+	}
+	.salon_like{
+		padding:20px;
+		font-size:16px;
+	}
+	.comment{
+		border-top:1px solid #eee;
+		margin:0 20px;
+	}
+	.conmment_one{
+		width:700px;
+		min-height:80px;
+	}
+	.cmt_content{
+		margin-top:20px;
+		width:600px;
+		background:#f6f6f1;
+		float:left;
+		border-radius:5px;
+		min-height:60px;
+		padding:10px;
+		word-wrap:break-word;
+		white-space:pre-line;
+	}
+	.traingle{
+		margin-top:23px;
+		width:0;
+		height:0;
+		display:block;
+		border:10px solid #f6f6f1;
+		border-color: transparent #f6f6f1 transparent transparent;
+		float:left;
+	}
+	.cmt_del a{
+		margin-left:700px;
+	}
+</style>
 <h1><%= title%></h1>
 
-<ul class="span10">
-
-  <li>title:<%= salon.title %></li>
-   <li>author:<%= salon.user.name %></li>
-   <li>time:<%= salon.time %></li>
-   <li>content:<%= salon.content %></li>
-   <% if(isMine === true ){%>
-		<li><a href="/book/<%= book._id%>/salon/salon_<%=salon.time%>/edit">修改</a></li>
-		<li><a href="javascript:;" id="del">删除</a></li>
-	<% }else  {%>
-		<li><span id="likeNum"><%= salon.like.num %></span>人喜欢
-		<% if(salon.like.num != 0 ){%>
-			<span>ta 们是:
-				<% for(var i=0;i<salon.like.users.length;i++){%>
-					<%=salon.like.users[i]%>
-				<%}%>
-			</span>
+<div  class="panel">
+	<div class="salons_list">
+		
+			<div class="salon_one">
+				<div class="avatar_box">
+					<img src="/images/avatar/<%= salon.user.avatar %>"/>
+				</div>
+				<a class="salon_title" ><%= salon.title %></a>
+			 
+			   <p class="salon_content"><%= salon.content %></p>
+			   <p class="salon_footer"><%= salon.user.name %> 写于<%= salon.time_format %> </p>
+		   </div>
+		
+	</div>
+	 
+	   <% if(isMine === true ){%>
+			<p class="salon_edit">
+				<a class=" btn btn-warning" href="/book/<%= book._id%>/salon/salon_<%=salon.time%>/edit">修改</a>
+				<a class=" btn btn-warning" href="javascript:;" id="del">删除</a>
+			</p>
+		<% }else  {%>
+			<p class="salon_like"><span id="likeNum"><%= salon.like.num %></span>人喜欢
+			<% if(salon.like.num != 0 ){%>
+				<span>ta 们是:
+					<% for(var i=0;i<salon.like.users.length;i++){%>
+						<%=salon.like.users[i]%>
+					<%}%>
+				</span>
+			<%}%>
+			<% if(canLike === 1 ){%>
+				<a href="javascript:;" id="like">喜欢</a></p>
+			<%}%>
 		<%}%>
-		<% if(canLike === 1 ){%>
-			<a href="javascript:;" id="like">喜欢</a></li>
-		<%}%>
-	<%}%>
-</ul>
+	
 
-<ul class="span10">
-	<% for(var i=0;i<salon.comment.length;i++){%>
-		<li>author:<%= salon.comment[i].user.name %></li>
-		<li>content:<%= salon.comment[i].content %></li>
-		<% if(user.name==salon.comment[i].user.name){%>
-			<li><a href="javascript:;" time="<%=salon.comment[i].time%>" stime="<%=salon.time%>" bid="<%=book._id%>" class="delCmt">删除</a></li>
+	<div class="comment">
+		<% for(var i=0;i<salon.comment.length;i++){%>
+			<div class="comment_one">
+				<div class="avatar_box">
+					<img src="/images/avatar/<%= salon.comment[i].user.avatar %>"/>
+				</div>
+				<span class="traingle"></span>
+				<p class="cmt_content"><%= salon.comment[i].content %></p>
+				<div style="clear:both"></div>
+				<% if(user.name==salon.comment[i].user.name){%>
+					<p class="cmt_del"><a class="btn btn-success  delCmt" href="javascript:;" time="<%=salon.comment[i].time%>" stime="<%=salon.time%>" bid="<%=book._id%>" >删除</a></p>
+				<% } %>
+				
+			</div>
 		<% } %>
-	<% } %>
-</ul>
+
+	</div>
+
 
 
 <form class="form-horizontal" method="post" action="/book/<%= book._id%>/salon/salon_<%=salon.time%>/pubCmt">
@@ -43,7 +137,7 @@
     <div class="control-group">
       <label class="control-label" for="content">发表评论</label>
       <div class="controls">
-        <textarea type="text" class="input-xlarge" id="content" name="content"></textarea>
+        <textarea style="width:500px;height:80px;" type="text" class="input-xlarge" id="content" name="content"></textarea>
       </div>
     </div>
     <div class="form-actions">
@@ -53,6 +147,7 @@
 </form>
 
 
+</div>
 
 <div class="modal hide fade" id="error">
   <div class="modal-header">

@@ -2,32 +2,51 @@
 	.table tbody tr.info > td {
 	  background-color: #d9edf7;
 	}
+	.tip{
+		list-style:none;
+		background-color:#fff;
+		border-top: 3px solid #1d88b4;
+		border-bottom: 0px;
+		margin-bottom: 25px;
+	}
+	.tip_header{
+		font-size: 22px;
+		color: #1d88b4;
+		padding: 10px 10px;
+	}
+	.tip li{
+		width: auto;
+		border-bottom: 1px solid #ccc;
+		position: relative;
+		padding: 7px 10px;
+		height:40px;
+		font-size:16px;
+	}
+	.tip .unread{
+		background:#eee;
+	}
+	
+	.tip li span{
+		float:right;
+	}
 </style>
 <h1>我的提醒 </h1>
-
-<table class="table span8">
-	<thead>
-        <tr>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-	<tbody>
+<div style="height:20px"></div>
+<ul class=" span8 tip">
+	<li class="tip_header">消息列表</li>
 	<% for(var i=0; i<msg.length; i++) {%>
 		<%if(msg[i].status===1){%>
-			<tr >
-				<td><%= msg[i].content%><a target="blank" href="<%= msg[i].url%>"><%= msg[i].urlTitle%></a></td>
-				<td>已读</td>
-			</tr>
+			<li><%= msg[i].content%><a target="blank" href="<%= msg[i].url%>"><%= msg[i].urlTitle%></a></td>
+				<span>已读</span>
+			</li>
 		<% } else {%>
-			<tr  class="info unread" mid ="<%=msg[i]._id%>">	
-				<td><%= msg[i].content%><a class="url" mid ="<%=msg[i]._id%>" target="blank" href="javascript:;" adress="<%= msg[i].url%>"><%= msg[i].urlTitle%></a></td>
-				<td>未读</td>
-			</tr>
+			<li  class="info unread" mid ="<%=msg[i]._id%>">	
+				<%= msg[i].content%><a class="url" mid ="<%=msg[i]._id%>" target="blank" href="javascript:;" adress="<%= msg[i].url%>"><%= msg[i].urlTitle%></a></td>
+				<span>未读</span>
+			</li>
 		<% } %>
 	<% } %>
-	</tbody>
-</table>
+</ul>
 
 
 <div class="modal hide fade" id="error">

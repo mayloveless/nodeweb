@@ -185,6 +185,7 @@ exports.getSalons = function(req, res){
 					book.salons[i] =temp;
 				}
 			}
+			book.salons[i].time_format = (new Date(book.salons[i].time)).toString().substring(10,25);
 		}
 		res.render('salons', {
 			title: '读者沙龙:'+book.bookName,
@@ -217,8 +218,9 @@ exports.getOneSalon = function(req, res){
 			if(salon.like.users[i] == req.session.user.name){
 				canLike = 0;
 				break;
-			}
+			} 
 		}
+		salon.time_format = (new Date(salon.time)).toString().substring(10,25);
 		//console.log(canLike);
 		res.render('oneSalon', {
 			title: '读者沙龙:'+book.bookName,

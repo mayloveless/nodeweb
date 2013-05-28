@@ -6,17 +6,24 @@
         background: #eee;
         right: 100px;
         width: 200px;
+        list-style:none;
 	}
     .cataList{
         float: left;
         width: 100%;
         display: block;
+        text-indent: -7px;
+        overflow: hidden;
+        font-size:16px;
+        height:60px;
     }
+
 	#content{
 		width: 600px;
 		overflow: hidden;
         margin: 0 auto;
         height: 100%;
+        border:1px dashed;
 	}
     #tool{
         position: fixed;
@@ -66,6 +73,24 @@
         right:100px;
         top:100px;
         display:none;
+        width:200px;
+        background:#fff;
+    }
+    #drawPannel h3{
+        background: #1d88b4;
+        color:#fff;
+        padding:10px;
+    }
+    #drawPannel ul{
+        list-style:none;
+        padding:0;
+        margin:0;
+    }
+    .drawPannel_tool li{
+        margin-left:10px;
+        height:40px;
+        font-size:16px;
+        margin-top:10px;
     }
     .pcanvas{
         position:absolute;
@@ -76,7 +101,7 @@
 
     #draw{
         position:absolute;
-        left:300px;
+        left:295px;
     }
     #pen_sample{
         display: block;
@@ -86,7 +111,11 @@
         border-radius: 20px;
     }
     #canvas_colors{
+        position:absolute;
+        top:30px;
+        background:#eee;
         display:none;
+        width: 120px;
     }
     #canvas_currentColor{
         width:20px;
@@ -98,23 +127,47 @@
         width:20px;
         height:20px;
         float:left;
-        margin-left:10px;
+        margin:10px;
         display:block;
+        overflow: hidden;
     }
     #canvas_colors li a{
         background:#000;
         display:block;
         width:100%;
         height:100%;
+        text-indent:99px;
     }
     #canvas_colors .yellow{
-        background-color:yellow;
+        background-color:#ffc40d;
     }
     #canvas_colors .green{
         background-color:green;
     }
     #canvas_colors .red{
         background-color:red;
+    }
+   #canvas_colors .purple{
+        background-color:#7a43b6;
+    }
+    #canvas_colors .grayLight{
+        background-color:#999;
+    }
+    #canvas_colors .blue{
+        background-color:#049cdb;
+    }
+
+  #canvas_colors .pink{
+        background-color:#c3325f;
+    }
+    #canvas_colors .black{
+        background-color:#000;
+    }
+    #canvas_colors .red{
+        background-color:red;
+    }
+    #canvas_colors .errorBackground{
+        background-color:#f2dede;
     }
 
     :-webkit-full-screen{
@@ -133,42 +186,102 @@
 
     #chat{
         position:fixed;
-        left:20px;
+        right:20px;
         bottom:100px;
         width:300px;
         height:200px;
+        
     }
     #chatWin{
         width:100%;
         height:100%;
-        background-color:yellow;
+        background-color:#c09853;
+        margin:0;
+        list-style:none;
+        margin:0;
+        padding:0;
+        word-wrap:break-word;
+        white-space:pre-line;
+        overflow-y:scroll;
+        font-size:14px;
+    }
+     #chat h3{
+        background: #1d88b4;
+        color:#fff;
+        padding:10px;
+    }
+    #tool{
+        list-style:none;
+        background:#fff;
+        width:150px;
+        margin-left:0;
+    }
+    #tool li{
+        color:#000;
+        line-height:40px;
+        height:40px
+        font-size:24px;
+        border-bottom:1px solid #999;
+        text-align:center;
+    }
+    .cata_nav li a,.cata_nav .nav-header{
+        color:#000;
+        line-height:40px;
+        height:40px
+        font-size:24px;
+    }
+  
+    .nav-pills > li > a:hover{
+        color:#000;
+        border-radius:0px;
+    }
+    .nav-pills.nav-stacked > li > a{
         margin:0;
     }
-
+    .page .curPageNum{
+        float:right;
+        margin:5px;
+        font-size:18px;
+    }
+    .page .title{
+        margin:5px;
+        font-size:18px;
+    }
+    .showTheirs{
+        display:block;
+    }
+    .mine{
+        margin-top:10px;
+    }
 </style>
 
-<a id="draw" href="javascript:;">涂鸦</a>
+<a id="draw" class="btn btn-primary" href="javascript:;">涂鸦</a>
 <div id="hideContent" style="display:none"><%= book.content %></div>
 
-<ul id="tool">
+<ul id="tool" class="cata_nav nav nav-pills nav-stacked ">
     <li><a href="javascript:;" class="showCata">目录</a></li>
     <li><a href="/book/<%= book._id %>/salon" class="salan">长评</a></li>
     <li><a href="javascript:;" class="fullScreen">全屏</a></li>
     <li><a href="javascript:;" class="derection">横屏</a></li>
-    <li>共<span id="total"></span>页</li>
-    <li>当前<span id="curPage"></span>页</li>
+    <li>
+        <a id="pre" class="label-info" style="display:inline;" href="javascript:;">上一页</a>
+        <a id="next" class="label-info" style="display:inline;"  href="javascript:;">下一页</a>
+    </li>
     <li>跳转到<input id="jump" style="width:20px;"/>页</li>
-    <li><a id="pre" href="javascript:;">上一页</a></li>
-    <li><a id="next" href="javascript:;">下一页</a></li>
+    <div>共<span id="total"></span>页,当前<span id="curPage"></span>页</div>
 </ul>
-<div id="catalogue"></div>
+
+
+
+<ul id="catalogue"></ul>
 
 <div id="content">
    <div id="pageWrap"></div>
 </div>
 
 <div id="drawPannel">
-    <ul>
+    <h3>绘图工具箱</h3>
+    <ul class="drawPannel_tool">
         <li><a href="###" id="canvas_clear">清屏</a></li>
         <li>
             <a href="###" id="choose_color">颜色</a>
@@ -179,12 +292,18 @@
             <a href="###" id="pen_small">细</a>
             <span id="pen_sample"></span>
         </li>
-        <li><a href="###" id="saveDrew">保存</a></li>
+        <li><a href="###" class="btn btn-success" id="saveDrew">保存</a></li>
     </ul>
     <ul id="canvas_colors">
         <li><a href="###" class="red">red</a></li>
         <li><a href="###" class="green">green</a></li>
-        <li><a href="###" class="yellow">black</a></li>
+        <li><a href="###" class="purple">purple</a></li>
+        <li><a href="###" class="blue">blue</a></li>
+        <li><a href="###" class="grayLight">grayLight</a></li>
+        <li><a href="###" class="yellow">yellow</a></li>
+        <li><a href="###" class="errorBackground">errorBackground</a></li>
+        <li><a href="###" class="pink">pink</a></li>
+        <li><a href="###" class="black">black</a></li>
     </ul>
 </div>
 
@@ -220,12 +339,13 @@
 
 
 <div id="chat">
+    <h3>即时通信</h3>
     <ul id="chatWin">
 
     </ul>
     <div id="chatPub">
         <textarea class="msgTextarea"></textarea>
-        <span class="btn sendMsg">发送</span>
+        <span class="btn sendMsg btn-success">发送</span>
     </div>
     <div id="chatHand">
     </div>

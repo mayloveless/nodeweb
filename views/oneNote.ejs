@@ -21,6 +21,7 @@
         float: left;
         margin-right: 10px;
         cursor: pointer;
+        visibility:hidden;
     }
     .pcanvas{
         position:absolute;
@@ -28,53 +29,110 @@
         left:0;
         z-index:-1;
     }
+    .panel{
+    	background:#fff;
+    	padding:20px;
+    }
+    .n_box{
+    	margin-top:20px;
+    	font-size:16px;
+    }
+    .comment{
+		border-top:1px solid #eee;
+		margin:0 20px;
+	}
+	.conmment_one{
+		width:700px;
+		min-height:80px;
+	}
+	.cmt_content{
+		margin-top:20px;
+		width:600px;
+		background:#f6f6f1;
+		float:left;
+		border-radius:5px;
+		min-height:60px;
+		padding:10px;
+		word-wrap:break-word;
+		white-space:pre-line;
+	}
+	.traingle{
+		margin-top:23px;
+		width:0;
+		height:0;
+		display:block;
+		border:10px solid #f6f6f1;
+		border-color: transparent #f6f6f1 transparent transparent;
+		float:left;
+	}
+	.cmt_del a{
+		margin-left:700px;
+	}
+	.avatar_box{
+		width:70px;
+		height:70px;
+		float:left;
+		overflow:hidden;
+		margin-right:20px;
+		margin-top:10px;
+	}
+	.avatar_box img{
+		width:100%;
+	}
 </style>
-<a href="/book/<%= book._id%>/read?pid=<%=pid%>">返回</a>
-<div>
-	<p>段落:</p>
-	<div id="pcontent">
-		<img class="pic" src="<%=note.pic%>"/>
-		<div class="ptext"></div>
+<a class="btn btn-large btn-warning" href="/book/<%= book._id%>/read?pid=<%=pid%>">返回</a>
+<div class="panel">
+	<div class="p_box">
+		<div id="pcontent">
+			<img class="pic" src="<%=note.pic%>"/>
+			<div class="ptext"></div>
+		</div>
 	</div>
-</div>
-<div>
-	<p>内容:</p>
-	<p ><%=note.content%></p>
-	<p><%= (new Date(note.time)).toString().substr(10,15)%></p>
-	<% if(user.name == note.user.name){ %>
-		<a class="edit">修改</a>
-		<a class="del">删除</a>
-	<%}%>
-</div>
-<hr>
-<div>
-	<% for(var i=0;i<note.comment.length;i++){%>
-		<p>内容:<%= note.comment[i].content%></p>
-		<p>名字:<%= note.comment[i].user.name%></p>
-		<p>时间:<%= note.comment[i].time%></p>
-		<%if(note.comment[i].user.name == user.name){%>
-			<p><a href="###" time="<%=note.comment[i].time%>" class="delCmt">删除</a></p>
+	<div class="n_box">
+		<p>笔记内容:</p>
+		<p ><%=note.content%></p>
+		<p><%=note.user.name%>写于:<%= (new Date(note.time)).toString().substr(10,15)%></p>
+		<% if(user.name == note.user.name){ %>
+			<a class="edit btn btn-success">修改</a>
+			<a class="del btn btn-success">删除</a>
 		<%}%>
-	<%}%>
+	</div>
+	<hr>
+
+	<div class="comment">
+		<% for(var i=0;i<note.comment.length;i++){%>
+			<div class="comment_one">
+				<div class="avatar_box">
+					<img src="/images/avatar/<%= note.comment[i].user.avatar %>"/>
+				</div>
+				<span class="traingle"></span>
+				<p class="cmt_content"><%= note.comment[i].content %></p>
+				<div style="clear:both"></div>
+				<% if(user.name==note.comment[i].user.name){%>
+					<p class="cmt_del"><a class="btn btn-success  delCmt" href="javascript:;" time="<%=note.comment[i].time%>" stime="<%=note.time%>" bid="<%=book._id%>" >删除</a></p>
+				<% } %>
+				
+			</div>
+		<% } %>
+	</div>
+
+	<form class="form-horizontal" method="post" action="/book/<%= book._id%>/note/<%=note.time%>/pubCmt">
+	  <fieldset>
+	  	<input type="hidden" value="<%=note.time%>" name="time"/>
+	  	<input type="hidden" value="<%=book._id%>" name="bookid"/>
+	  	<input type="hidden" value="<%=pid%>" name="pid"/>
+	    <div class="control-group">
+	      <label class="control-label" for="content">发表评论</label>
+	      <div class="controls">
+	        <textarea style="width:500px;height:80px;" type="text" class="input-xlarge" id="content" name="content"></textarea>
+	      </div>
+	    </div>
+	    <div class="form-actions">
+	      <button type="submit" class="btn btn-primary">发布</button>
+	    </div>
+	  </fieldset>
+	</form>
 </div>
-
-<form class="form-horizontal" method="post" action="/book/<%= book._id%>/note/<%=note.time%>/pubCmt">
-  <fieldset>
-  	<input type="hidden" value="<%=note.time%>" name="time"/>
-  	<input type="hidden" value="<%=book._id%>" name="bookid"/>
-  	<input type="hidden" value="<%=pid%>" name="pid"/>
-    <div class="control-group">
-      <label class="control-label" for="content">发表评论</label>
-      <div class="controls">
-        <textarea type="text" class="input-xlarge" id="content" name="content"></textarea>
-      </div>
-    </div>
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary">发布</button>
-    </div>
-  </fieldset>
-</form>
-
 
 <div id="editNote" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-header">

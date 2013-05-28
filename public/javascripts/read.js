@@ -73,11 +73,11 @@ var init = function(){
 
 	//catalogue
 	for(var i=0;i<cList.length;i++){
-        var cataHTML = '<a class="cataList" href="javascript:;" '+
+        var cataHTML = '<li><a class="cataList" href="javascript:;" '+
                             'link="'+
                             cataInPage[i]+'">'+
                             cList[i]+
-                        '</a>';
+                        '</a><li>';
     	$('#catalogue').append(cataHTML);
     }
 
@@ -86,8 +86,9 @@ var init = function(){
     $('#pageWrap').html('').css('width',pageNum*pageWidth);
     for(var i=0;i<pageNum;i++){
         var pageHTML = '<div class="page">'+
-                            '<div class="title">'+bookName+'</div>'+
                             '<div class="curPageNum">'+(i+1)+'</div>'+
+                            '<div class="title">'+bookName+'</div>'+
+                            '<hr>'+
                              pages[i]+
                         '</div>';
         $('#pageWrap').append(pageHTML);
@@ -371,7 +372,7 @@ $(document).ready(function(){
     });
     //即时消息
     socketNote.on('im'+bid, function (data) {
-        var html = '<li>'+data.msg.content+data.msg.time+data.msg.user.name+'</li>';
+        var html = '<li><span style="color:#dff0d8;">'+data.msg.user.name+'</span>:'+data.msg.content+'<p>'+(new Date(data.msg.time)).toString().substring(16,25)+'</p></li>';
         $('#chatWin').append(html);
     });
 
@@ -393,7 +394,7 @@ $(document).ready(function(){
         var pid = $('#notes>.contents').attr('pid');
         $.post('/addNote',{'content':text,'pcontent':pcontent,id:bid,pid:pid},function(data){
             var one = data['success']['data'];
-            var html = '<p tid="'+one['time']+'">'+one['content']+'时间'+new Date(one['time'])+
+            var html = '<p tid="'+one['time']+'">'+one['content']+'时间'+(new Date(one['time'])).toString().substring(10,25)+
                             '<a target="_blank" href="/book/'+bid+'/note/'+one['time']+'">查看</a>/'+
                             '<a href="###" class="delNote">删除</a></p>'+
                             '<a class="showTheirs">查看其他人的笔记</a>';
@@ -430,13 +431,13 @@ $(document).ready(function(){
                     if(notes[i]['user']['name'] == username){
                         imgData = notes[i]['pic'];
                         if(notes[i]['content']!==''){
-                            hasMine = '<p tid="'+notes[i]['time']+'">'+notes[i]['content']+
+                            hasMine = '<p  class="alert_none"  tid="'+notes[i]['time']+'">'+notes[i]['content']+
                                 '<a href="/book/'+bid+'/note/'+notes[i]['time']+
                                 '"target="_blank">查看</a>/'+
                                 '<a href="###" class="delNote">删除</a></p>';
                         }
                     }else{
-                        theirs += '<p >'+notes[i]['content']+"时间："+new Date(notes[i]['time'])+
+                        theirs += '<p >'+notes[i]['content']+"时间："+(new Date(notes[i]['time'])).toString().substring(10,25)+
                         '<a href="/book/'+bid+'/note/'+notes[i]['time']+'" target="_blank">查看</a></p>';
                     }
                 }

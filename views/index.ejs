@@ -1,5 +1,6 @@
 
 <style>
+
 	.bookList{
 		list-style:none;
 
@@ -15,7 +16,7 @@
 	}
 	.bookList img{
 		width:100%;
-		margin:0 auto;
+		margin:0 auto; 
 	}
 	.bookList .title{
 		width:100%;
@@ -41,54 +42,104 @@
 		font-size:20px;
 		color:#fff;
 	}
-	.hero-unit{
-		background:#fff;
-	}
+	
 	.cata_nav{
-		background:#fff;
+		background:#000;
+		width:15%;
+		margin-left:0;
 	}
+	.cata_nav .active a{
+		background:#f6f6f1;
+		border-radius:0px;
+		color:#000;
+	}
+	.cata_nav .active{
+		background:#fff;
+		border-radius:0px;
+	}
+
+	.cata_nav li a,.cata_nav .nav-header{
+		color:#fff;
+		line-height:40px;
+		height:40px
+		font-size:24px;
+	}
+	
 	.cata_nav li:hover{
-		background:#eee;
+		background:#000;
+	}
+	.nav-pills > li > a:hover{
+		color:#000;
+		border-radius:0px;
+	}
+	.nav-pills.nav-stacked > li > a{
+		margin:0;
+	}
+	.right_section{
+		width:85%;
+		float:right;
+		background:#f6f6f1;
+	}
+	.header{
+		width:100%;
+		height:120px;
+		
+		background:#fff;
+		border-bottom:2px solid #1d88b4;
+		float:right;
+		margin-top:-8px;
+	}
+	.header .search_area{
+		float:left;
+		margin-top:40px;
+	}
+	.header h2{
+		margin-top:40px;
 	}
 </style>
 
-
-<div class="hero-unit">
-	<h1>欢迎来到 ReadIn</h1>
+<div class="header">
+	<div class="span2"><img src="/images/icon/logo.jpg" width="150"></div>
+	<h2 class="span2">在线阅读社区</h2>
+	<div class="span4 search_area" >
+		<form action="/book/search" method="get" class="form-inline ">
+			<input type="text" name="key" placeholder="内容及标题" class="input-large"/>
+			<button type="submit" class="btn btn-warning ">搜索</button>
+		</form>
+	</div>
 </div>
 
-<ul class="cata_nav nav nav-pills nav-stacked span2">
-  <li class="nav-header">书籍分类</li>
-  <li class="active"><a href="/cata/all">全部书籍</a></li>
-<% for(var i=0; i<cata.length; i++) {%>
-	<li><a href="/cata/<%= cata[i].cname %>"><%= cata[i].cname %></a></li>
-<% } %>
-</ul>
+<div >
+	<ul class="cata_nav nav nav-pills nav-stacked span2">
+	  <li class="nav-header">书籍分类</li>
+	  <li class="active"><a href="/cata/all" >全部书籍</a></li>
+	<% for(var i=0; i<cata.length; i++) {%>
+		<li><a href="/cata/<%= cata[i].cname %>"><%= cata[i].cname %></a></li>
+	<% } %>
+	</ul>
 
-<div class="span8" style="margin-left:50px;">
-	<form action="/book/search" method="get" class="form-inline ">
-		<input type="text" name="key" placeholder="内容及标题" class="input-large"/>
-		<button type="submit" class="btn btn-danger ">搜索</button>
-	</form>
+	<div class="right_section">
+		
+
+		<ul class="span9 bookList" >
+		<% for(var i=0; i<books.length; i++) {%>
+		   <li>
+		   		<a href="/book/<%= books[i]._id %>"><img src="<%= books[i].cover %>"/></a>
+		   		<a href="/book/<%= books[i]._id %>" class="title"><%= books[i].bookName %></a>
+		   		<span class="cata"><%= books[i].cata %></span>
+		   </li>
+		<% } %>
+
+		<% for(var i=0; i<books.length; i++) {%>
+		   <li>
+		   		<a href="/book/<%= books[i]._id %>"><img src="<%= books[i].cover %>"/></a>
+		   		<a href="/book/<%= books[i]._id %>" class="title"><%= books[i].bookName %></a>
+		   		<span class="cata"><%= books[i].cata %></span>
+		   </li>
+		<% } %>
+
+
+		</ul>
+
+	</div>
 </div>
-
-<ul class="span9 bookList" >
-<% for(var i=0; i<books.length; i++) {%>
-   <li>
-   		<a href="/book/<%= books[i]._id %>"><img src="<%= books[i].cover %>"/></a>
-   		<a href="/book/<%= books[i]._id %>" class="title"><%= books[i].bookName %></a>
-   		<span class="cata"><%= books[i].cata %></span>
-   </li>
-<% } %>
-
-<% for(var i=0; i<books.length; i++) {%>
-   <li>
-   		<a href="/book/<%= books[i]._id %>"><img src="<%= books[i].cover %>"/></a>
-   		<a href="/book/<%= books[i]._id %>" class="title"><%= books[i].bookName %></a>
-   		<span class="cata"><%= books[i].cata %></span>
-   </li>
-<% } %>
-
-
-</ul>
-

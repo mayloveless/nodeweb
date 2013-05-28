@@ -1,12 +1,61 @@
-
+<style>
+	.panel{
+		background:#fff;
+		padding-top:20px;
+	}
+	
+	.salons_list{
+		width:700px;
+		margin-top:20px;
+	}
+	.salon_one{
+		width:100%;
+		border-top:1px solid #eee;
+		height:150px;
+		overflow:hidden;
+		margin-left:20px;
+		margin-bottom:20px;
+	}
+	.avatar_box{
+		width:70px;
+		height:70px;
+		float:left;
+		overflow:hidden;
+		margin-right:20px;
+		margin-top:10px;
+	}
+	.avatar_box img{
+		width:100%;
+	}
+	.salon_title{
+		font-size:18px;
+		margin-top:10px;
+		display:inline-block;
+	}
+	.salon_content{
+		margin-top:10px;
+		height:80px;
+		overflow:hidden;
+	}
+	.salon_footer{
+		margin-left:100px;
+	}
+</style>
 <h1><%= title%></h1>
-<div class="alert alert-info span8">共<%= salons.length %>条记录</div>
-<h3><a href="/book/<%= book._id %>/newSalon">增加</a></h3>
-<ul class="span10">
-<% for(var i=0; i<salons.length; i++) {%>
-  <li>title:<a href="/book/<%= book._id %>/salon/salon_<%= salons[i].time%>"><%= salons[i].title %></a></li>
-   <li>author:<%= salons[i].user.name %></li>
-   <li>time:<%= salons[i].time %></li>
-   <li>content:<%= salons[i].content %></li>
-<% } %>
-</ul>
+<div class="panel">
+	<div class="alert alert-info span6 info">共<%= salons.length %>条记录</div>
+	<h3><a class="btn btn-warning btn-large" href="/book/<%= book._id %>/newSalon">增加</a></h3>
+	<div class="salons_list">
+		<% for(var i=0; i<salons.length; i++) {%>
+			<div class="salon_one">
+				<div class="avatar_box">
+					<img src="/images/avatar/<%= salons[i].user.avatar %>"/>
+				</div>
+				<a class="salon_title" href="/book/<%= book._id %>/salon/salon_<%= salons[i].time%>"><%= salons[i].title %></a>
+			 
+			   <p class="salon_content"><%= salons[i].content %></p>
+			   <p class="salon_footer"><%= salons[i].user.name %> 写于<%= salons[i].time_format %> <%= salons[i].like.num %>人喜欢</p>
+		   </div>
+		<% } %>
+	</div>
+</div>

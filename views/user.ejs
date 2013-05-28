@@ -1,12 +1,24 @@
+<style>
+	#readList .nav-list > li > a{
+		width:45%;
+		float:left;
+		margin:0;
+	}
 
+	.nav-list > li {
+		height:40px;
+		font-size:18px;
+		line-height:40px;
+	}
+</style>
 
 <% if(isMine === true){%>
 	<h1>我的主页</h1>
 <%}else {%>
 	<h1><%= curUser.name%>的主页</h1>
 <% }%>
-
-<ul class="nav nav-tabs span10">
+<div style="height:20px"></div>
+<ul class="nav nav-tabs span10"> 
   <li class="active" ><a href="#readList" data-toggle="tab">阅读清单</a></li>
   <li><a href="#makeList" data-toggle="tab">制作清单</a></li>
 </ul>
@@ -14,7 +26,7 @@
 
 <div id="myTabContent" class="tab-content">
   <div class="tab-pane fade active in" id="readList">
-  	<ul class="nav nav-list " >
+  	<ul class="nav nav-list  " >
    		<% if(readList[0]){%>
 	   		<% for(var i=0;i<readList.length;i++){%>
 				<li>

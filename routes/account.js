@@ -87,7 +87,7 @@ exports.reg = function(req, res){
 
 exports.doReg = function(req, res) {
 	//检查密码
-	if (req.body['verify'] === ''|| req.body['password-repeat'] === '' || req.body['password'] === ''|| req.body['username'] ==='' ){
+	if (req.body['email'] === ''||req.body['verify'] === ''|| req.body['password-repeat'] === '' || req.body['password'] === ''|| req.body['username'] ==='' ){
 		req.flash('error', '请检查输入');
 		return res.redirect('/reg');
 	}
@@ -107,6 +107,7 @@ exports.doReg = function(req, res) {
     var newUser = {
 		name: req.body.username,
 		password: password,
+		email:req.body.email
     };
     
     //检查用户名是否已经存在
@@ -144,6 +145,7 @@ exports.doReg = function(req, res) {
 			newUser['avatar'] = 'default.png';
 		}
 		//如果不存在則新增用戶
+
 		User.save(newUser,function(err) {
 			if (err) {
 				req.flash('error', err);

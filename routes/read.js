@@ -278,7 +278,7 @@ exports.sendIm = function(req, res,socket){
 	} ;
 	var msg = {
 		content:req.body.content,
-		time : new Date(),
+		time : new Date().valueOf(),
 		user : req.body.user
 	}
 	for( user in socket){
