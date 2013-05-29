@@ -23,7 +23,7 @@
 		overflow: hidden;
         margin: 0 auto;
         height: 100%;
-        border:1px dashed;
+        border:2px dashed;
 	}
     #tool{
         position: fixed;
@@ -216,6 +216,12 @@
         width:150px;
         margin-left:0;
     }
+    #tool h3{
+        background: #1d88b4;
+        color:#fff;
+        padding:10px;
+        text-align:center;
+    }
     #tool li{
         color:#000;
         line-height:40px;
@@ -259,6 +265,7 @@
 <div id="hideContent" style="display:none"><%= book.content %></div>
 
 <ul id="tool" class="cata_nav nav nav-pills nav-stacked ">
+    <h3>阅读工具箱</h3>
     <li><a href="javascript:;" class="showCata">目录</a></li>
     <li><a href="/book/<%= book._id %>/salon" class="salan">长评</a></li>
     <li><a href="javascript:;" class="fullScreen">全屏</a></li>
@@ -268,7 +275,7 @@
         <a id="next" class="label-info" style="display:inline;"  href="javascript:;">下一页</a>
     </li>
     <li>跳转到<input id="jump" style="width:20px;"/>页</li>
-    <div>共<span id="total"></span>页,当前<span id="curPage"></span>页</div>
+    <div style="text-align:center;">共<span id="total"></span>页,当前<span id="curPage"></span>页</div>
 </ul>
 
 
@@ -339,7 +346,7 @@
 
 
 <div id="chat">
-    <h3>即时通信</h3>
+    <h3 id="chatHand">即时通信</h3>
     <ul id="chatWin">
 
     </ul>
@@ -347,8 +354,7 @@
         <textarea class="msgTextarea"></textarea>
         <span class="btn sendMsg btn-success">发送</span>
     </div>
-    <div id="chatHand">
-    </div>
+    
 </div>
 
 <script>

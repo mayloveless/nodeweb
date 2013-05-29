@@ -10,6 +10,7 @@
 		position:absolute;
 		top:0;
 		left:0;
+		z-index:-1;
 	}
 	.psignal{
         background: #00b0f0;
@@ -81,13 +82,14 @@
 	}
 </style>
 <a class="btn btn-large btn-warning" href="/book/<%= book._id%>/read?pid=<%=pid%>">返回</a>
-<div class="panel">
+
 	<div class="p_box">
 		<div id="pcontent">
 			<img class="pic" src="<%=note.pic%>"/>
-			<div class="ptext"></div>
+			<div class="ptext"><%=note.pcontent.split('</span>')[1].split('<img')[0]%></div>
 		</div>
 	</div>
+<div class="panel">
 	<div class="n_box">
 		<p>笔记内容:</p>
 		<p ><%=note.content%></p>

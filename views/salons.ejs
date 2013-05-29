@@ -54,7 +54,7 @@
 				<a class="salon_title" href="/book/<%= book._id %>/salon/salon_<%= salons[i].time%>"><%= salons[i].title %></a>
 			 
 			   <p class="salon_content"><%= salons[i].content %></p>
-			   <p class="salon_footer"><%= salons[i].user.name %> 写于<%= salons[i].time_format %> <%= salons[i].like.num %>人喜欢</p>
+			   <p class="salon_footer"><%= salons[i].user.name %> 写于<%= (new Date(salons[i].time)).toString().substring(10,25) %> <%= salons[i].like.num %>人喜欢</p>
 		   </div>
 		<% } %>
 	</div>

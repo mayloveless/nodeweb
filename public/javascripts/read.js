@@ -56,7 +56,8 @@ var init = function(){
 	var pageContent = '';
 	for(var i=0;i<pList.length;i++){
 		pageContent += pList[i];
-		if( curHeight < viewHeight ){
+
+		if( curHeight < viewHeight && i!=pList.length-1){
             var oneHeight = $('#pageWrap>p:eq('+i+')').height();
             curHeight = curHeight + oneHeight;
         }else{
@@ -606,5 +607,14 @@ $(document).ready(function(){
         });
         $('.msgTextarea').val('');
     });
-
+    //chatHand
+    $('#chatHand').click(function(){
+        if($('#chatWin').is(":hidden")){
+            $('#chatWin').show();
+            $('#chat').css('bottom',100);
+        }else{
+            $('#chatWin').hide();
+            $('#chat').css('bottom',-30);
+        }
+    });
 });
