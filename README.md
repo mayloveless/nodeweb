@@ -54,6 +54,6 @@ cd mongodb-linux-i686-2.2.3/bin
 node app.js
 程序启动在127.0.0.1：3000下
 管理员帐号：wolf 密码wolf
-普通用户：test 密码123
+普通用户：test 密码111
 
 
