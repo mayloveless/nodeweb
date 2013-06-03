@@ -41,19 +41,29 @@ git clone git://github.com/wanglingfei/nodeweb.git
 1）下载MongoDB 2.2.3版本以上
 http://www.mongodb.org/downloads
 放在任意文件夹下
-2）导入数据库
+
+2) 新建“data”文件夹，作为数据存放的根文件夹
+cd mongodb-linux-i686-2.2.3/bin
+mkdir data
+
+3)运行MongoDB
+cd mongodb-linux-i686-2.2.3/bin
+./mongod --dbpath ./data
+
+4）导入数据库
 进入该文件夹
 cd mongodb-linux-i686-2.2.3/bin
 ./mongo readin 源码文件夹/db/mongo.js
-3)运行MongoDB
-cd mongodb-linux-i686-2.2.3/bin
-./mongod &
+
 
 8、运行应用程序
 进入源码文件夹下
 node app.js
+
 程序启动在127.0.0.1：3000下
+
 管理员帐号：wolf 密码wolf
+
 普通用户：test 密码111
 
 
