@@ -85,8 +85,10 @@
 
 	<div class="p_box">
 		<div id="pcontent">
-			<img class="pic" src="<%=note.pic%>"/>
-			<div class="ptext"><%=note.pcontent.split('</span>')[1].split('<img')[0]%></div>
+			<% if(note.pic){%>
+				<img class="pic" src="<%=note.pic%>"/>
+				<div class="ptext"><%=note.pcontent.split('</span>')[1].split('<img')[0]%></div>
+			<%}%>
 		</div>
 	</div>
 <div class="panel">
